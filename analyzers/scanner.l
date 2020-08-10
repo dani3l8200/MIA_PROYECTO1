@@ -4,7 +4,7 @@
 // license that can be found in the LICENSE file.
 
 // This is an example program using golex run time library.
-package main
+package analyzers
 
 import (
   "bufio"
@@ -57,22 +57,20 @@ func (l *lexer) Lex(lval *yySymType) int {
 
 digit         [0-9]|{unicodeDigit}
 identifier    {letter}({letter}|{digit})*
-int           {digit}+
 letter        [_a-zA-Z]|{unicodeLetter}
 unicodeDigit  \x81
 unicodeLetter \x80
 op            [-+*/]
-
 %%
 	c = l.Rule0()
 
 [ \t\r\n]+
-[/][/][^\n]+  lval.token = string(l.TokenBytes(nil)); return COMMENT
-func          lval.token = string(l.TokenBytes(nil)); return FUNC
-{identifier}  lval.token = string(l.TokenBytes(nil)); return IDENT
-{int}         lval.token = string(l.TokenBytes(nil)); return INT
-{op}          lval.token = string(l.TokenBytes(nil)); return OP
-
+int  lval.token = string(l.TokenBytes(nil)); return INT
+string lval.token = string(l.TokenBytes(nil)); return STRING
+float lval.token = string(l.TokenBytes(nil)); return FLOAT
+bool lval.token = string(l.TokenBytes(nil)); return BOOL
+char lval.token = string(l.TokenBytes(nil)); return CHAR
+{identifier} lval.token = string(l.TokenBytes(nil)); return IDENT
 %%
 	if c, ok := l.Abort(); ok { return int(c) }
 	goto yyAction

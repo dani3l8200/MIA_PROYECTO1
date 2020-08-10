@@ -9,21 +9,20 @@ import (
 
 func main() {
 	fi := bufio.NewReader(os.NewFile(0, "stdin"))
-
+	yyDebug = 0
+	yyErrorVerbose = true
 	for {
 		var eqn string
 		var ok bool
 
-		fmt.Printf("equation: ")
+		fmt.Printf("Ingrese el comando: ")
 		if eqn, ok = readline(fi); ok {
-			l := newLexer(bytes.NewBufferString(eqn), os.Stdout, "file.name")
+			l := analyzers.newLexer(bytes.NewBufferString(eqn), os.Stdout, "file.name")
 			yyParse(l)
 		} else {
 			break
 		}
 	}
-	yyDebug = 0
-	yyErrorVerbose = true
 
 }
 
