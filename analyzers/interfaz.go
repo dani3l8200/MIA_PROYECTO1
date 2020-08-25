@@ -1,6 +1,7 @@
-package LWH
+package analyzers
 
 import (
+	"MIA-PROYECTO1/lwh"
 	"bufio"
 	"bytes"
 	"fmt"
@@ -31,21 +32,31 @@ func Execute() {
 func ExecuteComands(entra string) {
 	l := newLexer(bytes.NewBufferString(entra), os.Stdout, "file.name")
 	if yyParse(l) == 0 {
-		SelectCommands(root)
+		SelectCommands(Root)
 	}
 	yyDebug = 0
 	yyErrorVerbose = true
 }
 
-func SelectCommands(command node) {
-	if command.typeToken == "PAUSE" {
+// SelectCommands utilizaro para ver de que comando se trata
+func SelectCommands(command lwh.Node) {
+	if command.TypeToken == "PAUSE" {
 		Pause()
-	} else if command.typeToken == "MKDISK" {
-		fmt.Println("AQUI ENTRO XD MKDISK")
-	} else if command.typeToken == "RMDISK" {
-		fmt.Println("RMDISK")
-	} else if command.typeToken == "FDISK" {
-		fmt.Println("FDISK")
+	} else if command.TypeToken == "MKDISK" {
+		if lwh.CheckMKdisk(command) {
+			lwh.MakeMK(command)
+		}
+	} else if command.TypeToken == "RMDISK" {
+		lwh.DeleteDisk(command.Children[0].Value)
+	} else if command.TypeToken == "FDISK" {
+		fmt.Println(Root.Children[0].Length())
+		for _, v := range Root.Children {
+			fmt.Println(v.Value, v.Size)
+			for _, i := range v.Children {
+				fmt.Println(i.Value, i.Size)
+			}
+		}
+
 	}
 }
 
