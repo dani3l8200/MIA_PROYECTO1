@@ -1,0 +1,527 @@
+
+state 0
+	$accept: .Input $end 
+	Input: .    (1)
+
+	CONTINUE  shift 8
+	PAUSE  shift 7
+	EXEC  shift 3
+	MKDISK  shift 4
+	RMDISK  shift 5
+	FDISK  shift 6
+	.  reduce 1 (src line 57)
+
+	Input  goto 1
+	Command  goto 2
+
+state 1
+	$accept:  Input.$end 
+
+	$end  accept
+	.  error
+
+
+state 2
+	Input:  Command.    (2)
+
+	.  reduce 2 (src line 58)
+
+
+state 3
+	Command:  EXEC.Exec 
+
+	PATH  shift 11
+	.  error
+
+	Exec  goto 9
+	Paparams  goto 10
+
+state 4
+	Command:  MKDISK.Mkdisk 
+
+	PATH  shift 11
+	SIZE  shift 15
+	UNIT  shift 16
+	NAME  shift 17
+	.  error
+
+	Paparams  goto 14
+	Mkdisk  goto 12
+	Mkparams  goto 13
+
+state 5
+	Command:  RMDISK.Rmdisk 
+
+	PATH  shift 11
+	.  error
+
+	Paparams  goto 19
+	Rmdisk  goto 18
+
+state 6
+	Command:  FDISK.Fdisk 
+
+	PATH  shift 11
+	SIZE  shift 29
+	UNIT  shift 24
+	NAME  shift 30
+	ADD  shift 28
+	DELETE  shift 27
+	FIT  shift 26
+	TYPE  shift 25
+	.  error
+
+	TYPE_NAMES  goto 23
+	Paparams  goto 22
+	Fdisk  goto 20
+	FdiskParams  goto 21
+
+state 7
+	Command:  PAUSE.    (7)
+
+	.  reduce 7 (src line 64)
+
+
+state 8
+	Command:  CONTINUE.    (8)
+
+	.  reduce 8 (src line 65)
+
+
+state 9
+	Command:  EXEC Exec.    (3)
+	Exec:  Exec.Paparams 
+
+	PATH  shift 11
+	.  reduce 3 (src line 60)
+
+	Paparams  goto 31
+
+state 10
+	Exec:  Paparams.    (10)
+
+	.  reduce 10 (src line 69)
+
+
+state 11
+	Paparams:  PATH.ARROW ROUTE 
+	Paparams:  PATH.ARROW STRTYPE 
+
+	ARROW  shift 32
+	.  error
+
+
+state 12
+	Command:  MKDISK Mkdisk.    (4)
+	Mkdisk:  Mkdisk.Mkparams 
+
+	PATH  shift 11
+	SIZE  shift 15
+	UNIT  shift 16
+	NAME  shift 17
+	.  reduce 4 (src line 61)
+
+	Paparams  goto 14
+	Mkparams  goto 33
+
+state 13
+	Mkdisk:  Mkparams.    (12)
+
+	.  reduce 12 (src line 72)
+
+
+state 14
+	Mkparams:  Paparams.    (32)
+
+	.  reduce 32 (src line 100)
+
+
+state 15
+	Mkparams:  SIZE.ARROW NUMBERN 
+
+	ARROW  shift 34
+	.  error
+
+
+state 16
+	Mkparams:  UNIT.ARROW K 
+	Mkparams:  UNIT.ARROW M 
+
+	ARROW  shift 35
+	.  error
+
+
+state 17
+	Mkparams:  NAME.ARROW ID 
+
+	ARROW  shift 36
+	.  error
+
+
+state 18
+	Command:  RMDISK Rmdisk.    (5)
+	Rmdisk:  Rmdisk.Paparams 
+
+	PATH  shift 11
+	.  reduce 5 (src line 62)
+
+	Paparams  goto 37
+
+state 19
+	Rmdisk:  Paparams.    (14)
+
+	.  reduce 14 (src line 75)
+
+
+state 20
+	Command:  FDISK Fdisk.    (6)
+	Fdisk:  Fdisk.FdiskParams 
+
+	PATH  shift 11
+	SIZE  shift 29
+	UNIT  shift 24
+	NAME  shift 30
+	ADD  shift 28
+	DELETE  shift 27
+	FIT  shift 26
+	TYPE  shift 25
+	.  reduce 6 (src line 63)
+
+	TYPE_NAMES  goto 23
+	Paparams  goto 22
+	FdiskParams  goto 38
+
+state 21
+	Fdisk:  FdiskParams.    (16)
+
+	.  reduce 16 (src line 79)
+
+
+state 22
+	FdiskParams:  Paparams.    (17)
+
+	.  reduce 17 (src line 82)
+
+
+state 23
+	FdiskParams:  TYPE_NAMES.    (18)
+
+	.  reduce 18 (src line 83)
+
+
+state 24
+	FdiskParams:  UNIT.ARROW B 
+	FdiskParams:  UNIT.ARROW K 
+	FdiskParams:  UNIT.ARROW M 
+
+	ARROW  shift 39
+	.  error
+
+
+state 25
+	FdiskParams:  TYPE.ARROW P 
+	FdiskParams:  TYPE.ARROW E 
+	FdiskParams:  TYPE.ARROW L 
+
+	ARROW  shift 40
+	.  error
+
+
+state 26
+	FdiskParams:  FIT.ARROW BF 
+	FdiskParams:  FIT.ARROW FF 
+	FdiskParams:  FIT.ARROW WF 
+
+	ARROW  shift 41
+	.  error
+
+
+state 27
+	FdiskParams:  DELETE.ARROW FAST 
+	FdiskParams:  DELETE.ARROW FULL 
+
+	ARROW  shift 42
+	.  error
+
+
+state 28
+	FdiskParams:  ADD.ARROW NUMBERN 
+
+	ARROW  shift 43
+	.  error
+
+
+state 29
+	FdiskParams:  SIZE.ARROW NUMBERN 
+
+	ARROW  shift 44
+	.  error
+
+
+state 30
+	TYPE_NAMES:  NAME.ARROW ID 
+	TYPE_NAMES:  NAME.ARROW STRTYPE 
+
+	ARROW  shift 45
+	.  error
+
+
+state 31
+	Exec:  Exec Paparams.    (9)
+
+	.  reduce 9 (src line 68)
+
+
+state 32
+	Paparams:  PATH ARROW.ROUTE 
+	Paparams:  PATH ARROW.STRTYPE 
+
+	ROUTE  shift 46
+	STRTYPE  shift 47
+	.  error
+
+
+state 33
+	Mkdisk:  Mkdisk Mkparams.    (11)
+
+	.  reduce 11 (src line 71)
+
+
+state 34
+	Mkparams:  SIZE ARROW.NUMBERN 
+
+	NUMBERN  shift 48
+	.  error
+
+
+state 35
+	Mkparams:  UNIT ARROW.K 
+	Mkparams:  UNIT ARROW.M 
+
+	K  shift 49
+	M  shift 50
+	.  error
+
+
+state 36
+	Mkparams:  NAME ARROW.ID 
+
+	ID  shift 51
+	.  error
+
+
+state 37
+	Rmdisk:  Rmdisk Paparams.    (13)
+
+	.  reduce 13 (src line 74)
+
+
+state 38
+	Fdisk:  Fdisk FdiskParams.    (15)
+
+	.  reduce 15 (src line 78)
+
+
+state 39
+	FdiskParams:  UNIT ARROW.B 
+	FdiskParams:  UNIT ARROW.K 
+	FdiskParams:  UNIT ARROW.M 
+
+	K  shift 53
+	M  shift 54
+	B  shift 52
+	.  error
+
+
+state 40
+	FdiskParams:  TYPE ARROW.P 
+	FdiskParams:  TYPE ARROW.E 
+	FdiskParams:  TYPE ARROW.L 
+
+	P  shift 55
+	E  shift 56
+	L  shift 57
+	.  error
+
+
+state 41
+	FdiskParams:  FIT ARROW.BF 
+	FdiskParams:  FIT ARROW.FF 
+	FdiskParams:  FIT ARROW.WF 
+
+	BF  shift 58
+	FF  shift 59
+	WF  shift 60
+	.  error
+
+
+state 42
+	FdiskParams:  DELETE ARROW.FAST 
+	FdiskParams:  DELETE ARROW.FULL 
+
+	FAST  shift 61
+	FULL  shift 62
+	.  error
+
+
+state 43
+	FdiskParams:  ADD ARROW.NUMBERN 
+
+	NUMBERN  shift 63
+	.  error
+
+
+state 44
+	FdiskParams:  SIZE ARROW.NUMBERN 
+
+	NUMBERN  shift 64
+	.  error
+
+
+state 45
+	TYPE_NAMES:  NAME ARROW.ID 
+	TYPE_NAMES:  NAME ARROW.STRTYPE 
+
+	ID  shift 65
+	STRTYPE  shift 66
+	.  error
+
+
+state 46
+	Paparams:  PATH ARROW ROUTE.    (37)
+
+	.  reduce 37 (src line 107)
+
+
+state 47
+	Paparams:  PATH ARROW STRTYPE.    (38)
+
+	.  reduce 38 (src line 108)
+
+
+state 48
+	Mkparams:  SIZE ARROW NUMBERN.    (33)
+
+	.  reduce 33 (src line 101)
+
+
+state 49
+	Mkparams:  UNIT ARROW K.    (34)
+
+	.  reduce 34 (src line 102)
+
+
+state 50
+	Mkparams:  UNIT ARROW M.    (35)
+
+	.  reduce 35 (src line 103)
+
+
+state 51
+	Mkparams:  NAME ARROW ID.    (36)
+
+	.  reduce 36 (src line 104)
+
+
+state 52
+	FdiskParams:  UNIT ARROW B.    (19)
+
+	.  reduce 19 (src line 84)
+
+
+state 53
+	FdiskParams:  UNIT ARROW K.    (30)
+
+	.  reduce 30 (src line 95)
+
+
+state 54
+	FdiskParams:  UNIT ARROW M.    (31)
+
+	.  reduce 31 (src line 96)
+
+
+state 55
+	FdiskParams:  TYPE ARROW P.    (20)
+
+	.  reduce 20 (src line 85)
+
+
+state 56
+	FdiskParams:  TYPE ARROW E.    (21)
+
+	.  reduce 21 (src line 86)
+
+
+state 57
+	FdiskParams:  TYPE ARROW L.    (22)
+
+	.  reduce 22 (src line 87)
+
+
+state 58
+	FdiskParams:  FIT ARROW BF.    (23)
+
+	.  reduce 23 (src line 88)
+
+
+state 59
+	FdiskParams:  FIT ARROW FF.    (24)
+
+	.  reduce 24 (src line 89)
+
+
+state 60
+	FdiskParams:  FIT ARROW WF.    (25)
+
+	.  reduce 25 (src line 90)
+
+
+state 61
+	FdiskParams:  DELETE ARROW FAST.    (26)
+
+	.  reduce 26 (src line 91)
+
+
+state 62
+	FdiskParams:  DELETE ARROW FULL.    (27)
+
+	.  reduce 27 (src line 92)
+
+
+state 63
+	FdiskParams:  ADD ARROW NUMBERN.    (28)
+
+	.  reduce 28 (src line 93)
+
+
+state 64
+	FdiskParams:  SIZE ARROW NUMBERN.    (29)
+
+	.  reduce 29 (src line 94)
+
+
+state 65
+	TYPE_NAMES:  NAME ARROW ID.    (39)
+
+	.  reduce 39 (src line 111)
+
+
+state 66
+	TYPE_NAMES:  NAME ARROW STRTYPE.    (40)
+
+	.  reduce 40 (src line 112)
+
+
+34 terminals, 11 nonterminals
+41 grammar rules, 67/8000 states
+0 shift/reduce, 0 reduce/reduce conflicts reported
+60 working sets used
+memory: parser 24/120000
+0 extra closures
+66 shift entries, 1 exceptions
+18 goto entries
+2 entries saved by goto default
+Optimizer space used: output 69/120000
+69 table entries, 0 zero
+maximum spread: 34, maximum offset: 33
