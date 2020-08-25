@@ -82,6 +82,7 @@ func MakeMK(root Node) {
 
 }
 
+// CreateDisk Funcion para crear el disco y tambien inicializar el mbr
 func CreateDisk(path string, size int32, diskSignature int32, name string, unit byte) {
 	auxSize := verifySize(unit, size)
 
@@ -209,10 +210,12 @@ func writeNextBytes(file *os.File, bytes []byte) {
 	}
 }
 
+// GenerateRandomSignature Genera un signature random
 func GenerateRandomSignature(min int32, max int32) int32 {
 	return rand.Int31n(max-min) + min
 }
 
+// GenerateSignature devuelve un signature de tipo random
 func GenerateSignature() int32 {
 	rand.Seed(time.Now().UnixNano())
 	randNumber := GenerateRandomSignature(1, 100000)

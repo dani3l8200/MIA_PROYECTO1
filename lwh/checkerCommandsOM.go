@@ -5,6 +5,7 @@ import (
 	"strings"
 )
 
+// CheckMKdisk funcion para verificar las entradas obligatorias
 func CheckMKdisk(aux Node) bool {
 	var sizeCheck bool = false
 	var pathCheck bool = false

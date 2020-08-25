@@ -42,8 +42,7 @@ func (n Node) Length() int {
 	return n.Size
 }
 
-//********************************************************************************************
-//******************************** METODO PARA ALMACENAR LOS TOKENS UNA LISTA SE PODRIA DECIR xd ***************************
+// Append es utilizaro para insertar los tokens hijos en las lista y tambien add sub hijos
 func (n Node) Append(nn ...Node) Node {
 	n.Children = append(n.Children, nn...)
 	n.Size = n.Size + 1
