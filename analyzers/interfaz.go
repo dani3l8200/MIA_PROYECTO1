@@ -10,22 +10,23 @@ import (
 )
 
 func Execute() {
-	fmt.Println("*************************************************************************************************")
-	fmt.Println("                                       SISTEMA DE ARCHIVOS LWH                                   ")
-	fmt.Println("*************************************************************************************************")
-	fi := bufio.NewReader(os.Stdin)
+	eqn := "Fdisk -sizE->135 -path->/home/dani3l8200/Escritorio/MisDiscos/Juan6.dsk -name->Particion3 -fit->BF -type->E"
+	/*fmt.Println("************************************************************************************************")
+	fmt.Println("                                       SISTEMA DE ARCHIVOS LWH                                 ")
+	fmt.Println("************************************************************************************************")*/
+	//fi := bufio.NewReader(os.Stdin)
 
-	for {
-		var eqn string
-		var ok bool
+	/*for {
+	var eqn string
+	var ok bool
 
-		fmt.Printf("~$: ")
-		if eqn, ok = readline(fi); ok {
-			ExecuteComands(eqn)
-		} else {
+	fmt.Printf("~$: ")
+	if eqn, ok = readline(fi); ok {*/
+	ExecuteComands(eqn)
+	/*	} else {
 			break
 		}
-	}
+	}*/
 
 }
 
@@ -47,16 +48,13 @@ func SelectCommands(command lwh.Node) {
 			lwh.MakeMK(command)
 		}
 	} else if command.TypeToken == "RMDISK" {
-		lwh.DeleteDisk(command.Children[0].Value)
-	} else if command.TypeToken == "FDISK" {
-		fmt.Println(Root.Children[0].Length())
-		for _, v := range Root.Children {
-			fmt.Println(v.Value, v.Size)
-			for _, i := range v.Children {
-				fmt.Println(i.Value, i.Size)
-			}
+		if lwh.CheckRMdisk(command) {
+			lwh.DeleteDisk(command.Children[0].Value)
 		}
-
+	} else if command.TypeToken == "FDISK" {
+		if lwh.ChekcFDisk(command) {
+			lwh.MakeFdisk(command)
+		}
 	}
 }
 
