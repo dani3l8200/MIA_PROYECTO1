@@ -21,7 +21,7 @@ func MakeMK(root Node) {
 	var size int32 = 0
 	var path string = ""
 	var name string = ""
-	var unit byte = 'k'
+	var unit byte = 'K'
 
 	for _, v := range root.Children {
 		if v.TypeToken == "SIZE" {
@@ -65,11 +65,11 @@ func MakeMK(root Node) {
 				fmt.Printf("%+v\n", name)
 			} else if j.TypeToken == "UNIT" {
 				if strings.EqualFold(j.Value, "k") {
-					unit = 'k'
+					unit = 'K'
 					//size = size * 1024
 					fmt.Printf("%+v\n", size)
 				} else if strings.EqualFold(j.Value, "m") {
-					unit = 'm'
+					unit = 'M'
 					//size = size * 1024 * 1024
 					fmt.Printf("%+v\n", unit)
 				}
@@ -130,7 +130,7 @@ func CreateDisk(path string, size int32, diskSignature int32, name string, unit 
 	writeFile(pathaux, mbr)
 	// Creando una copia del archivo binario
 	writeFile(newPath, mbr)
-	read(path)
+	//	read(path)
 	/*f1, err := os.OpenFile(path, os.O_RDWR, 0777)
 	if err != nil {
 		log.Fatal(err)
@@ -139,7 +139,7 @@ func CreateDisk(path string, size int32, diskSignature int32, name string, unit 
 
 }
 
-func read(path string) {
+/*func read(path string) {
 	f, err := os.OpenFile(path, os.O_RDWR, 0666)
 	if err != nil {
 		log.Fatal(err)
@@ -163,7 +163,7 @@ func read(path string) {
 	}
 	fmt.Printf("size: %d\nDiskSignature: %d\nTime: %+v\nCaracter:%+v\n ", m.MbrSize, m.MbrDiskSignature, m.MbrTime, m.Partition)
 
-}
+}*/
 
 func writeFile(path string, m structs_lwh.MBR) {
 	f, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0666)
@@ -171,25 +171,24 @@ func writeFile(path string, m structs_lwh.MBR) {
 		log.Fatal(err)
 	}
 	defer f.Close()
-	var otro int8 = 0
+	var firstPos [2]byte
+	copy(firstPos[:], "\\0")
+	f.Seek(int64(m.MbrSize), 0)
 
-	start := &otro
-	struC := &m
 	var binario bytes.Buffer
 
-	binary.Write(&binario, binary.BigEndian, struC)
+	binary.Write(&binario, binary.BigEndian, &firstPos)
 
 	writeNextBytes(f, binario.Bytes())
 
-	f.Seek(int64(m.MbrSize), 0)
+	f.Seek(0, 0)
 
 	var binario2 bytes.Buffer
 
-	binary.Write(&binario2, binary.BigEndian, start)
+	binary.Write(&binario2, binary.BigEndian, &m)
 
 	writeNextBytes(f, binario2.Bytes())
 
-	f.Seek(0, 0)
 }
 
 func readNextBytes(file *os.File, number int) []byte {
@@ -229,9 +228,9 @@ func makeDirectory(path string) {
 }
 
 func verifySize(unit byte, size int32) int32 {
-	if unit == 'k' {
+	if unit == 'K' {
 		size = size * 1020
-	} else if unit == 'm' {
+	} else if unit == 'M' {
 		size = size * 1020 * 1020
 	}
 	return size
