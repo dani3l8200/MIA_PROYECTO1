@@ -62,7 +62,7 @@ letter        [_a-zA-Z]|{unicodeLetter}
 id			 ([a-zA-Z_])[a-zA-Z0-9_"-""."]*
 route 		 ("/"{id})("/"{id})*("/"|"."{id})?
 stringL      ("\""[^"\""]*"\"")
-newLine    	[\\][\*]
+idn  		 (-id[0-9]+)	
 unicodeDigit  \x81 //ESTO ES PORQUE GO TRABAJA CON UTF-8 POR ESO ES NECESARIO 
 unicodeLetter \x80
 %%
@@ -94,11 +94,15 @@ fast lval.token = string(l.TokenBytes(nil)); return FAST
 full lval.token = string(l.TokenBytes(nil)); return FULL
 -add lval.token = string(l.TokenBytes(nil)); return ADD
 fdisk lval.token = string(l.TokenBytes(nil)); return FDISK 
+mount lval.token = string(l.TokenBytes(nil)); return MOUNT
+unmount lval.token = string(l.TokenBytes(nil)); return UNMOUNT
+= lval.token = string(l.TokenBytes(nil)); return S_EQUAL
 {digit}  lval.token = string(l.TokenBytes(nil)); return NUMBERN
 {id}	lval.token = string(l.TokenBytes(nil)); return ID
 {stringL} lval.token = string(l.TokenBytes(nil)); return STRTYPE
 {route} lval.token = string(l.TokenBytes(nil)); return ROUTE
-{newLine} lval.token = string(l.TokenBytes(nil)); return CONTINUE
+{idn} lval.token = string(l.TokenBytes(nil)); return IDM
+{comment} lval.token = string(l.TokenBytes(nil)); return COMMENT
 %%
 	if c, ok := l.Abort(); ok { return int(c) }
 	goto yyAction
