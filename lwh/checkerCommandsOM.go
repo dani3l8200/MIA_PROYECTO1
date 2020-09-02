@@ -240,3 +240,62 @@ func ChekcFDisk(aux Node) bool {
 	fmt.Println(sizeCheck, unitCheck, pathCheck, typeCheck, fitCheck, deleteCheck, nameCheck, addCheck)
 	return generalFlag
 }
+
+// CheckMount metodo utilizado para verificar que vengan los comandos especificados en el enunciado para el comando mount
+func CheckMount(aux Node) bool {
+	var generalFlag = true
+	var checkPath = false
+	var checkName = false
+	for _, i := range aux.Children {
+		if i.TypeToken == "PATH" {
+			checkPath = true
+		} else if i.TypeToken == "NAME" {
+			checkName = true
+		}
+		for _, j := range i.Children {
+			if j.TypeToken == "PATH" {
+				if checkPath {
+					fmt.Println("COMANDO PATH REPETIDO")
+					return false
+				}
+				checkPath = true
+			} else if j.TypeToken == "NAME" {
+				if checkName {
+					fmt.Println("COMANDO NAME REPETIDO")
+					return false
+				}
+				checkName = true
+			}
+		}
+	}
+	if !checkPath {
+		fmt.Println("FALTA EL COMANDO PATH")
+		generalFlag = false
+	}
+	if !checkName {
+		fmt.Println("FALTA EL COMANO NAME")
+		generalFlag = false
+	}
+	return generalFlag
+}
+
+//CheckUnmount metodo utlizado para verificar que vengan los comandos especificados en el enunciado para el comando unmount
+func CheckUnmount(aux Node) bool {
+	var CheckIDn = false
+	var generalFlag = true
+	for _, i := range aux.Children {
+		if i.TypeToken == "ID" {
+			CheckIDn = true
+		}
+		for _, j := range i.Children {
+			if j.TypeToken == "ID" {
+				CheckIDn = true
+			}
+		}
+	}
+	if !CheckIDn {
+		fmt.Println("COMANDO IDn es obligatorio")
+		generalFlag = false
+	}
+	return generalFlag
+}
