@@ -5,8 +5,8 @@ package structs_lwh
 type EBR struct {
 	PartStatusE byte
 	PartFitE    byte
-	PartStartE  int32
-	PartSizeE   int32
-	PartNextE   int32
+	PartStartE  int64
+	PartSizeE   int64
+	PartNextE   int64
 	PartNameE   [16]byte
 }
