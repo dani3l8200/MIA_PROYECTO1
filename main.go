@@ -3,7 +3,20 @@ package main
 import "MIA-PROYECTO1/analyzers"
 
 func main() {
+
 	analyzers.Execute()
+
+	/*var lista datastructure.LinkedList
+	var mount structs_lwh.MountDisk
+	name := "JUAN"
+	id := "12"
+	path := "/home/dani33l820"
+
+	lista.Insert(mount.FMountDisk(id, path, name))
+	lista.Insert(mount.FMountDisk("A299", "/home/danil3901021", "Marcela"))
+	lista.DeleteMount("A299")*/
+	//lwh.ReportMBR("/home/dani3l8200/Escritorio/MisDiscos/archivo.dot")
+
 	/*if _, err := os.Stat("/home/dani3l8200/gocode/src/intento/day.go"); err == nil {
 		fmt.Println("existe")
 
@@ -19,17 +32,3 @@ func main() {
 	}*/
 
 }
-
-/*if x.value == "mkdisk" {
-	fmt.Println(x.value)
-	for i, s := range x.children {
-		fmt.Println(i, s.value)
-	}
-} else if x.value == "exec" {
-	fmt.Println(x.value)
-	for k, m := range x.children {
-		fmt.Println(k, m.value)
-	}
-
-
-}*/
