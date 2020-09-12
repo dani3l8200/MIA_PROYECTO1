@@ -132,15 +132,17 @@ func (l *LinkedList) Each(f func(val structs_lwh.MountDisk)) {
 }
 
 //GetMountedPart obtiene un objeto Mount, que ya fue insertado con anterioridad en la lista
-func (l *LinkedList) GetMountedPart(ID string) interface{} {
+func (l *LinkedList) GetMountedPart(ID string) (structs_lwh.MountDisk, bool) {
+	var disk structs_lwh.MountDisk
 	if l.head != nil {
 		for node := l.head; node != nil; node = node.Next() {
 			if ID == node.Value().ID {
-				return node
+				disk = node.Value()
+				return disk, true
 			}
 		}
 	}
-	return nil
+	return disk, false
 }
 
 //MountedPart Verifica si ya se monto alguna particion del disco
@@ -158,7 +160,7 @@ func (l *LinkedList) MountedPart(path string, name string) bool {
 
 //SetLetter genera la letra para el ID del mount, como lo indica el enunciado
 func (l *LinkedList) SetLetter(path string) byte {
-	var letter byte = 98
+	var letter byte = 97
 	if l.head != nil {
 		for node := l.head; node != nil; node = node.Next() {
 			if path == node.Value().Path {
@@ -203,9 +205,9 @@ func (l *LinkedList) SetNumber(path string) int {
 // Print LinkedList
 func (l *LinkedList) Print() {
 	if l.head != nil {
-		fmt.Println("List of Partitions Mounts: ")
+		fmt.Println("Lista de Particiones Montadas: ")
 		for node := l.head; node != nil; node = node.Next() {
-			fmt.Println(node.Value().ID, node.Value().Name, node.Value().Path)
+			fmt.Println("ID:", node.Value().ID, "Nombre:", node.Value().Name, "Directorio:", node.Value().Path)
 		}
 	}
 }
