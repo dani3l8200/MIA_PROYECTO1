@@ -1,20 +1,63 @@
 package main
 
-import "MIA-PROYECTO1/analyzers"
+import (
+	"fmt"
+	"strings"
+)
 
 func main() {
+	//	analyzers.Execute()
+	var stringPath string = "/home/dani3l8200/Escritorio/MisDiscos/"
+	x := strings.Split(stringPath, "/")
+	fmt.Println(x)
+	/*	if _, err := os.Stat("/home/Juan Daniel/"); os.IsNotExist(err) {
+		os.Mkdir("/home/Juan Daniel/", 0777)
+	}*/
+	/*	var lista datastructure.LinkedList
+		var mount structs_lwh.MountDisk
+		name := "JUAN"
+		path := "/home/dani33l820"
+		letter := lista.SetLetter(path)
 
-	analyzers.Execute()
+		number := lista.SetNumber(path)
+		var ids string = ""
 
-	/*var lista datastructure.LinkedList
-	var mount structs_lwh.MountDisk
-	name := "JUAN"
-	id := "12"
-	path := "/home/dani33l820"
+		var auxID [16]byte
+		copy(auxID[:], "vd ")
+		auxID[2] = letter
+		for _, v := range auxID {
+			if v != 0 {
+				ids += string(v)
+			}
+		}
+		ids += strconv.Itoa(number)
 
-	lista.Insert(mount.FMountDisk(id, path, name))
-	lista.Insert(mount.FMountDisk("A299", "/home/danil3901021", "Marcela"))
-	lista.DeleteMount("A299")*/
+		lista.Insert(mount.FMountDisk(ids, path, name))
+
+		letter1 := lista.SetLetter("/home/Escritorio/NAme")
+
+		number1 := lista.SetNumber("/home/Escritorio/NAme")
+		ids = ""
+
+		var auxID1 [16]byte
+
+		copy(auxID1[:], "vd ")
+		auxID1[2] = letter1
+		for _, v := range auxID1 {
+			if v != 0 {
+				ids += string(v)
+			}
+		}
+		ids += strconv.Itoa(number1)
+
+		fmt.Println(letter1)
+		lista.Insert(mount.FMountDisk("A299", "/home/Escritorio/NAme", "Marcela"))
+		test, err := lista.GetMountedPart("A2997")
+		if !err {
+			log.Fatalln("NO SE ENCONTRO EL ID")
+		}
+		fmt.Println(test.ID, test.Name, test.Path)*/
+
 	//lwh.ReportMBR("/home/dani3l8200/Escritorio/MisDiscos/archivo.dot")
 
 	/*if _, err := os.Stat("/home/dani3l8200/gocode/src/intento/day.go"); err == nil {
