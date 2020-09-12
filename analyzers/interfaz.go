@@ -11,19 +11,23 @@ import (
 
 // Execute realiza el iniciamiento del proyecto :D
 func Execute() {
-	//eqn := "mkdisk -size->10 -path->/home/dani3l8200/Escritorio/MisDiscos/Disco5.dsk -name->Disco5.dsk -unit->m"
+	//eqn := "mkdisk -size->10 -path->/home/dani3l8200/Escritorio/MisDiscos/DiscoFormateo.dsk -name->DiscoFormateo.dsk -unit->m"
 	//eqn := "Fdisk -sizE->40 -path->/home/dani3l8200/Escritorio/MisDiscos/Disco5.dsk -name->Particion1 \n"
-	//eqn := "Fdisk -sizE->50 -path->/home/dani3l8200/Escritorio/MisDiscos/Disco5.dsk -name->Particion2 -fit->BF"
+	//eqn := "Fdisk -sizE->50 -path->/home/dani3l8200/Escritorio/MisDiscos/DiscoFormateo.dsk -name->Particion2 -fit->BF"
 	//eqn := "Fdisk -sizE->63 -path->/home/dani3l8200/Escritorio/MisDiscos/Disco5.dsk -name->Particion3  -fit->BF"
-	//eqn := "Fdisk -sizE->883 -path->/home/dani3l8200/Escritorio/MisDiscos/Disco5.dsk -name->Particion4 -type->E"
+	//eqn := "Fdisk -sizE->883 -path->/home/dani3l8200/Escritorio/MisDiscos/DiscoFormateo.dsk -name->Particion4 -type->E"
 	//eqn := "Fdisk -sizE->12 -path->/home/dani3l8200/Escritorio/MisDiscos/Disco5.dsk -name->Particion5 -type->L"
 	//eqn := "Fdisk -sizE->25 -path->/home/dani3l8200/Escritorio/MisDiscos/Disco5.dsk -name->Particion6 -type->L"
 	//eqn := "Fdisk -sizE->45 -path->/home/dani3l8200/Escritorio/MisDiscos/Disco5.dsk -name->Particion7 -type->L"
 	//eqn := "mount -path->/home/dani3l8200/Escritorio/MisDiscos/Disco5.dsk -name->Particion1"
 
-	//eqn := "exec -path->/home/dani3l8200/Escritorio/MisDiscos/ht1.txt"
+	eqn := "exec -path->/home/dani3l8200/Escritorio/MisDiscos/ht1.txt"
+	//eqn := "login -usr->root -pwd->201020576 -id->vda1"
+	//eqn := "fdisk -add->2 -unit->k -path->/home/dani3l8200/Escritorio/MisDiscos/Disco5.dsk -name->Particion2"
 
-	fmt.Println("************************************************************************************************")
+	//eqn := "mkfs -id->vdb1 -type->fast"
+
+	/*fmt.Println("************************************************************************************************")
 	fmt.Println("                                       SISTEMA DE ARCHIVOS LWH                                 ")
 	fmt.Println("************************************************************************************************")
 
@@ -44,8 +48,8 @@ func Execute() {
 			ExecuteComands(str)
 		}
 
-	}
-	//ExecuteComands(eqn)
+	}*/
+	ExecuteComands(eqn)
 
 }
 
@@ -87,6 +91,16 @@ func SelectCommands(command lwh.Node) {
 		if lwh.CheckUnmount(command) {
 			lwh.UnmountPartitions(command)
 		}
+	} else if command.TypeToken == "MKFS" {
+		lwh.MakeFileSystem(command)
+	} else if command.TypeToken == "LOGIN" {
+		lwh.MakeLogin(command)
+	} else if command.TypeToken == "LOGOUT" {
+		lwh.MakeLogout(command)
+	} else if command.TypeToken == "MKFILE" {
+
+	} else if command.TypeToken == "MKDIR" {
+
 	}
 	for _, i := range command.Children {
 		if i.TypeToken == "PAUSE" {
@@ -115,6 +129,16 @@ func SelectCommands(command lwh.Node) {
 			if lwh.CheckUnmount(i) {
 				lwh.UnmountPartitions(i)
 			}
+		} else if i.TypeToken == "MKFS" {
+			lwh.MakeFileSystem(i)
+		} else if i.TypeToken == "LOGIN" {
+			lwh.MakeLogin(i)
+		} else if i.TypeToken == "LOGOUT" {
+			lwh.MakeLogout(i)
+		} else if i.TypeToken == "MKFILE" {
+
+		} else if i.TypeToken == "MKDIR" {
+
 		}
 	}
 }

@@ -63,7 +63,7 @@ id			 ([a-zA-Z_])[a-zA-Z0-9_"-""."]*
 route 		 ("/"{id})("/"{id})*("/"|"."{id})?
 stringL      ("\""[^"\""]*"\"")
 idn  		 (-id[0-9]+)	
-unicodeDigit  \x81 //ESTO ES PORQUE GO TRABAJA CON UTF-8 POR ESO ES NECESARIO 
+unicodeDigit  \x81
 unicodeLetter \x80
 %%
 	c = l.Rule0()
@@ -96,7 +96,17 @@ full lval.token = string(l.TokenBytes(nil)); return FULL
 fdisk lval.token = string(l.TokenBytes(nil)); return FDISK 
 mount lval.token = string(l.TokenBytes(nil)); return MOUNT
 unmount lval.token = string(l.TokenBytes(nil)); return UNMOUNT
+mkfs lval.token = string(l.TokenBytes(nil)); return MKFS 
+-id lval.token = string(l.TokenBytes(nil)); return IDN
 = lval.token = string(l.TokenBytes(nil)); return S_EQUAL
+-p lval.token = string(l.TokenBytes(nil)); return PCONT
+-cont lval.token = string(l.TokenBytes(nil)); return CONT
+mkfile lval.token = string(l.TokenBytes(nil)); return MKFILE
+mkdir lval.token = string(l.TokenBytes(nil)); return MKDIR
+login lval.token = string(l.TokenBytes(nil)); return LOGIN
+-usr lval.token = string(l.TokenBytes(nil)); return USER
+-pwd lval.token = string(l.TokenBytes(nil)); return PWD
+logout lval.token = string(l.TokenBytes(nil)); return LOGOUT
 {digit}  lval.token = string(l.TokenBytes(nil)); return NUMBERN
 {id}	lval.token = string(l.TokenBytes(nil)); return ID
 {stringL} lval.token = string(l.TokenBytes(nil)); return STRTYPE

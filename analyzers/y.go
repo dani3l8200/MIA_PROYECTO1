@@ -54,6 +54,16 @@ const UNMOUNT = 57377
 const IDM = 57378
 const S_EQUAL = 57379
 const COMMENT = 57380
+const MKFS = 57381
+const IDN = 57382
+const MKFILE = 57383
+const PCONT = 57384
+const CONT = 57385
+const LOGIN = 57386
+const USER = 57387
+const PWD = 57388
+const LOGOUT = 57389
+const MKDIR = 57390
 
 var yyToknames = [...]string{
 	"$end",
@@ -94,6 +104,16 @@ var yyToknames = [...]string{
 	"IDM",
 	"S_EQUAL",
 	"COMMENT",
+	"MKFS",
+	"IDN",
+	"MKFILE",
+	"PCONT",
+	"CONT",
+	"LOGIN",
+	"USER",
+	"PWD",
+	"LOGOUT",
+	"MKDIR",
 }
 
 var yyStatenames = [...]string{}
@@ -101,10 +121,6 @@ var yyStatenames = [...]string{}
 const yyEofCode = 1
 const yyErrCode = 2
 const yyInitialStackSize = 16
-
-//line parser.y:143
-
-const src = `exec path`
 
 //line yacctab:1
 var yyExca = [...]int{
@@ -115,77 +131,109 @@ var yyExca = [...]int{
 
 const yyPrivate = 57344
 
-const yyLast = 88
+const yyLast = 151
 
 var yyAct = [...]int{
-	8, 4, 40, 18, 27, 41, 5, 36, 14, 81,
-	23, 26, 25, 37, 38, 6, 7, 42, 75, 76,
-	72, 73, 74, 69, 70, 71, 48, 65, 26, 59,
-	9, 10, 79, 80, 11, 67, 68, 49, 17, 37,
-	38, 15, 58, 57, 78, 66, 33, 28, 34, 63,
-	64, 60, 77, 62, 56, 44, 32, 31, 30, 29,
-	61, 15, 15, 39, 15, 55, 19, 20, 21, 34,
-	54, 53, 52, 51, 50, 47, 46, 45, 43, 3,
-	35, 24, 12, 22, 16, 13, 2, 1,
+	23, 66, 59, 42, 54, 19, 140, 28, 31, 57,
+	136, 45, 32, 20, 55, 56, 60, 67, 44, 70,
+	8, 4, 48, 46, 41, 135, 5, 132, 76, 125,
+	31, 126, 127, 118, 119, 6, 7, 20, 115, 116,
+	117, 124, 63, 138, 45, 30, 108, 68, 102, 69,
+	10, 9, 139, 137, 11, 12, 46, 15, 93, 60,
+	13, 97, 87, 14, 16, 85, 67, 101, 52, 134,
+	88, 61, 133, 62, 64, 77, 20, 51, 129, 130,
+	50, 38, 33, 39, 112, 113, 114, 22, 131, 110,
+	111, 37, 36, 35, 34, 103, 49, 122, 123, 109,
+	106, 107, 128, 121, 104, 20, 120, 105, 20, 72,
+	24, 25, 26, 100, 99, 39, 98, 96, 95, 94,
+	92, 91, 90, 89, 86, 84, 83, 82, 81, 80,
+	79, 78, 75, 74, 73, 71, 20, 3, 65, 53,
+	17, 58, 47, 40, 43, 29, 27, 21, 18, 2,
+	1,
 }
 
 var yyPact = [...]int{
-	-4, -1000, -4, -1000, 58, 55, 58, 35, -1000, 56,
-	-31, -1000, -1000, 58, -1000, 70, 55, -1000, -1000, 69,
-	68, 67, 58, -1000, 35, -1000, -1000, -1000, 66, 65,
-	64, 63, 62, 57, 46, 56, -1000, -1000, -1000, -31,
-	-1000, 21, -1000, 42, -1000, 39, 34, 10, -1000, -1000,
-	20, -3, -9, -14, 38, 30, 15, -1000, -1000, -8,
+	16, -1000, 16, -1000, 130, 99, 130, 70, -1000, -33,
+	102, -1000, 56, -31, -1000, 31, 7, -1000, 130, -1000,
+	127, 99, -1000, -1000, 126, 125, 124, 130, -1000, 70,
+	-1000, -1000, -1000, 123, 122, 121, 120, 119, 118, 117,
+	-33, -1000, 116, 102, -1000, -1000, -1000, 56, -1000, 115,
+	114, 113, 112, -31, -1000, 111, 110, 109, 31, -1000,
+	-1000, 108, -1000, 106, 105, 7, -1000, -1000, 40, -1000,
+	-1000, 86, -1000, 93, 85, 29, -1000, -1000, 74, 58,
+	9, 1, 92, 89, 80, -1000, 24, -1000, -1000, 12,
+	-1, 88, 63, -1000, 10, 55, 8, -1000, -7, 39,
+	34, -1000, -11, -1000, -1000, -1000, -1000, -1000, -1000, -1000,
 	-1000, -1000, -1000, -1000, -1000, -1000, -1000, -1000, -1000, -1000,
 	-1000, -1000, -1000, -1000, -1000, -1000, -1000, -1000, -1000, -1000,
-	-1000, -1000,
+	-1000, -1000, -1000, -1000, -1000, -1000, -1000, -1000, -1000, -1000,
+	-1000,
 }
 
 var yyPgo = [...]int{
-	0, 4, 87, 79, 86, 85, 3, 84, 38, 83,
-	81, 12, 80, 7, 63, 2,
+	0, 12, 150, 137, 149, 148, 0, 147, 87, 146,
+	145, 45, 144, 18, 143, 24, 142, 22, 141, 2,
+	139, 4, 138, 1,
 }
 
 var yyR1 = [...]int{
 	0, 2, 4, 4, 3, 3, 3, 3, 3, 3,
-	3, 3, 5, 5, 7, 7, 9, 9, 10, 10,
-	12, 12, 14, 14, 11, 11, 11, 11, 11, 11,
-	11, 11, 11, 11, 11, 11, 11, 11, 11, 13,
-	13, 15, 8, 8, 8, 8, 8, 6, 6, 1,
-	1,
+	3, 3, 3, 3, 3, 3, 3, 5, 5, 7,
+	7, 9, 9, 10, 10, 12, 12, 14, 14, 16,
+	16, 20, 20, 18, 18, 22, 22, 11, 11, 11,
+	11, 11, 11, 11, 11, 11, 11, 11, 11, 11,
+	11, 11, 17, 17, 17, 17, 17, 17, 17, 21,
+	21, 21, 21, 19, 19, 19, 19, 19, 19, 23,
+	23, 23, 13, 13, 15, 8, 8, 8, 8, 8,
+	6, 6, 1, 1,
 }
 
 var yyR2 = [...]int{
 	0, 1, 2, 1, 2, 2, 2, 2, 1, 2,
-	2, 1, 2, 1, 2, 1, 2, 1, 2, 1,
-	2, 1, 2, 1, 1, 1, 3, 3, 3, 3,
-	3, 3, 3, 3, 3, 3, 3, 3, 3, 1,
-	1, 3, 1, 3, 3, 3, 3, 3, 3, 3,
-	3,
+	2, 1, 2, 2, 1, 2, 2, 2, 1, 2,
+	1, 2, 1, 2, 1, 2, 1, 2, 1, 2,
+	1, 2, 1, 2, 1, 2, 1, 1, 1, 3,
+	3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+	3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+	3, 3, 3, 1, 3, 1, 3, 3, 3, 1,
+	3, 1, 1, 1, 3, 1, 3, 3, 3, 3,
+	3, 3, 3, 3,
 }
 
 var yyChk = [...]int{
-	-1000, -2, -4, -3, 5, 10, 19, 20, 4, 34,
-	35, 38, -3, -5, -6, 6, -7, -8, -6, 11,
-	12, 13, -9, -6, -10, -11, -6, -1, 12, 24,
-	23, 22, 21, 11, 13, -12, -13, -6, -1, -14,
-	-15, 36, -6, 8, -8, 8, 8, 8, -6, -11,
-	8, 8, 8, 8, 8, 8, 8, -13, -15, 8,
-	9, 18, 14, 15, 16, 17, 25, 15, 16, 26,
-	27, 28, 29, 30, 31, 32, 33, 14, 14, 17,
-	18, 17,
+	-1000, -2, -4, -3, 5, 10, 19, 20, 4, 35,
+	34, 38, 39, 44, 47, 41, 48, -3, -5, -6,
+	6, -7, -8, -6, 11, 12, 13, -9, -6, -10,
+	-11, -6, -1, 12, 24, 23, 22, 21, 11, 13,
+	-14, -15, 36, -12, -13, -6, -1, -16, -17, 40,
+	24, 21, 12, -20, -21, 45, 46, 40, -18, -19,
+	-6, 40, 42, 11, 43, -22, -23, -6, 40, 42,
+	-6, 8, -8, 8, 8, 8, -6, -11, 8, 8,
+	8, 8, 8, 8, 8, -15, 8, -13, -17, 8,
+	8, 8, 8, -21, 8, 8, 8, -19, 8, 8,
+	8, -23, 8, 9, 18, 14, 15, 16, 17, 25,
+	15, 16, 26, 27, 28, 29, 30, 31, 32, 33,
+	14, 14, 17, 18, 17, 17, 32, 33, 14, 15,
+	16, 25, 17, 17, 14, 17, 17, 14, 9, 18,
+	17,
 }
 
 var yyDef = [...]int{
 	0, -2, 1, 3, 0, 0, 0, 0, 8, 0,
-	0, 11, 2, 4, 13, 0, 5, 15, 42, 0,
-	0, 0, 6, 17, 7, 19, 24, 25, 0, 0,
-	0, 0, 0, 0, 0, 9, 21, 39, 40, 10,
-	23, 0, 12, 0, 14, 0, 0, 0, 16, 18,
-	0, 0, 0, 0, 0, 0, 0, 20, 22, 0,
-	47, 48, 43, 44, 45, 46, 26, 37, 38, 27,
-	28, 29, 30, 31, 32, 33, 34, 35, 36, 49,
-	50, 41,
+	0, 11, 0, 0, 14, 0, 0, 2, 4, 18,
+	0, 5, 20, 75, 0, 0, 0, 6, 22, 7,
+	24, 37, 38, 0, 0, 0, 0, 0, 0, 0,
+	9, 28, 0, 10, 26, 72, 73, 12, 30, 0,
+	0, 0, 0, 13, 32, 0, 0, 0, 15, 34,
+	63, 0, 65, 0, 0, 16, 36, 69, 0, 71,
+	17, 0, 19, 0, 0, 0, 21, 23, 0, 0,
+	0, 0, 0, 0, 0, 27, 0, 25, 29, 0,
+	0, 0, 0, 31, 0, 0, 0, 33, 0, 0,
+	0, 35, 0, 80, 81, 76, 77, 78, 79, 39,
+	50, 51, 40, 41, 42, 43, 44, 45, 46, 47,
+	48, 49, 82, 83, 74, 52, 53, 54, 55, 56,
+	57, 58, 59, 60, 61, 62, 64, 66, 67, 68,
+	70,
 }
 
 var yyTok1 = [...]int{
@@ -196,7 +244,8 @@ var yyTok2 = [...]int{
 	2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
 	12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
 	22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
-	32, 33, 34, 35, 36, 37, 38,
+	32, 33, 34, 35, 36, 37, 38, 39, 40, 41,
+	42, 43, 44, 45, 46, 47, 48,
 }
 
 var yyTok3 = [...]int{
@@ -542,302 +591,500 @@ yydefault:
 
 	case 1:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:69
+//line parser.y:98
 		{
 			yyVAL.node = yyDollar[1].node
 			Root = yyVAL.node
 		}
 	case 2:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line parser.y:72
+//line parser.y:100
 		{
 			yyVAL.node = yyDollar[1].node.Append(yyDollar[2].node)
 		}
 	case 3:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:73
+//line parser.y:101
 		{
 			yyVAL.node.Append(yyDollar[1].node)
 		}
 	case 4:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line parser.y:76
+//line parser.y:103
 		{
 			yyVAL.node = lwh.NodeF("EXEC", yyDollar[1].token).Append(yyDollar[2].node)
 		}
 	case 5:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line parser.y:77
+//line parser.y:104
 		{
 			yyVAL.node = lwh.NodeF("MKDISK", yyDollar[1].token).Append(yyDollar[2].node)
 		}
 	case 6:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line parser.y:78
+//line parser.y:105
 		{
 			yyVAL.node = lwh.NodeF("RMDISK", yyDollar[1].token).Append(yyDollar[2].node)
 		}
 	case 7:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line parser.y:79
+//line parser.y:106
 		{
 			yyVAL.node = lwh.NodeF("FDISK", yyDollar[1].token).Append(yyDollar[2].node)
 		}
 	case 8:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:80
+//line parser.y:107
 		{
 			yyVAL.node = lwh.NodeF("PAUSE", yyDollar[1].token)
 		}
 	case 9:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line parser.y:81
-		{
-			yyVAL.node = lwh.NodeF("MOUNT", yyDollar[1].token).Append(yyDollar[2].node)
-		}
-	case 10:
-		yyDollar = yyS[yypt-2 : yypt+1]
-//line parser.y:82
+//line parser.y:108
 		{
 			yyVAL.node = lwh.NodeF("UNMOUNT", yyDollar[1].token).Append(yyDollar[2].node)
 		}
+	case 10:
+		yyDollar = yyS[yypt-2 : yypt+1]
+//line parser.y:109
+		{
+			yyVAL.node = lwh.NodeF("MOUNT", yyDollar[1].token).Append(yyDollar[2].node)
+		}
 	case 11:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:83
+//line parser.y:110
 		{
 			yyVAL.node = lwh.NodeF("COMENTARIO", yyDollar[1].token)
 		}
 	case 12:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line parser.y:86
+//line parser.y:111
 		{
-			yyVAL.node = yyDollar[1].node.Append(yyDollar[2].node)
+			yyVAL.node = lwh.NodeF("MKFS", yyDollar[1].token).Append(yyDollar[2].node)
 		}
 	case 13:
-		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:87
+		yyDollar = yyS[yypt-2 : yypt+1]
+//line parser.y:112
 		{
-			yyVAL.node.Append(yyDollar[1].node)
+			yyVAL.node = lwh.NodeF("LOGIN", yyDollar[1].token).Append(yyDollar[2].node)
 		}
 	case 14:
-		yyDollar = yyS[yypt-2 : yypt+1]
-//line parser.y:89
+		yyDollar = yyS[yypt-1 : yypt+1]
+//line parser.y:113
 		{
-			yyVAL.node = yyDollar[1].node.Append(yyDollar[2].node)
+			yyVAL.node = lwh.NodeF("LOGOUT", yyDollar[1].token)
 		}
 	case 15:
-		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:90
+		yyDollar = yyS[yypt-2 : yypt+1]
+//line parser.y:114
 		{
-			yyVAL.node.Append(yyDollar[1].node)
+			yyVAL.node = lwh.NodeF("MKFILE", yyDollar[1].token).Append(yyDollar[2].node)
 		}
 	case 16:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line parser.y:92
-		{
-			yyVAL.node = yyDollar[1].node.Append(yyDollar[2].node)
-		}
-	case 17:
-		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:93
-		{
-			yyVAL.node.Append(yyDollar[1].node)
-		}
-	case 18:
-		yyDollar = yyS[yypt-2 : yypt+1]
-//line parser.y:96
-		{
-			yyVAL.node = yyDollar[1].node.Append(yyDollar[2].node)
-		}
-	case 19:
-		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:97
-		{
-			yyVAL.node.Append(yyDollar[1].node)
-		}
-	case 20:
-		yyDollar = yyS[yypt-2 : yypt+1]
-//line parser.y:100
-		{
-			yyVAL.node = yyDollar[1].node.Append(yyDollar[2].node)
-		}
-	case 21:
-		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:101
-		{
-			yyVAL.node.Append(yyDollar[1].node)
-		}
-	case 22:
-		yyDollar = yyS[yypt-2 : yypt+1]
-//line parser.y:103
-		{
-			yyVAL.node = yyDollar[1].node.Append(yyDollar[2].node)
-		}
-	case 23:
-		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:104
-		{
-			yyVAL.node.Append(yyDollar[1].node)
-		}
-	case 24:
-		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:107
-		{
-			yyVAL.node = yyDollar[1].node
-		}
-	case 25:
-		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:108
-		{
-			yyVAL.node = yyDollar[1].node
-		}
-	case 26:
-		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:109
-		{
-			yyVAL.node = lwh.NodeF("UNIT", yyDollar[3].token)
-		}
-	case 27:
-		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:110
-		{
-			yyVAL.node = lwh.NodeF("TYPE", yyDollar[3].token)
-		}
-	case 28:
-		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:111
-		{
-			yyVAL.node = lwh.NodeF("TYPE", yyDollar[3].token)
-		}
-	case 29:
-		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:112
-		{
-			yyVAL.node = lwh.NodeF("TYPE", yyDollar[3].token)
-		}
-	case 30:
-		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:113
-		{
-			yyVAL.node = lwh.NodeF("FIT", yyDollar[3].token)
-		}
-	case 31:
-		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:114
-		{
-			yyVAL.node = lwh.NodeF("FIT", yyDollar[3].token)
-		}
-	case 32:
-		yyDollar = yyS[yypt-3 : yypt+1]
 //line parser.y:115
 		{
-			yyVAL.node = lwh.NodeF("FIT", yyDollar[3].token)
+			yyVAL.node = lwh.NodeF("MKDIR", yyDollar[1].token).Append(yyDollar[2].node)
 		}
-	case 33:
-		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:116
-		{
-			yyVAL.node = lwh.NodeF("DELETE", yyDollar[3].token)
-		}
-	case 34:
-		yyDollar = yyS[yypt-3 : yypt+1]
+	case 17:
+		yyDollar = yyS[yypt-2 : yypt+1]
 //line parser.y:117
 		{
-			yyVAL.node = lwh.NodeF("DELETE", yyDollar[3].token)
+			yyVAL.node = yyDollar[1].node.Append(yyDollar[2].node)
 		}
-	case 35:
-		yyDollar = yyS[yypt-3 : yypt+1]
+	case 18:
+		yyDollar = yyS[yypt-1 : yypt+1]
 //line parser.y:118
 		{
-			yyVAL.node = lwh.NodeF("ADD", yyDollar[3].token)
+			yyVAL.node.Append(yyDollar[1].node)
 		}
-	case 36:
-		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:119
-		{
-			yyVAL.node = lwh.NodeF("SIZE", yyDollar[3].token)
-		}
-	case 37:
-		yyDollar = yyS[yypt-3 : yypt+1]
+	case 19:
+		yyDollar = yyS[yypt-2 : yypt+1]
 //line parser.y:120
 		{
-			yyVAL.node = lwh.NodeF("UNIT", yyDollar[3].token)
+			yyVAL.node = yyDollar[1].node.Append(yyDollar[2].node)
 		}
-	case 38:
-		yyDollar = yyS[yypt-3 : yypt+1]
+	case 20:
+		yyDollar = yyS[yypt-1 : yypt+1]
 //line parser.y:121
 		{
-			yyVAL.node = lwh.NodeF("UNIT", yyDollar[3].token)
+			yyVAL.node.Append(yyDollar[1].node)
 		}
-	case 39:
-		yyDollar = yyS[yypt-1 : yypt+1]
+	case 21:
+		yyDollar = yyS[yypt-2 : yypt+1]
 //line parser.y:123
 		{
-			yyVAL.node = yyDollar[1].node
+			yyVAL.node = yyDollar[1].node.Append(yyDollar[2].node)
 		}
-	case 40:
+	case 22:
 		yyDollar = yyS[yypt-1 : yypt+1]
 //line parser.y:124
 		{
+			yyVAL.node.Append(yyDollar[1].node)
+		}
+	case 23:
+		yyDollar = yyS[yypt-2 : yypt+1]
+//line parser.y:126
+		{
+			yyVAL.node = yyDollar[1].node.Append(yyDollar[2].node)
+		}
+	case 24:
+		yyDollar = yyS[yypt-1 : yypt+1]
+//line parser.y:127
+		{
+			yyVAL.node.Append(yyDollar[1].node)
+		}
+	case 25:
+		yyDollar = yyS[yypt-2 : yypt+1]
+//line parser.y:129
+		{
+			yyVAL.node = yyDollar[1].node.Append(yyDollar[2].node)
+		}
+	case 26:
+		yyDollar = yyS[yypt-1 : yypt+1]
+//line parser.y:130
+		{
+			yyVAL.node.Append(yyDollar[1].node)
+		}
+	case 27:
+		yyDollar = yyS[yypt-2 : yypt+1]
+//line parser.y:132
+		{
+			yyVAL.node = yyDollar[1].node.Append(yyDollar[2].node)
+		}
+	case 28:
+		yyDollar = yyS[yypt-1 : yypt+1]
+//line parser.y:133
+		{
+			yyVAL.node.Append(yyDollar[1].node)
+		}
+	case 29:
+		yyDollar = yyS[yypt-2 : yypt+1]
+//line parser.y:135
+		{
+			yyVAL.node = yyDollar[1].node.Append(yyDollar[2].node)
+		}
+	case 30:
+		yyDollar = yyS[yypt-1 : yypt+1]
+//line parser.y:136
+		{
+			yyVAL.node.Append(yyDollar[1].node)
+		}
+	case 31:
+		yyDollar = yyS[yypt-2 : yypt+1]
+//line parser.y:138
+		{
+			yyVAL.node = yyDollar[1].node.Append(yyDollar[2].node)
+		}
+	case 32:
+		yyDollar = yyS[yypt-1 : yypt+1]
+//line parser.y:139
+		{
+			yyVAL.node.Append(yyDollar[1].node)
+		}
+	case 33:
+		yyDollar = yyS[yypt-2 : yypt+1]
+//line parser.y:141
+		{
+			yyVAL.node = yyDollar[1].node.Append(yyDollar[2].node)
+		}
+	case 34:
+		yyDollar = yyS[yypt-1 : yypt+1]
+//line parser.y:142
+		{
+			yyVAL.node.Append(yyDollar[1].node)
+		}
+	case 35:
+		yyDollar = yyS[yypt-2 : yypt+1]
+//line parser.y:144
+		{
+			yyVAL.node = yyDollar[1].node.Append(yyDollar[2].node)
+		}
+	case 36:
+		yyDollar = yyS[yypt-1 : yypt+1]
+//line parser.y:145
+		{
+			yyVAL.node.Append(yyDollar[1].node)
+		}
+	case 37:
+		yyDollar = yyS[yypt-1 : yypt+1]
+//line parser.y:147
+		{
 			yyVAL.node = yyDollar[1].node
+		}
+	case 38:
+		yyDollar = yyS[yypt-1 : yypt+1]
+//line parser.y:148
+		{
+			yyVAL.node = yyDollar[1].node
+		}
+	case 39:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line parser.y:149
+		{
+			yyVAL.node = lwh.NodeF("UNIT", yyDollar[3].token)
+		}
+	case 40:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line parser.y:150
+		{
+			yyVAL.node = lwh.NodeF("TYPE", yyDollar[3].token)
 		}
 	case 41:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:126
+//line parser.y:151
 		{
-			yyVAL.node = lwh.NodeF("ID", yyDollar[3].token)
+			yyVAL.node = lwh.NodeF("TYPE", yyDollar[3].token)
 		}
 	case 42:
-		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:128
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line parser.y:152
 		{
-			yyVAL.node = yyDollar[1].node
+			yyVAL.node = lwh.NodeF("TYPE", yyDollar[3].token)
 		}
 	case 43:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:129
+//line parser.y:153
 		{
-			yyVAL.node = lwh.NodeF("SIZE", yyDollar[3].token)
+			yyVAL.node = lwh.NodeF("FIT", yyDollar[3].token)
 		}
 	case 44:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:130
+//line parser.y:154
 		{
-			yyVAL.node = lwh.NodeF("UNIT", yyDollar[3].token)
+			yyVAL.node = lwh.NodeF("FIT", yyDollar[3].token)
 		}
 	case 45:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:131
+//line parser.y:155
 		{
-			yyVAL.node = lwh.NodeF("UNIT", yyDollar[3].token)
+			yyVAL.node = lwh.NodeF("FIT", yyDollar[3].token)
 		}
 	case 46:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:132
+//line parser.y:156
 		{
-			yyVAL.node = lwh.NodeF("NAME", yyDollar[3].token)
+			yyVAL.node = lwh.NodeF("DELETE", yyDollar[3].token)
 		}
 	case 47:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:135
+//line parser.y:157
 		{
-			yyVAL.node = lwh.NodeF("PATH", yyDollar[3].token)
+			yyVAL.node = lwh.NodeF("DELETE", yyDollar[3].token)
 		}
 	case 48:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:136
+//line parser.y:158
 		{
-			yyVAL.node = lwh.NodeF("PATH", yyDollar[3].token)
+			yyVAL.node = lwh.NodeF("ADD", yyDollar[3].token)
 		}
 	case 49:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:139
+//line parser.y:159
 		{
-			yyVAL.node = lwh.NodeF("NAME", yyDollar[3].token)
+			yyVAL.node = lwh.NodeF("SIZE", yyDollar[3].token)
 		}
 	case 50:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:140
+//line parser.y:160
+		{
+			yyVAL.node = lwh.NodeF("UNIT", yyDollar[3].token)
+		}
+	case 51:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line parser.y:161
+		{
+			yyVAL.node = lwh.NodeF("UNIT", yyDollar[3].token)
+		}
+	case 52:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line parser.y:164
+		{
+			yyVAL.node = lwh.NodeF("ID", yyDollar[3].token)
+		}
+	case 53:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line parser.y:165
+		{
+			yyVAL.node = lwh.NodeF("TYPE", yyDollar[3].token)
+		}
+	case 54:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line parser.y:166
+		{
+			yyVAL.node = lwh.NodeF("TYPE", yyDollar[3].token)
+		}
+	case 55:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line parser.y:167
+		{
+			yyVAL.node = lwh.NodeF("ADD", yyDollar[3].token)
+		}
+	case 56:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line parser.y:168
+		{
+			yyVAL.node = lwh.NodeF("UNIT", yyDollar[3].token)
+		}
+	case 57:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line parser.y:169
+		{
+			yyVAL.node = lwh.NodeF("UNIT", yyDollar[3].token)
+		}
+	case 58:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line parser.y:170
+		{
+			yyVAL.node = lwh.NodeF("UNIT", yyDollar[3].token)
+		}
+	case 59:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line parser.y:173
+		{
+			yyVAL.node = lwh.NodeF("USER", yyDollar[3].token)
+		}
+	case 60:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line parser.y:174
+		{
+			yyVAL.node = lwh.NodeF("PWD", yyDollar[3].token)
+		}
+	case 61:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line parser.y:175
+		{
+			yyVAL.node = lwh.NodeF("PWD", yyDollar[3].token)
+		}
+	case 62:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line parser.y:176
+		{
+			yyVAL.node = lwh.NodeF("ID", yyDollar[3].token)
+		}
+	case 63:
+		yyDollar = yyS[yypt-1 : yypt+1]
+//line parser.y:178
+		{
+			yyVAL.node = yyDollar[1].node
+		}
+	case 64:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line parser.y:179
+		{
+			yyVAL.node = lwh.NodeF("ID", yyDollar[3].token)
+		}
+	case 65:
+		yyDollar = yyS[yypt-1 : yypt+1]
+//line parser.y:180
+		{
+			yyVAL.node = lwh.NodeF("P", yyDollar[1].token)
+		}
+	case 66:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line parser.y:181
+		{
+			yyVAL.node = lwh.NodeF("SIZE", yyDollar[3].token)
+		}
+	case 67:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line parser.y:182
+		{
+			yyVAL.node = lwh.NodeF("CONT", yyDollar[3].token)
+		}
+	case 68:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line parser.y:183
+		{
+			yyVAL.node = lwh.NodeF("CONT", yyDollar[3].token)
+		}
+	case 69:
+		yyDollar = yyS[yypt-1 : yypt+1]
+//line parser.y:186
+		{
+			yyVAL.node = yyDollar[1].node
+		}
+	case 70:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line parser.y:187
+		{
+			yyVAL.node = lwh.NodeF("ID", yyDollar[3].token)
+		}
+	case 71:
+		yyDollar = yyS[yypt-1 : yypt+1]
+//line parser.y:188
+		{
+			yyVAL.node = lwh.NodeF("P", yyDollar[1].token)
+		}
+	case 72:
+		yyDollar = yyS[yypt-1 : yypt+1]
+//line parser.y:191
+		{
+			yyVAL.node = yyDollar[1].node
+		}
+	case 73:
+		yyDollar = yyS[yypt-1 : yypt+1]
+//line parser.y:192
+		{
+			yyVAL.node = yyDollar[1].node
+		}
+	case 74:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line parser.y:194
+		{
+			yyVAL.node = lwh.NodeF("ID", yyDollar[3].token)
+		}
+	case 75:
+		yyDollar = yyS[yypt-1 : yypt+1]
+//line parser.y:196
+		{
+			yyVAL.node = yyDollar[1].node
+		}
+	case 76:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line parser.y:197
+		{
+			yyVAL.node = lwh.NodeF("SIZE", yyDollar[3].token)
+		}
+	case 77:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line parser.y:198
+		{
+			yyVAL.node = lwh.NodeF("UNIT", yyDollar[3].token)
+		}
+	case 78:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line parser.y:199
+		{
+			yyVAL.node = lwh.NodeF("UNIT", yyDollar[3].token)
+		}
+	case 79:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line parser.y:200
+		{
+			yyVAL.node = lwh.NodeF("NAME", yyDollar[3].token)
+		}
+	case 80:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line parser.y:202
+		{
+			yyVAL.node = lwh.NodeF("PATH", yyDollar[3].token)
+		}
+	case 81:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line parser.y:203
+		{
+			yyVAL.node = lwh.NodeF("PATH", yyDollar[3].token)
+		}
+	case 82:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line parser.y:205
+		{
+			yyVAL.node = lwh.NodeF("NAME", yyDollar[3].token)
+		}
+	case 83:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line parser.y:206
 		{
 			yyVAL.node = lwh.NodeF("NAME", yyDollar[3].token)
 		}
