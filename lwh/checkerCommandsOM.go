@@ -268,14 +268,7 @@ func CheckMount(aux Node) bool {
 			}
 		}
 	}
-	if !checkPath {
-		fmt.Println("FALTA EL COMANDO PATH")
-		generalFlag = false
-	}
-	if !checkName {
-		fmt.Println("FALTA EL COMANO NAME")
-		generalFlag = false
-	}
+
 	return generalFlag
 }
 

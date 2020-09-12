@@ -15,21 +15,25 @@ import (
 )
 
 var mbr structs_lwh.MBR
+var pathDisk string = ""
+var nameDisk string = ""
+var startDisk int64 = 0
+var fitDisk byte
 
 // MakeMK funcion para el mkdisk
 func MakeMK(root Node) {
-	var size int32 = 0
+	var size int64 = 0
 	var path string = ""
 	var name string = ""
 	var unit byte = 'K'
 
 	for _, v := range root.Children {
 		if v.TypeToken == "SIZE" {
-			k, err := strconv.Atoi(v.Value)
+			k, err := strconv.ParseInt(v.Value, 10, 64)
 			if err != nil {
 				log.Fatal(err)
 			}
-			size = int32(k)
+			size = k
 			fmt.Println(size)
 			fmt.Printf("%+v\n", unsafe.Sizeof(k))
 			fmt.Printf("%+v\n", unsafe.Sizeof(size))
@@ -50,11 +54,11 @@ func MakeMK(root Node) {
 		}
 		for _, j := range v.Children {
 			if j.TypeToken == "SIZE" {
-				k, err := strconv.Atoi(j.Value)
+				k, err := strconv.ParseInt(v.Value, 10, 64)
 				if err != nil {
 					log.Fatal(err)
 				}
-				size = int32(k)
+				size = k
 				fmt.Println(j.Value)
 				fmt.Printf("%+v\n", unsafe.Sizeof(size))
 			} else if j.TypeToken == "PATH" {
@@ -83,7 +87,7 @@ func MakeMK(root Node) {
 }
 
 // CreateDisk Funcion para crear el disco y tambien inicializar el mbr
-func CreateDisk(path string, size int32, diskSignature int32, name string, unit byte) {
+func CreateDisk(path string, size int64, diskSignature int64, name string, unit byte) {
 	auxSize := verifySize(unit, size)
 
 	var directory string = ""
@@ -102,9 +106,6 @@ func CreateDisk(path string, size int32, diskSignature int32, name string, unit 
 		copy(mbr.Partition[i].PartName[:], "")
 	}
 
-	var size2 int32 = int32(unsafe.Sizeof(mbr))
-
-	fmt.Println(size2)
 	indexPath := strings.LastIndex(path, ".")
 	if indexPath > -1 {
 		aux1 := path[:indexPath]
@@ -123,6 +124,9 @@ func CreateDisk(path string, size int32, diskSignature int32, name string, unit 
 	} else {
 		fmt.Println("No se pudo obtener la ruta del directorio")
 	}
+
+	pathDisk += directory
+	nameDisk += name
 	// creando el directorio
 	makeDirectory(directory)
 	// Creando el archivo binario
@@ -166,29 +170,35 @@ func CreateDisk(path string, size int32, diskSignature int32, name string, unit 
 }*/
 
 func writeFile(path string, m structs_lwh.MBR) {
-	f, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0666)
+	f, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0777)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer f.Close()
-	var firstPos [2]byte
-	copy(firstPos[:], "\\0")
-	f.Seek(int64(m.MbrSize), 0)
+	var pos [2]byte
+	copy(pos[:], "\\0")
 
-	var binario bytes.Buffer
+	var binario3 bytes.Buffer
 
-	binary.Write(&binario, binary.BigEndian, &firstPos)
+	binary.Write(&binario3, binary.BigEndian, &pos)
 
-	writeNextBytes(f, binario.Bytes())
+	writeNextBytes(f, binario3.Bytes())
 
-	f.Seek(0, 0)
+	f.Seek(m.MbrSize, 0)
 
 	var binario2 bytes.Buffer
 
-	binary.Write(&binario2, binary.BigEndian, &m)
+	binary.Write(&binario2, binary.BigEndian, &pos)
 
 	writeNextBytes(f, binario2.Bytes())
 
+	f.Seek(0, 0)
+
+	var binario bytes.Buffer
+
+	binary.Write(&binario, binary.BigEndian, &m)
+
+	writeNextBytes(f, binario.Bytes())
 }
 
 func readNextBytes(file *os.File, number int) []byte {
@@ -210,14 +220,14 @@ func writeNextBytes(file *os.File, bytes []byte) {
 }
 
 // GenerateRandomSignature Genera un signature random
-func GenerateRandomSignature(min int32, max int32) int32 {
-	return rand.Int31n(max-min) + min
+func GenerateRandomSignature(min int64, max int64) int64 {
+	return rand.Int63n(max-min) + min
 }
 
 // GenerateSignature devuelve un signature de tipo random
-func GenerateSignature() int32 {
+func GenerateSignature() int64 {
 	rand.Seed(time.Now().UnixNano())
-	randNumber := GenerateRandomSignature(1, 100000)
+	randNumber := GenerateRandomSignature(1, 1000)
 	return randNumber
 }
 
@@ -227,11 +237,13 @@ func makeDirectory(path string) {
 	}
 }
 
-func verifySize(unit byte, size int32) int32 {
+func verifySize(unit byte, size int64) int64 {
 	if unit == 'K' {
 		size = size * 1020
 	} else if unit == 'M' {
 		size = size * 1020 * 1020
+	} else if unit == 'B' {
+		size = size * 1
 	}
 	return size
 }

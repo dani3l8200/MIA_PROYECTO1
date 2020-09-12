@@ -6,6 +6,7 @@ import (
 	"encoding/binary"
 	"fmt"
 	"log"
+	"math"
 	"os"
 	"strconv"
 	"strings"
@@ -19,8 +20,8 @@ func MakeFdisk(root Node) {
 	var unit byte = 'K'
 	var tipo byte = 'P'
 	var fit byte = 'F'
-	var del int8 = -1
-	var add int16 = 0
+	var del int64 = -1
+	var add int64 = 0
 	for _, i := range root.Children {
 		if i.TypeToken == "SIZE" {
 			k, err := strconv.ParseInt(i.Value, 10, 64)
@@ -63,11 +64,11 @@ func MakeFdisk(root Node) {
 		} else if i.TypeToken == "NAME" {
 			name = i.Value
 		} else if i.TypeToken == "ADD" {
-			k, err := strconv.Atoi(i.Value)
+			k, err := strconv.ParseInt(i.Value, 10, 64)
 			if err != nil {
 				log.Fatal(err)
 			}
-			add = int16(k)
+			add = k
 			fmt.Println(add)
 		}
 		for _, j := range i.Children {
@@ -114,11 +115,11 @@ func MakeFdisk(root Node) {
 			} else if j.TypeToken == "NAME" {
 				name = j.Value
 			} else if j.TypeToken == "ADD" {
-				k, err := strconv.Atoi(j.Value)
+				k, err := strconv.ParseInt(j.Value, 10, 64)
 				if err != nil {
 					log.Fatal(err)
 				}
-				add = int16(k)
+				add = k
 				fmt.Println(add)
 			}
 		}
@@ -136,13 +137,102 @@ func MakeFdisk(root Node) {
 				ParticionLogica(path, name, tipo, fit, unit, size)
 				printMBR(path)
 			}
-		} else if add != 0 {
-
 		} else if del != -1 {
 
+		} else {
+			AddSize(path, name, unit, add)
 		}
 	} else if os.IsNotExist(err) {
 		panic(err)
+	}
+
+}
+
+// AddSize anade mas espacio o quita dependiendo del valor que tenga el comando add
+func AddSize(path string, name string, unit byte, size int64) {
+	f, err := os.OpenFile(path, os.O_RDWR, 0666)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer f.Close()
+	auxSize := verifySize(unit, size)
+	auxName := converNameToByte(name)
+	addOrM := strconv.Itoa(int(size))
+	flagCheck := CheckNumbers(addOrM)
+	m := readFileDisk(f, err)
+	var index = 0
+	var existPartition = false
+	var part structs_lwh.Partitions
+
+	for k, i := range m.Partition {
+		if auxName == i.PartName {
+			existPartition = true
+			index = k
+			part = i
+			break
+		}
+	}
+
+	if existPartition {
+		if flagCheck {
+			if math.Abs(float64(auxSize)) >= float64(part.PartSize) {
+				fmt.Println("EL ESPACIO A QUITAR ES MAS GRANDE QUE EL ESPACIO DE LA PARTICION")
+			} else {
+				part.PartSize = part.PartSize - int64(math.Abs(float64(auxSize)))
+				m.Partition[index] = part
+				f.Seek(0, 0)
+				var binario bytes.Buffer
+
+				binary.Write(&binario, binary.BigEndian, &m)
+
+				writeNextBytes(f, binario.Bytes())
+			}
+		} else {
+			if index == 3 {
+				x := m.MbrSize - (part.PartStart + part.PartSize)
+				if x >= auxSize {
+					part.PartSize = part.PartSize + auxSize
+					m.Partition[index] = part
+					f.Seek(0, 0)
+					var binario bytes.Buffer
+
+					binary.Write(&binario, binary.BigEndian, &m)
+
+					writeNextBytes(f, binario.Bytes())
+				} else {
+					fmt.Println("EL ESPACION ANADIR ES MAYOR AL QUE TIENE LA PARTICION")
+				}
+			} else {
+				var nextPartition structs_lwh.Partitions
+				var rest int64 = 0
+				var nextIndex = index + 1
+				for nextIndex < 5 {
+					if nextIndex == 4 {
+						rest = m.MbrSize - (part.PartStart + part.PartSize)
+						break
+					} else {
+						nextPartition = m.Partition[nextIndex]
+						nextIndex++
+						if nextPartition.PartStatus == '0' && nextPartition.PartStart != -1 {
+							rest = nextPartition.PartStart - (part.PartStart + part.PartSize)
+							break
+						}
+					}
+				}
+				if rest >= auxSize {
+					part.PartSize = part.PartSize + auxSize
+					m.Partition[index] = part
+					f.Seek(0, 0)
+					var binario bytes.Buffer
+
+					binary.Write(&binario, binary.BigEndian, &m)
+
+					writeNextBytes(f, binario.Bytes())
+				} else {
+					fmt.Println("EL ESPACIO A AGREGAR ES MAYOR A LO DISPONIBLE PARA LA SIGUIENTE PARTICION")
+				}
+			}
+		}
 	}
 
 }
@@ -334,6 +424,7 @@ func printMBR(path string) {
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer f.Close()
 	f.Seek(0, 0)
 	m := readFileDisk(f, err)
 	var indexCheck int = 0
@@ -406,6 +497,7 @@ func printMBR(path string) {
 
 }
 
+//ParticionLogica Crea particiones logicas
 func ParticionLogica(path string, name string, tipo byte, fit byte, unit byte, size int64) {
 	f, err := os.OpenFile(path, os.O_RDWR, 0666)
 	if err != nil {
@@ -617,10 +709,8 @@ func writeInLogicalPartition(path string, m structs_lwh.MBR, e structs_lwh.EBR, 
 	if err != nil {
 		panic(err)
 	}
-	//var firstPos byte = '1'
+	defer f.Close()
 
-	//start := &firstPos
-	//struC := &m
 	f.Seek(int64(m.Partition[index].PartStart), 0)
 	var binario bytes.Buffer
 
@@ -634,6 +724,7 @@ func writeInExtenderPartition(path string, m structs_lwh.MBR, e structs_lwh.EBR,
 	if err != nil {
 		panic(err)
 	}
+	defer f.Close()
 	f.Seek(0, 0)
 
 	var binario bytes.Buffer
@@ -655,4 +746,16 @@ func writeInExtenderPartition(path string, m structs_lwh.MBR, e structs_lwh.EBR,
 
 func writeInExtenderPartitionIfExist(path string, m structs_lwh.MBR, e structs_lwh.EBR, index int, fit byte, auxSize int32) {
 
+}
+
+//CheckNumbers revisa si el valor para el comando add es positivio o negativo
+func CheckNumbers(value string) bool {
+	var check = false
+	for _, char := range value {
+		if char < '0' || char > '9' {
+			check = true
+			return check
+		}
+	}
+	return check
 }
