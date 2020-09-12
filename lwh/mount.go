@@ -11,6 +11,7 @@ import (
 
 var lista datastructure.LinkedList
 
+//MountPartitions ...
 func MountPartitions(root Node) {
 	var name string = ""
 	var path string = ""
@@ -110,6 +111,7 @@ func MountPartitions(root Node) {
 	}
 }
 
+//UnmountPartitions ...
 func UnmountPartitions(root Node) {
 	for _, i := range root.Children {
 		if i.TypeToken == "ID" {

@@ -346,7 +346,8 @@ func createDateNull2() [25]byte {
 	return DateCreation
 }
 
-func readFileSB(f *os.File, err error) structs_lwh.SB {
+func readFileSB(f *os.File, err error, start int64) structs_lwh.SB {
+	f.Seek(start, io.SeekStart)
 	var sb structs_lwh.SB
 
 	sizeRead := binary.Size(sb)
@@ -454,28 +455,29 @@ func createBitmapBlocks(f *os.File, err error, sb structs_lwh.SB) []byte {
 	return test
 }
 
+//WriteOneInBitmap ....
 func WriteOneInBitmap(f *os.File, sb structs_lwh.SB, avd []byte, dd []byte, inodo []byte, block []byte) structs_lwh.SB {
 
-	if len(avd) != 0 {
+	if avd != nil {
 
 		ReWriteBitmap(f, sb.SbTreeVirtualCount, sb.SbApBitmapTreeDirectory, avd)
 
 		sb.SbFirstFreeBitTreeDirectory = GetNextBitFree(avd)
 	}
 
-	if len(dd) != 0 {
+	if dd != nil {
 
 		ReWriteBitmap(f, sb.SbDetailDirectoryCount, sb.SbApBitmapDetailDirectory, dd)
 
 		sb.SbFirstFreeBitDetailDirectory = GetNextBitFree(dd)
 	}
-	if len(inodo) != 0 {
+	if inodo != nil {
 		ReWriteBitmap(f, sb.SbInodosCount, sb.SbApBitmapTableInodo, inodo)
 
 		sb.SbFirstFreeBitTableInodo = GetNextBitFree(inodo)
 	}
 
-	if len(block) != 0 {
+	if block != nil {
 
 		ReWriteBitmap(f, sb.SbBlocksCount, sb.SbApBitmapBlocks, block)
 
@@ -485,6 +487,7 @@ func WriteOneInBitmap(f *os.File, sb structs_lwh.SB, avd []byte, dd []byte, inod
 	return sb
 }
 
+//ReWriteBitmap ...
 func ReWriteBitmap(f *os.File, delimiter int64, start int64, data []byte) {
 	var i int64 = 0
 	var data0 byte
@@ -502,6 +505,7 @@ func ReWriteBitmap(f *os.File, delimiter int64, start int64, data []byte) {
 	}
 }
 
+//GetNextBitFree ...
 func GetNextBitFree(data []byte) int64 {
 	var i int64 = 0
 
@@ -542,6 +546,7 @@ func createAVD(NameDirectory string, AvdApDetailDirectory int64, AvdProper int64
 	return avd
 }
 
+//WriteAVD ...
 func WriteAVD(i int64, f *os.File, err error, sb structs_lwh.SB, avd structs_lwh.AVD) {
 	f.Seek(sb.SbApTreeDirectory+i*int64(binary.Size(avd)), io.SeekStart)
 
@@ -552,6 +557,7 @@ func WriteAVD(i int64, f *os.File, err error, sb structs_lwh.SB, avd structs_lwh
 	writeNextBytes(f, binaryStrucAVD.Bytes())
 }
 
+//ReadAVD ...
 func ReadAVD(i int64, f *os.File, err error, SbApTreeDirectory int64) structs_lwh.AVD {
 
 	var avd structs_lwh.AVD
@@ -609,6 +615,7 @@ func writeDD(i int64, f *os.File, err error, sb structs_lwh.SB, dd structs_lwh.D
 	writeNextBytes(f, binaryStrucDD.Bytes())
 }
 
+//ReadDD ...
 func ReadDD(i int64, f *os.File, err error, SbApDetailDirectory int64) structs_lwh.DDirectory {
 
 	var dd structs_lwh.DDirectory
@@ -665,6 +672,7 @@ func writeTInodo(i int64, f *os.File, err error, sb structs_lwh.SB, inodo struct
 	writeNextBytes(f, binaryStrucInodo.Bytes())
 }
 
+//ReadTInodo ...
 func ReadTInodo(i int64, f *os.File, err error, SbApTableInodo int64) structs_lwh.INodo {
 
 	var inodo structs_lwh.INodo
@@ -704,6 +712,7 @@ func writeBlock(i int64, f *os.File, err error, sb structs_lwh.SB, block structs
 	writeNextBytes(f, binaryStrucBlock.Bytes())
 }
 
+//ReadBlock ...
 func ReadBlock(i int64, f *os.File, err error, SbApBlocks int64) structs_lwh.Block {
 
 	var block structs_lwh.Block

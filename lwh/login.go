@@ -4,7 +4,6 @@ import (
 	"MIA-PROYECTO1/datastructure"
 	"MIA-PROYECTO1/structs_lwh"
 	"fmt"
-	"io"
 	"os"
 	"strconv"
 	"strings"
@@ -59,8 +58,7 @@ func Login(path string, usr string, pwd string, id string, start int64) bool {
 		panic(err)
 	}
 	defer f.Close()
-	f.Seek(start, io.SeekStart)
-	sb := readFileSB(f, err)
+	sb := readFileSB(f, err, start)
 	inodo := ReadTInodo(0, f, err, sb.SbApTableInodo)
 	us := ReadUsers(f, err, sb, inodo)
 
@@ -74,6 +72,8 @@ func Login(path string, usr string, pwd string, id string, start int64) bool {
 			if node.Value().Usr == xa && node.Value().Pwd == xs {
 
 				myusers = node.Value()
+
+				fmt.Println("BIENVENIDO AL SISTEMAS DE ARCHIVOS, User:", usr)
 
 				return true
 
@@ -319,7 +319,7 @@ func GetRecoveryUsers(us []byte, id string) {
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------
 	x := strings.Split(users, "\n")
 
-	x = remove(x, "")
+	x = deleteEmpty(x)
 
 	aux := make([]string, len(x))
 
@@ -372,6 +372,16 @@ func remove(s []string, r string) []string {
 		}
 	}
 	return s
+}
+
+func deleteEmpty(s []string) []string {
+	var r []string
+	for _, str := range s {
+		if str != "" {
+			r = append(r, str)
+		}
+	}
+	return r
 }
 
 //converByteLToString .....
