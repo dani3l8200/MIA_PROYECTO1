@@ -1,15 +1,10 @@
 package main
 
-import (
-	"fmt"
-	"strings"
-)
+import "MIA-PROYECTO1/analyzers"
 
 func main() {
-	//	analyzers.Execute()
-	var stringPath string = "/home/dani3l8200/Escritorio/MisDiscos/"
-	x := strings.Split(stringPath, "/")
-	fmt.Println(x)
+	analyzers.Execute()
+
 	/*	if _, err := os.Stat("/home/Juan Daniel/"); os.IsNotExist(err) {
 		os.Mkdir("/home/Juan Daniel/", 0777)
 	}*/
