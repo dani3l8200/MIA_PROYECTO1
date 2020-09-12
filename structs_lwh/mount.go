@@ -7,6 +7,12 @@ type MountDisk struct {
 	Name string
 }
 
+type GetMounDisk struct {
+	GetSize  int64
+	GetStart int64
+	GetName  string
+}
+
 //FMountDisk Inicializa la structura mount
 func (mount *MountDisk) FMountDisk(ID string, Path string, Name string) MountDisk {
 	return MountDisk{ID: ID, Path: Path, Name: Name}
