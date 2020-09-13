@@ -241,7 +241,7 @@ func WriteFilesAVD(start int64, f *os.File, err error, name string, aptIndirecto
 
 				avd.AvdApTreeVirtualDirectory = bitFreeAvd
 
-				apIndirecto := createAVD(name, -1, idUser, idGrp, 664)
+				apIndirecto := createAVD(converByteLToString(avd.AvdNameDirectory), -1, idUser, idGrp, 664)
 
 				WriteAVD(bitFreeAvd, f, err, sb, apIndirecto)
 

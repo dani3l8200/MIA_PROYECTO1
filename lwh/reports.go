@@ -134,6 +134,20 @@ func MakeReports(Root Node) {
 			fmt.Println("ERROR NO SE ENCONTRO LA PARTICION")
 			return
 		}
+	} else if strings.EqualFold(name, "tree_complete") {
+		disk, err := lista.GetMountedPart(id)
+		if err == true {
+			getData := GetDiskMount(disk.GetPath(), disk.GetName(), false)
+
+			if getData.GetSize != 0 && getData.GetStart != 0 {
+				ReportTreeComplete(path, disk.GetPath(), getData.GetStart, getData.GetName)
+				return
+			}
+
+		} else if err == false {
+			fmt.Println("ERROR NO SE ENCONTRO LA PARTICION")
+			return
+		}
 	}
 }
 
@@ -588,8 +602,9 @@ func ReportDirectory(path string, diskPath string, start int64, name string) {
 	avd := ReadAVD(0, f, err, sb.SbApTreeDirectory)
 
 	report += "digraph structs {\n"
+	report += "\tgraph[label=\"Reporte Directorio\"];\n"
 	report += "splines = ortho\n"
-	report += GenerateDotAVD(f, err, avd, sb.SbApTreeDirectory, 0, "white")
+	report += GenerateDotAVD(f, err, avd, sb.SbApTreeDirectory, 0, "LightGoldenrod1")
 	report += "}\n"
 
 	GenerateDot(path, "reporDirectory.dot", report)
@@ -606,37 +621,37 @@ func GenerateDotAVD(f *os.File, err error, avd structs_lwh.AVD, startAvd int64, 
 	report += "\t\t\t\t<tr>\n"
 
 	if avd.AvdApArraySubdirectories[0] != -1 {
-		report += "\t\t\t\t\t\t<td bgcolor = \"lightskyblue1\">" + strconv.Itoa(int(avd.AvdApArraySubdirectories[0])) + "</td>\n"
+		report += "\t\t\t\t\t\t<td bgcolor = \"OrangeRed1\">" + strconv.Itoa(int(avd.AvdApArraySubdirectories[0])) + "</td>\n"
 	} else if avd.AvdApArraySubdirectories[0] == -1 {
 		report += "\t\t\t\t\t\t<td bgcolor = \"lightcyan\"> &nbsp; </td>\n"
 	}
 
 	if avd.AvdApArraySubdirectories[1] != -1 {
-		report += "\t\t\t\t\t\t<td bgcolor = \"lightskyblue1\">" + strconv.Itoa(int(avd.AvdApArraySubdirectories[1])) + "</td>\n"
+		report += "\t\t\t\t\t\t<td bgcolor = \"OrangeRed1\">" + strconv.Itoa(int(avd.AvdApArraySubdirectories[1])) + "</td>\n"
 	} else if avd.AvdApArraySubdirectories[1] == -1 {
 		report += "\t\t\t\t\t\t<td bgcolor = \"lightcyan\"> &nbsp; </td>\n"
 	}
 
 	if avd.AvdApArraySubdirectories[2] != -1 {
-		report += "\t\t\t\t\t\t<td bgcolor = \"lightskyblue1\">" + strconv.Itoa(int(avd.AvdApArraySubdirectories[2])) + "</td>\n"
+		report += "\t\t\t\t\t\t<td bgcolor = \"OrangeRed1\">" + strconv.Itoa(int(avd.AvdApArraySubdirectories[2])) + "</td>\n"
 	} else if avd.AvdApArraySubdirectories[2] == -1 {
 		report += "\t\t\t\t\t\t<td bgcolor = \"lightcyan\"> &nbsp; </td>\n"
 	}
 
 	if avd.AvdApArraySubdirectories[3] != -1 {
-		report += "\t\t\t\t\t\t<td bgcolor = \"lightskyblue1\">" + strconv.Itoa(int(avd.AvdApArraySubdirectories[3])) + "</td>\n"
+		report += "\t\t\t\t\t\t<td bgcolor = \"OrangeRed1\">" + strconv.Itoa(int(avd.AvdApArraySubdirectories[3])) + "</td>\n"
 	} else if avd.AvdApArraySubdirectories[3] == -1 {
 		report += "\t\t\t\t\t\t<td bgcolor = \"lightcyan\"> &nbsp; </td>\n"
 	}
 
 	if avd.AvdApArraySubdirectories[4] != -1 {
-		report += "\t\t\t\t\t\t<td bgcolor = \"lightskyblue1\">" + strconv.Itoa(int(avd.AvdApArraySubdirectories[4])) + "</td>\n"
+		report += "\t\t\t\t\t\t<td bgcolor = \"OrangeRed1\">" + strconv.Itoa(int(avd.AvdApArraySubdirectories[4])) + "</td>\n"
 	} else if avd.AvdApArraySubdirectories[4] == -1 {
 		report += "\t\t\t\t\t\t<td bgcolor = \"lightcyan\"> &nbsp; </td>\n"
 	}
 
 	if avd.AvdApArraySubdirectories[5] != -1 {
-		report += "\t\t\t\t\t\t<td bgcolor = \"lightskyblue1\">" + strconv.Itoa(int(avd.AvdApArraySubdirectories[5])) + "</td>\n"
+		report += "\t\t\t\t\t\t<td bgcolor = \"OrangeRed1\">" + strconv.Itoa(int(avd.AvdApArraySubdirectories[5])) + "</td>\n"
 	} else if avd.AvdApArraySubdirectories[5] == -1 {
 		report += "\t\t\t\t\t\t<td bgcolor = \"lightcyan\"> &nbsp; </td>\n"
 	}
@@ -664,7 +679,7 @@ func GenerateDotAVD(f *os.File, err error, avd structs_lwh.AVD, startAvd int64, 
 
 			noIndirecto := ReadAVD(avd.AvdApArraySubdirectories[i], f, err, startAvd)
 
-			report += GenerateDotAVD(f, err, noIndirecto, startAvd, avd.AvdApArraySubdirectories[i], "white")
+			report += GenerateDotAVD(f, err, noIndirecto, startAvd, avd.AvdApArraySubdirectories[i], "bisque1")
 		}
 	}
 
@@ -673,7 +688,237 @@ func GenerateDotAVD(f *os.File, err error, avd structs_lwh.AVD, startAvd int64, 
 
 		indirecto := ReadAVD(avd.AvdApTreeVirtualDirectory, f, err, startAvd)
 
-		report += GenerateDotAVD(f, err, indirecto, startAvd, avd.AvdApTreeVirtualDirectory, "lawngreen")
+		report += GenerateDotAVD(f, err, indirecto, startAvd, avd.AvdApTreeVirtualDirectory, "yellow")
+	}
+
+	return report
+}
+
+func ReportTreeComplete(path string, diskPath string, start int64, name string) {
+	var report string = ""
+
+	f, err := os.OpenFile(diskPath, os.O_RDWR, 0777)
+	if err != nil {
+		panic(err)
+	}
+
+	defer f.Close()
+
+	sb := readFileSB(f, err, start)
+
+	avd := ReadAVD(0, f, err, sb.SbApTreeDirectory)
+
+	report += "digraph TreeComplete {\n"
+
+	report += "\tgraph[label=\"Reporte Arbol Completo\"];\n"
+
+	report += "splines = ortho\n"
+
+	report += GenerateDotFullTree(f, err, avd, sb.SbApTreeDirectory, 0, "LightGoldenrod1", sb.SbApDetailDirectory, sb.SbApTableInodo, sb.SbApBlocks)
+
+	report += "}\n"
+
+	GenerateDot(path, "reportTreeComplete.dot", report)
+}
+
+func GenerateDotFullTree(f *os.File, err error, avd structs_lwh.AVD, startAvd int64, pos int64, graphColor string, starDD int64, startInodo int64, startBlock int64) string {
+	var report string = ""
+
+	report += "\tAVD" + strconv.Itoa(int(pos)) + " [\n\t"
+	report += "\t\tshape = none;\n"
+	report += "\t\tlabel = <\n"
+	report += "\t\t\t<table border=\"0\" cellborder=\"2\" cellspacing=\"2\" color=\"cyan4\">\n"
+	report += "\t\t\t\t<tr><td colspan=\"8\" bgcolor=\"" + graphColor + "\" >" + converByteLToString(avd.AvdNameDirectory) + "</td></tr>\n"
+	report += "\t\t\t\t<tr>\n"
+
+	if avd.AvdApArraySubdirectories[0] != -1 {
+		report += "\t\t\t\t\t\t<td bgcolor = \"OrangeRed1\">" + strconv.Itoa(int(avd.AvdApArraySubdirectories[0])) + "</td>\n"
+	} else if avd.AvdApArraySubdirectories[0] == -1 {
+		report += "\t\t\t\t\t\t<td bgcolor = \"lightcyan\"> &nbsp; </td>\n"
+	}
+
+	if avd.AvdApArraySubdirectories[1] != -1 {
+		report += "\t\t\t\t\t\t<td bgcolor = \"OrangeRed1\">" + strconv.Itoa(int(avd.AvdApArraySubdirectories[1])) + "</td>\n"
+	} else if avd.AvdApArraySubdirectories[1] == -1 {
+		report += "\t\t\t\t\t\t<td bgcolor = \"lightcyan\"> &nbsp; </td>\n"
+	}
+
+	if avd.AvdApArraySubdirectories[2] != -1 {
+		report += "\t\t\t\t\t\t<td bgcolor = \"OrangeRed1\">" + strconv.Itoa(int(avd.AvdApArraySubdirectories[2])) + "</td>\n"
+	} else if avd.AvdApArraySubdirectories[2] == -1 {
+		report += "\t\t\t\t\t\t<td bgcolor = \"lightcyan\"> &nbsp; </td>\n"
+	}
+
+	if avd.AvdApArraySubdirectories[3] != -1 {
+		report += "\t\t\t\t\t\t<td bgcolor = \"OrangeRed1\">" + strconv.Itoa(int(avd.AvdApArraySubdirectories[3])) + "</td>\n"
+	} else if avd.AvdApArraySubdirectories[3] == -1 {
+		report += "\t\t\t\t\t\t<td bgcolor = \"lightcyan\"> &nbsp; </td>\n"
+	}
+
+	if avd.AvdApArraySubdirectories[4] != -1 {
+		report += "\t\t\t\t\t\t<td bgcolor = \"OrangeRed1\">" + strconv.Itoa(int(avd.AvdApArraySubdirectories[4])) + "</td>\n"
+	} else if avd.AvdApArraySubdirectories[4] == -1 {
+		report += "\t\t\t\t\t\t<td bgcolor = \"lightcyan\"> &nbsp; </td>\n"
+	}
+
+	if avd.AvdApArraySubdirectories[5] != -1 {
+		report += "\t\t\t\t\t\t<td bgcolor = \"OrangeRed1\">" + strconv.Itoa(int(avd.AvdApArraySubdirectories[5])) + "</td>\n"
+	} else if avd.AvdApArraySubdirectories[5] == -1 {
+		report += "\t\t\t\t\t\t<td bgcolor = \"lightcyan\"> &nbsp; </td>\n"
+	}
+
+	if avd.AvdApTreeVirtualDirectory != -1 {
+		report += "\t\t\t\t\t\t<td bgcolor = \"cyan3\">" + strconv.Itoa(int(avd.AvdApTreeVirtualDirectory)) + "</td>\n"
+	} else if avd.AvdApTreeVirtualDirectory == -1 {
+		report += "\t\t\t\t\t\t<td bgcolor = \"cyan3\"> &nbsp; </td>\n"
+	}
+
+	if avd.AvdApDetailDirectory != -1 {
+		report += "\t\t\t\t\t\t<td bgcolor = \"greenyellow\">" + strconv.Itoa(int(avd.AvdApDetailDirectory)) + "</td>\n"
+	} else if avd.AvdApDetailDirectory == -1 {
+		report += "\t\t\t\t\t\t<td bgcolor = \"greenyellow\"> &nbsp; </td>\n"
+	}
+
+	report += "\t\t\t\t\t</tr>\n"
+	report += "\t\t\t\t</table>\n"
+	report += "\t\t\t>\n"
+	report += "    ];\n\n"
+
+	for i := 0; i < 6; i++ {
+		if avd.AvdApArraySubdirectories[i] != -1 {
+			report += "AVD" + strconv.Itoa(int(pos)) + "->AVD" + strconv.Itoa(int(avd.AvdApArraySubdirectories[i])) + ";\n"
+
+			noIndirecto := ReadAVD(avd.AvdApArraySubdirectories[i], f, err, startAvd)
+
+			report += GenerateDotFullTree(f, err, noIndirecto, startAvd, avd.AvdApArraySubdirectories[i], "bisque1", starDD, startInodo, startBlock)
+		}
+	}
+
+	if avd.AvdApTreeVirtualDirectory != -1 {
+		report += "AVD" + strconv.Itoa(int(pos)) + "->AVD" + strconv.Itoa(int(avd.AvdApTreeVirtualDirectory)) + ";\n"
+
+		indirecto := ReadAVD(avd.AvdApTreeVirtualDirectory, f, err, startAvd)
+
+		report += GenerateDotFullTree(f, err, indirecto, startAvd, avd.AvdApTreeVirtualDirectory, "yellow", starDD, startInodo, startBlock)
+	}
+
+	if avd.AvdApDetailDirectory != -1 {
+		report += "AVD" + strconv.Itoa(int(pos)) + "->DD" + strconv.Itoa(int(avd.AvdApDetailDirectory)) + ";\n"
+
+		report += GenerateDotDD(f, err, ReadDD(avd.AvdApDetailDirectory, f, err, starDD), starDD, avd.AvdApDetailDirectory, startInodo, startBlock)
+	}
+
+	return report
+}
+
+func GenerateDotDD(f *os.File, err error, dd structs_lwh.DDirectory, startDd int64, pos int64, startInode int64, startBlock int64) string {
+	var report string = ""
+	var graphColor string = ""
+
+	report += "\tDD" + strconv.Itoa(int(pos)) + " [\n\t"
+	report += "\t\tshape = none;\n"
+	report += "\t\tlabel = <\n"
+	report += "\t\t\t<table border=\"0\" cellborder=\"2\" cellspacing=\"2\" color=\"cyan4\">\n"
+	report += "\t\t\t\t<tr><td colspan=\"2\" bgcolor=\"dodgerblue\" >Directory" + strconv.Itoa(int(pos)) + "</td></tr>\n"
+
+	for i := 0; i < 5; i++ {
+		if i%2 == 1 {
+			graphColor = "deepskyblue"
+		} else if i%2 == 0 {
+			graphColor = "lightskyblue1"
+		}
+
+		if dd.DDArrayBlock[i].DdFileApInodo != -1 {
+			report += "\t\t\t\t<tr>\n"
+			report += "\t\t\t\t\t<td bgcolor=\"" + graphColor + "\">" + convertBByteToString(dd.DDArrayBlock[i].DdFileName) + "</td>\n"
+			report += "\t\t\t\t\t<td bgcolor=\"" + graphColor + "\">" + strconv.Itoa(int(dd.DDArrayBlock[i].DdFileApInodo)) + "</td>\n"
+			report += "\t\t\t\t</tr>\n"
+		} else if dd.DDArrayBlock[i].DdFileApInodo == -1 {
+			report += "<tr><td bgcolor=\"" + graphColor + "\"> </td><td bgcolor=\"" + graphColor + "\"> </td></tr>\n"
+		}
+	}
+
+	if dd.DdApDetailDirectory != -1 {
+		report += "\t\t\t\t<tr>\n"
+		report += "\t\t\t\t\t<td colspan=\"2\" bgcolor=\"greenyellow\">" + strconv.Itoa(int(dd.DdApDetailDirectory)) + "</td>\n"
+		report += "\t\t\t\t<tr>\n"
+	} else if dd.DdApDetailDirectory == -1 {
+		report += "<tr><td colspan=\"2\" bgcolor=\"greenyellow\"> </td></tr>\n"
+	}
+
+	report += "\t\t\t\t\t</table>\n"
+	report += "\t\t\t\t>\n"
+	report += "\t\t\t];\n\n"
+
+	for i := 0; i < 5; i++ {
+		if dd.DDArrayBlock[i].DdFileApInodo != -1 {
+			inodo := ReadTInodo(dd.DDArrayBlock[i].DdFileApInodo, f, err, startInode)
+
+			report += "DD" + strconv.Itoa(int(pos)) + "->INODO" + strconv.Itoa(int(dd.DDArrayBlock[i].DdFileApInodo)) + ";\n"
+
+			report += GenerateDotInode(f, err, inodo, startInode, dd.DDArrayBlock[i].DdFileApInodo, startBlock)
+		}
+	}
+
+	if dd.DdApDetailDirectory != -1 {
+		report += "DD" + strconv.Itoa(int(pos)) + "->DD" + strconv.Itoa(int(dd.DdApDetailDirectory)) + ";\n"
+		report += GenerateDotDD(f, err, ReadDD(dd.DdApDetailDirectory, f, err, startDd), startDd, dd.DdApDetailDirectory, startInode, startBlock)
+	}
+
+	return report
+}
+
+func GenerateDotInode(f *os.File, err error, inodo structs_lwh.INodo, startInodo int64, pos int64, startBlock int64) string {
+	var report string = ""
+
+	report += "\n"
+
+	report += "\tINODO" + strconv.Itoa(int(pos)) + " [\n"
+
+	report += "\t\tshape = none;\n"
+
+	report += "\t\tlabel = <\n"
+
+	report += "\t\t\t<table border=\"0\" cellborder=\"2\" cellspacing=\"2\" color=\"cyan4\">\n"
+
+	report += "\t\t\t\t<tr><td bgcolor=\"dodgerblue\" >Inodo" + strconv.Itoa(int(pos)) + "</td></tr>\n"
+
+	for i := 0; i < 4; i++ {
+		if inodo.IArrayBlocks[i] != -1 {
+			report += "<tr><td>" + strconv.Itoa(int(inodo.IArrayBlocks[i])) + "</td></tr>\n"
+		} else if inodo.IArrayBlocks[i] == -1 {
+			report += "<tr><td> </td></tr>\n"
+		}
+	}
+
+	if inodo.IApIndirecto != -1 {
+		report += "<tr><td>" + strconv.Itoa(int(inodo.IApIndirecto)) + "</td></tr>\n"
+	} else if inodo.IApIndirecto == -1 {
+		report += "<tr><td> </td></tr>\n"
+	}
+
+	report += "\t\t\t\t</table>\n"
+
+	report += "\t\t\t>\n"
+
+	report += "\t\t];\n\n"
+
+	for i := 0; i < 4; i++ {
+		if inodo.IArrayBlocks[i] != -1 {
+
+			report += "\t\tINODO" + strconv.Itoa(int(pos)) + "->BLOCK" + strconv.Itoa(int(inodo.IArrayBlocks[i])) + ";\n"
+
+			block := ReadBlock(inodo.IArrayBlocks[i], f, err, startBlock)
+
+			report += "BLOCK" + strconv.Itoa(int(inodo.IArrayBlocks[i])) + "[shape=\"box\" label=\"" + convertBByteToString(block.DbData) + "\"]\n"
+		}
+	}
+
+	if inodo.IApIndirecto != -1 {
+
+		report += "INODO" + strconv.Itoa(int(pos)) + "->INODO" + strconv.Itoa(int(inodo.IApIndirecto)) + ";\n"
+
+		report += GenerateDotInode(f, err, ReadTInodo(inodo.IApIndirecto, f, err, startInodo), startInodo, inodo.IApIndirecto, startBlock)
 	}
 
 	return report
