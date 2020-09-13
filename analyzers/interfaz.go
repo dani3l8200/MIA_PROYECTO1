@@ -21,35 +21,35 @@ func Execute() {
 	//eqn := "Fdisk -sizE->45 -path->/home/dani3l8200/Escritorio/MisDiscos/Disco5.dsk -name->Particion7 -type->L"
 	//eqn := "mount -path->/home/dani3l8200/Escritorio/MisDiscos/Disco5.dsk -name->Particion1"
 
-	//eqn := "exec -path->/home/dani3l8200/Escritorio/MisDiscos/ht1.txt"
+	eqn := "exec -path->/home/dani3l8200/Escritorio/MisDiscos/ht1.txt"
 	//eqn := "login -usr->root -pwd->201020576 -id->vda1"
 	//eqn := "fdisk -add->2 -unit->k -path->/home/dani3l8200/Escritorio/MisDiscos/Disco5.dsk -name->Particion2"
 
 	//eqn := "mkfs -id->vdb1 -type->fast"
 
-	fmt.Println("************************************************************************************************")
-	fmt.Println("                                       SISTEMA DE ARCHIVOS LWH                                 ")
-	fmt.Println("************************************************************************************************")
+	/*	fmt.Println("************************************************************************************************")
+		fmt.Println("                                       SISTEMA DE ARCHIVOS LWH                                 ")
+		fmt.Println("************************************************************************************************")
 
-	var flag = false
-	for !flag {
-		fmt.Printf("~$: ")
-		str := readLine()
-		if strings.EqualFold(str, "exit") {
-			flag = true
-		} else {
-			for strings.Contains(str, "\\*") {
-				str = strings.ReplaceAll(str, "\\*", "")
-				scanner := bufio.NewScanner(os.Stdin)
-				fmt.Printf("> ")
-				scanner.Scan()
-				str += scanner.Text()
+		var flag = false
+		for !flag {
+			fmt.Printf("~$: ")
+			str := readLine()
+			if strings.EqualFold(str, "exit") {
+				flag = true
+			} else {
+				for strings.Contains(str, "\\*") {
+					str = strings.ReplaceAll(str, "\\*", "")
+					scanner := bufio.NewScanner(os.Stdin)
+					fmt.Printf("> ")
+					scanner.Scan()
+					str += scanner.Text()
+				}
+				ExecuteComands(str)
 			}
-			ExecuteComands(str)
-		}
 
-	}
-	//ExecuteComands(eqn)
+		}*/
+	ExecuteComands(eqn)
 
 }
 

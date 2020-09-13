@@ -183,17 +183,17 @@ func ReportMBR(path string, id string) {
 	testTime := string(m.MbrTime[:19])
 
 	report += "digraph MBR{\n"
-	report += "\tgraph[label=\"REPORT MBR\"];\n"
+	report += "\tgraph[bgcolor = lemonchiffon1,label=\"REPORT MBR\"];\n"
 	report += "\trandir=TB;\n\n"
 
 	report += "\tnode0[shape=plaintext, label=<\n"
-	report += "\t\t<table border='0' cellborder='1' cellspacing='0' cellpadding='4'>\n"
+	report += "\t\t<table border='0' cellborder='1' color=\"green1\" cellspacing='0' cellpadding='4'>\n"
 
-	report += "\t\t\t<tr><td colspan='2'>MBR " + diskName + "</td></tr>\n"
-	report += "\t\t\t<tr>  <td>Nombre</td>  <td>Valor</td>  </tr>\n"
-	report += "\t\t\t<tr>  <td>mbr_tamaño</td>  <td>" + strconv.Itoa(int(m.MbrSize)) + "</td>  </tr>\n"
+	report += "\t\t\t<tr><td bgcolor=\"brown1\" colspan='2'>MBR " + diskName + "</td></tr>\n"
+	report += "\t\t\t<tr>  <td bgcolor=\"azure2\">Nombre</td>  <td bgcolor=\"azure2\">Valor</td>  </tr>\n"
+	report += "\t\t\t<tr>  <td bgcolor=\"gold\">mbr_tamaño</td>  <td bgcolor=\"gold\">" + strconv.Itoa(int(m.MbrSize)) + "</td>  </tr>\n"
 	report += "\t\t\t<tr>  <td>mbr_fecha_creacion</td>  <td>" + testTime + "</td>  </tr>\n"
-	report += "\t\t\t<tr>  <td>mbr_disk_signature</td>  <td>" + strconv.Itoa(int(m.MbrDiskSignature)) + "</td>  </tr>\n"
+	report += "\t\t\t<tr>  <td bgcolor=\"gold\">mbr_disk_signature</td>  <td bgcolor=\"gold\">" + strconv.Itoa(int(m.MbrDiskSignature)) + "</td>  </tr>\n"
 
 	indexLogica := -1
 	exist := false
@@ -208,11 +208,11 @@ func ReportMBR(path string, id string) {
 
 			}
 			report += "\t\t\t<tr>  <td>part_status_" + x + "</td>  <td>" + string(i.PartStatus) + "</td>  </tr>\n"
-			report += "\t\t\t<tr>  <td>part_type_" + x + "</td>  <td>" + string(i.PartType) + "</td>  </tr>\n"
+			report += "\t\t\t<tr>  <td bgcolor=\"gold\">part_type_" + x + "</td>  <td bgcolor=\"gold\">" + string(i.PartType) + "</td>  </tr>\n"
 			report += "\t\t\t<tr>  <td>part_fit_" + x + "</td>  <td>" + string(i.PartFit) + "</td>  </tr>\n"
-			report += "\t\t\t<tr>  <td>part_start_" + x + "</td>  <td>" + strconv.Itoa(int(i.PartStart)) + "</td>  </tr>\n"
+			report += "\t\t\t<tr>  <td bgcolor=\"gold\">part_start_" + x + "</td>  <td bgcolor=\"gold\">" + strconv.Itoa(int(i.PartStart)) + "</td>  </tr>\n"
 			report += "\t\t\t<tr>  <td>part_size_" + x + "</td>  <td>" + strconv.Itoa(int(i.PartSize)) + "</td>  </tr>\n"
-			report += "\t\t\t<tr>  <td>part_name_" + x + "</td>  <td>" + namePartition + "</td>  </tr>\n"
+			report += "\t\t\t<tr>  <td bgcolor=\"gold\">part_name_" + x + "</td>  <td bgcolor=\"gold\">" + namePartition + "</td>  </tr>\n"
 			namePartition = ""
 
 			if i.PartType == 'E' {
@@ -235,9 +235,9 @@ func ReportMBR(path string, id string) {
 
 			if e.PartStatusE != '1' {
 				report += "\tnode" + strconv.Itoa(x) + "[shape=plaintext, label=<\n"
-				report += "\t\t<table border='0' cellborder='1'  cellspacing='0' cellpadding='4'>\n"
-				report += "\t\t\t<tr><td colspan='2'>EBR_" + strconv.Itoa(x) + "</td></tr>\n"
-				report += "\t\t\t<tr>  <td>Nombre</td>  <td>Valor</td>  </tr>"
+				report += "\t\t<table border='0' cellborder='1' color=\"purple\" cellspacing='0' cellpadding='4'>\n"
+				report += "\t\t\t<tr><td colspan='2' bgcolor=\"aquamarine\">EBR_" + strconv.Itoa(x) + "</td></tr>\n"
+				report += "\t\t\t<tr>  <td bgcolor=\"SteelBlue1\">Nombre</td>  <td bgcolor=\"SteelBlue1\">Valor</td>  </tr>"
 
 				for _, k := range e.PartNameE {
 					if k != 0 {
@@ -245,11 +245,11 @@ func ReportMBR(path string, id string) {
 					}
 				}
 				report += "\t\t\t<tr>  <td>part_status_1</td>  <td>" + string(e.PartStatusE) + "</td>  </tr>"
-				report += "\t\t\t<tr>  <td>part_fit_1</td>  <td>" + string(e.PartFitE) + "</td>  </tr>"
+				report += "\t\t\t<tr>  <td bgcolor=\"DarkSlateGray1\">part_fit_1</td>  <td bgcolor=\"DarkSlateGray1\">" + string(e.PartFitE) + "</td>  </tr>"
 				report += "\t\t\t<tr>  <td>part_start_1</td>  <td>" + strconv.Itoa(int(e.PartStartE)) + "</td>  </tr>"
-				report += "\t\t\t<tr>  <td>part_size_1</td>  <td>" + strconv.Itoa(int(e.PartSizeE)) + "</td>  </tr>"
+				report += "\t\t\t<tr>  <td bgcolor=\"DarkSlateGray1\">part_size_1</td>  <td bgcolor=\"DarkSlateGray1\">" + strconv.Itoa(int(e.PartSizeE)) + "</td>  </tr>"
 				report += "\t\t\t<tr>  <td>part_next_1</td>  <td>" + strconv.Itoa(int(e.PartNextE)) + "</td>  </tr>"
-				report += "\t\t\t<tr>  <td>part_name_1</td>  <td>" + nameLogica + "</td>  </tr>"
+				report += "\t\t\t<tr>  <td bgcolor=\"DarkSlateGray1\">part_name_1</td>  <td bgcolor=\"DarkSlateGray1\">" + nameLogica + "</td>  </tr>"
 
 				report += "\t\t</table>\n"
 				report += "\t>];\n\n"
@@ -294,12 +294,12 @@ func ReportDisk(path string, id string) {
 
 	m := readFileDisk(f, err)
 
-	diskName, _ := GetNameDisk(path)
+	diskName, _ := GetNameDisk(disk.GetPath())
 
 	//var nameLogica string = ""
 
 	report += "digraph DISK{\n"
-	report += "\tgraph[label=\"Reporte DISK\"];\n"
+	report += "\tgraph[bgcolor = lemonchiffon1,label=\"Reporte DISK\"];\n"
 	report += "\trankdir=TB;\n\n"
 
 	var total float64 = float64(m.MbrSize)
@@ -308,7 +308,7 @@ func ReportDisk(path string, id string) {
 
 	report += "\tnodeO[shape=plaintext, label=<\n"
 	report += "\t\t<table border='1' cellborder='1'  cellspacing='0' cellpadding='4'>\n"
-	report += "\t\t\t<tr>\n\t\t\t\t<td>MBR " + diskName + "</td>\n"
+	report += "\t\t\t<tr>\n\t\t\t\t<td bgcolor=\"tan3\">MBR " + diskName + "</td>\n"
 
 	for j, i := range m.Partition {
 		var sizePartition float64 = float64(i.PartSize)
@@ -316,13 +316,13 @@ func ReportDisk(path string, id string) {
 		if i.PartStart != -1 {
 			cant := sizePartition * 100 / total
 
-			space += cant
+			auxTotal := sizePartition
 
 			if i.PartStatus != '1' {
 				if i.PartType == 'E' {
 					report += "\t\t\t\t<td>\n\t\t\t\t\t<table border='1' cellspacing='0' cellborder='1'>\n"
 					report += "\t\t\t\t\t\t<tr>\n"
-					report += "\t\t\t\t\t\t\t<td>EXTENDIDA</td>\n"
+					report += "\t\t\t\t\t\t\t<td bgcolor=\"violet\">EXTENDIDA " + FloatToString(cant) + "% del Disco </td>\n"
 					report += "\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t<tr>\n"
 
 					f.Seek(i.PartStart, io.SeekStart)
@@ -333,23 +333,24 @@ func ReportDisk(path string, id string) {
 						f.Seek(i.PartStart, io.SeekStart)
 
 						for pos < (i.PartStart + i.PartSize) {
-							sizePartition = float64(e.PartSizeE)
-							cant = sizePartition * 100 / total
 
+							sizePartition = float64(e.PartSizeE)
+							cant = sizePartition * 100 / auxTotal
+							space += cant
 							if cant != 0 {
 								if e.PartStatusE != '1' {
-									report += "\t\t\t\t\t<td>EBR</td>\n"
-									report += "\t\t\t\t\t<td>LOGICA<br/>" + FloatToString(cant) + "% del Disco</td>\n"
+									report += "\t\t\t\t\t<td bgcolor=\"LightSeaGreen\">EBR</td>\n"
+									report += "\t\t\t\t\t<td bgcolor=\"HotPink2\">LOGICA <br/>" + FloatToString(cant) + "% del SubDisco</td>\n"
 								} else {
-									report += "\t\t\t\t\t<td>LIBRE<br/>" + FloatToString(cant) + "% del Disco</td>\n"
+									report += "\t\t\t\t\t<td bgcolor=\"gold\">LIBRE<br/>" + FloatToString(cant) + "% del SubDisco</td>\n"
 								}
 							}
 
 							if e.PartNextE == -1 {
-								sizePartition = float64(i.PartStart) + float64(i.PartSize) - float64((e.PartStartE + e.PartStartE))
-								cant = sizePartition * 100 / total
+								sizePartition = 100 - space
+								cant = sizePartition
 								if cant != 0 {
-									report += "\t\t\t\t\t<td>LIBRE<br/>" + FloatToString(cant) + "% del Disco</td>\n"
+									report += "\t\t\t\t\t<td bgcolor=\"gold\">LIBRE<br/>" + FloatToString(cant) + "% del SubDisco</td>\n"
 								}
 								break
 							} else {
@@ -360,7 +361,7 @@ func ReportDisk(path string, id string) {
 						}
 
 					} else {
-						report += "\t\t\t\t\t<td>" + strconv.Itoa(int(cant)) + "% del Disco</td>\n"
+						report += "\t\t\t\t\t<td bgcolor=\"gold\">" + strconv.Itoa(int(cant)) + "% del Disco</td>\n"
 					}
 
 					report += "\t\t\t\t</tr>\n\t\t\t</table>\n\t\t\t</td>\n"
@@ -374,7 +375,7 @@ func ReportDisk(path string, id string) {
 					report += checkNextSpace(i.PartStart, i.PartSize, nextS3, j, total)
 
 				} else {
-					report += "\t\t\t<td>PRIMARIA <br/> " + FloatToString(cant) + "% del disco</td>\n"
+					report += "\t\t\t<td bgcolor=\"LawnGreen\">PRIMARIA<br/> " + FloatToString(cant) + "% del disco</td>\n"
 					var nextS3 int64 = 0
 					if j != 3 {
 						nextS3 += m.Partition[j+1].PartStart
@@ -383,7 +384,7 @@ func ReportDisk(path string, id string) {
 					report += checkNextSpace(i.PartStart, i.PartSize, nextS3, j, total)
 				}
 			} else {
-				report += "<td>LIBRE <br/>" + FloatToString(cant) + "% del Disco</td>\n"
+				report += "<td bgcolor=\"gold\">LIBRE <br/>" + FloatToString(cant) + "% del Disco</td>\n"
 			}
 		}
 	}
@@ -929,20 +930,20 @@ func checkNextSpace(start int64, size int64, nextStart int64, index int, tot flo
 	var m structs_lwh.MBR
 	if index != 3 {
 		var p1 float64 = float64(start + size)
-		var p2 float64 = float64(nextStart)
+		var size float64 = tot + float64(int64(binary.Size(m)))
 
-		if p2 != -1 {
+		if nextStart == -1 && size != p1 {
 
-			if p2 != p1 {
-				var frag float64 = p2 - p1
-				var percentage float64 = frag * 100 / tot
-				if percentage == 0 {
-					report = ""
-				} else {
-					report = "\t\t\t<td> LIBRE<br/> "
-					report += FloatToString(percentage)
-					report += "% del disco</td>"
-				}
+			var freeS float64 = size - p1 + float64(binary.Size(m))
+
+			var percentage float64 = freeS * 100 / tot
+
+			if percentage == 0 {
+				report = ""
+			} else {
+				report = "\t\t\t<td bgcolor=\"gold\"> LIBRE<br/> "
+				report += FloatToString(percentage)
+				report += "% del disco</td>"
 			}
 
 		}
@@ -959,7 +960,7 @@ func checkNextSpace(start int64, size int64, nextStart int64, index int, tot flo
 			if percentage == 0 {
 				report = ""
 			} else {
-				report = "\t\t\t<td> LIBRE<br/> "
+				report = "\t\t\t<td bgcolor=\"gold\"> LIBRE<br/> "
 				report += FloatToString(percentage)
 				report += "% del disco</td>"
 			}
