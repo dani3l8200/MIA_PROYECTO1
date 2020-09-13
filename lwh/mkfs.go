@@ -142,7 +142,7 @@ func MakeFileSystem(root Node) {
 		getData := GetDiskMount(disk.GetPath(), disk.GetName(), false)
 
 		if getData.GetSize != 0 && getData.GetStart != 0 {
-			MakeFormatFast(getData.GetStart, getData.GetSize, disk.GetPath(), getData.GetName)
+			MakeFormatFast(getData.GetStart, getData.GetSize, disk.GetPath(), getData.GetNamePartition)
 		}
 
 	} else if err == false {

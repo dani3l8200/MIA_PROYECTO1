@@ -50,6 +50,76 @@ func MakeReports(Root Node) {
 	} else if strings.EqualFold(name, "disk") {
 		ReportDisk(path, id)
 		return
+	} else if strings.EqualFold(name, "sb") {
+		disk, err := lista.GetMountedPart(id)
+		if err == true {
+			getData := GetDiskMount(disk.GetPath(), disk.GetName(), false)
+
+			if getData.GetSize != 0 && getData.GetStart != 0 {
+				ReportSB(path, disk.GetPath(), getData.GetStart, getData.GetName)
+				return
+			}
+
+		} else if err == false {
+			fmt.Println("ERROR NO SE ENCONTRO LA PARTICION")
+			return
+		}
+	} else if strings.EqualFold(name, "bm_arbdir") {
+		disk, err := lista.GetMountedPart(id)
+		if err == true {
+			getData := GetDiskMount(disk.GetPath(), disk.GetName(), false)
+
+			if getData.GetSize != 0 && getData.GetStart != 0 {
+				ReportBmArbdir(path, disk.GetPath(), getData.GetStart, getData.GetName)
+				return
+			}
+
+		} else if err == false {
+			fmt.Println("ERROR NO SE ENCONTRO LA PARTICION")
+			return
+		}
+	} else if strings.EqualFold(name, "bm_detdir") {
+		disk, err := lista.GetMountedPart(id)
+		if err == true {
+			getData := GetDiskMount(disk.GetPath(), disk.GetName(), false)
+
+			if getData.GetSize != 0 && getData.GetStart != 0 {
+				ReportBmDetdir(path, disk.GetPath(), getData.GetStart, getData.GetName)
+				return
+			}
+
+		} else if err == false {
+			fmt.Println("ERROR NO SE ENCONTRO LA PARTICION")
+			return
+		}
+	} else if strings.EqualFold(name, "bm_inode") {
+		disk, err := lista.GetMountedPart(id)
+		if err == true {
+			getData := GetDiskMount(disk.GetPath(), disk.GetName(), false)
+
+			if getData.GetSize != 0 && getData.GetStart != 0 {
+				ReportBmInode(path, disk.GetPath(), getData.GetStart, getData.GetName)
+				return
+			}
+
+		} else if err == false {
+			fmt.Println("ERROR NO SE ENCONTRO LA PARTICION")
+			return
+		}
+	} else if strings.EqualFold(name, "bm_block") {
+		disk, err := lista.GetMountedPart(id)
+		if err == true {
+			getData := GetDiskMount(disk.GetPath(), disk.GetName(), false)
+
+			if getData.GetSize != 0 && getData.GetStart != 0 {
+				ReportBmBlock(path, disk.GetPath(), getData.GetStart, getData.GetName)
+				return
+			}
+
+		} else if err == false {
+			fmt.Println("ERROR NO SE ENCONTRO LA PARTICION")
+			return
+		}
 	}
 }
 
@@ -297,6 +367,198 @@ func ReportDisk(path string, id string) {
 	GenerateDot(path, "ResportMount.dot", report)
 }
 
+func ReportSB(path string, diskPath string, start int64, name string) {
+
+	var report string = ""
+
+	f, err := os.OpenFile(diskPath, os.O_RDWR, 0777)
+	if err != nil {
+		panic(err)
+	}
+	defer f.Close()
+
+	sb := readFileSB(f, err, start)
+
+	report += "digraph D{\n"
+	report += "graph [pad=\"0.5\", nodesep=\"0.5\", ranksep=\"2\"];\n"
+	report += "node [shape=plain]\n"
+	report += "rankdir=LR;\n"
+	report += "arset [label=<\n"
+	report += "<table border=\"0\" cellborder=\"1\" color=\"green1\" cellspacing=\"0\">\n"
+	report += "<tr> <td colspan=\"2\" bgcolor=\"green1\"> Reporte SB Ubicado en el disco " + name + " </td> </tr>\n"
+	report += "<tr> <td bgcolor=\"green1\"> DATO EN LA ESTRUCTURA </td><td  bgcolor=\"green1\"> DESCRIPCIÓN </td> </tr>"
+	report += "<tr> <td bgcolor=\"LightSalmon1\"> sb_nombre_hd: </td><td bgcolor=\"LightSalmon1\">" + converByteLToString(sb.SbNameHd) + "</td></tr>\n"
+	report += "<tr> <td> sb_arbol_virtual_count: </td><td>" + strconv.Itoa(int(sb.SbTreeVirtualCount)) + "</td></tr>\n"
+	report += "<tr> <td bgcolor=\"LightSalmon1\"> sb_detalle_directory_count: </td><td bgcolor=\"LightSalmon1\">" + strconv.Itoa(int(sb.SbDetailDirectoryCount)) + "</td></tr>\n"
+	report += "<tr> <td> sb_inodos_count: </td><td>" + strconv.Itoa(int(sb.SbInodosCount)) + "</td></tr>\n"
+	report += "<tr> <td bgcolor=\"LightSalmon1\"> sb_bloques_count: </td><td bgcolor=\"LightSalmon1\">" + strconv.Itoa(int(sb.SbBlocksCount)) + "</td></tr>\n"
+	report += "<tr> <td> sb_arbol_virtual_free: </td><td>" + strconv.Itoa(int(sb.SbTreeVirtualFree)) + "</td></tr>\n"
+	report += "<tr> <td bgcolor=\"LightSalmon1\"> sb_detalle_directory_free: </td><td bgcolor=\"LightSalmon1\">" + strconv.Itoa(int(sb.SbDetailDirectoryFree)) + "</td></tr>\n"
+	report += "<tr> <td> sb_inodos_free: </td><td>" + strconv.Itoa(int(sb.SbInodosFree)) + "</td></tr>\n"
+	report += "<tr> <td bgcolor=\"LightSalmon1\"> sb_bloques_free: </td><td bgcolor=\"LightSalmon1\">" + strconv.Itoa(int(sb.SbBlocksFree)) + "</td></tr>\n"
+	report += "<tr> <td> sb_date_creacion: </td><td>" + string(sb.SbDateCreation[:19]) + "</td></tr>\n"
+	report += "<tr> <td bgcolor=\"LightSalmon1\"> sb_date_ultimo_montaje: </td><td bgcolor=\"LightSalmon1\">" + string(sb.SbDateLastMount[:19]) + "</td></tr>\n"
+	report += "<tr> <td> sb_montaje_count: </td><td>" + strconv.Itoa(int(sb.SbMontajesCount)) + "</td></tr>\n"
+	report += "<tr> <td bgcolor=\"LightSalmon1\"> sb_ap_bitmap_arbol_directorio: </td><td bgcolor=\"LightSalmon1\">" + strconv.Itoa(int(sb.SbApBitmapTreeDirectory)) + "</td></tr>\n"
+	report += "<tr> <td> sb_ap_arbol_directory: </td><td>" + strconv.Itoa(int(sb.SbApTreeDirectory)) + "</td></tr>\n"
+	report += "<tr> <td bgcolor=\"LightSalmon1\"> sb_ap_bitmap_detalle_directory: </td><td bgcolor=\"LightSalmon1\">" + strconv.Itoa(int(sb.SbApBitmapDetailDirectory)) + "</td></tr>\n"
+	report += "<tr> <td> sb_ap_detalle_directory: </td><td>" + strconv.Itoa(int(sb.SbApDetailDirectory)) + "</td></tr>\n"
+	report += "<tr> <td bgcolor=\"LightSalmon1\"> sb_ap_bitmap_table_inodo: </td><td bgcolor=\"LightSalmon1\">" + strconv.Itoa(int(sb.SbApBitmapTableInodo)) + "</td></tr>\n"
+	report += "<tr> <td> sb_ap_table_inodo: </td><td>" + strconv.Itoa(int(sb.SbApTableInodo)) + "</td></tr>\n"
+	report += "<tr> <td bgcolor=\"LightSalmon1\"> sb_ap_bitmap_bloques: </td><td bgcolor=\"LightSalmon1\">" + strconv.Itoa(int(sb.SbApBitmapBlocks)) + "</td></tr>\n"
+	report += "<tr> <td> sb_ap_bloques: </td><td>" + strconv.Itoa(int(sb.SbApBlocks)) + "</td></tr>\n"
+	report += "<tr> <td bgcolor=\"LightSalmon1\"> sb_ap_log: </td><td bgcolor=\"LightSalmon1\">" + strconv.Itoa(int(sb.SbApLog)) + "</td></tr>\n"
+	report += "<tr> <td> size_struct_arbol_directorio: </td><td>" + strconv.Itoa(int(sb.SbSizeStrucTreeDirectory)) + "</td></tr>\n"
+	report += "<tr> <td bgcolor=\"LightSalmon1\"> size_struct_detalle_directorio: </td><td bgcolor=\"LightSalmon1\">" + strconv.Itoa(int(sb.SbSizeStrucDetailDirectory)) + "</td></tr>\n"
+	report += "<tr> <td> size_struct_inodo: </td><td>" + strconv.Itoa(int(sb.SbSizeStrucInodo)) + "</td></tr>\n"
+	report += "<tr> <td bgcolor=\"LightSalmon1\"> size_struct_bloque: </td><td bgcolor=\"LightSalmon1\">" + strconv.Itoa(int(sb.SbSizeStrucBloque)) + "</td></tr>\n"
+	report += "<tr> <td> sb_first_free_bit_arbol_directorio: </td><td>" + strconv.Itoa(int(sb.SbFirstFreeBitTreeDirectory)) + "</td></tr>\n"
+	report += "<tr> <td bgcolor=\"LightSalmon1\"> sb_first_free_bit_detalle_directorio: </td><td bgcolor=\"LightSalmon1\">" + strconv.Itoa(int(sb.SbFirstFreeBitDetailDirectory)) + "</td></tr>\n"
+	report += "<tr> <td> sb_first_free_bit_tabla_inodo: </td><td>" + strconv.Itoa(int(sb.SbFirstFreeBitTableInodo)) + "</td></tr>\n"
+	report += "<tr> <td bgcolor=\"LightSalmon1\"> sb_first_free_bit_bloques: </td><td bgcolor=\"LightSalmon1\">" + strconv.Itoa(int(sb.SbFirstFreeBitBlocks)) + "</td></tr>\n"
+	report += "<tr> <td> sb_magic_num: </td><td>" + strconv.Itoa(int(sb.SbMagicNum)) + "</td></tr>\n"
+	report += "</table>\n"
+	report += ">]\n}"
+	GenerateDot(path, "Report3.dot", report)
+}
+
+func ReportBmArbdir(path string, diskPath string, start int64, name string) {
+
+	var report string = ""
+
+	f, err := os.OpenFile(diskPath, os.O_RDWR, 0777)
+	if err != nil {
+		panic(err)
+	}
+	defer f.Close()
+	var i int64 = 0
+	var j int = 0
+
+	sb := readFileSB(f, err, start)
+
+	bitMapAvd := getSBBitMap(f, err, sb.SbTreeVirtualCount, sb.SbApBitmapTreeDirectory)
+	report += "----------------------------REPORTE BITMAP ARBOL DE DIRECTORIO-------------------------\n"
+	report += "╔══════════════════════════════════════════════════════════╗\n"
+
+	for i <= 20 && j < len(bitMapAvd) {
+		if i < 20 {
+			report += "║" + string(bitMapAvd[j]) + "║"
+		} else if (i) == 20 {
+			i = -1
+			report += "\n"
+			j = j - 1
+		}
+		i++
+		j++
+	}
+
+	report += "\n╚══════════════════════════════════════════════════════════╝"
+
+	GenerateText(path, report)
+
+}
+
+func ReportBmDetdir(path string, diskPath string, start int64, name string) {
+	var report string = ""
+
+	f, err := os.OpenFile(diskPath, os.O_RDWR, 0777)
+	if err != nil {
+		panic(err)
+	}
+	defer f.Close()
+	var i int64 = 0
+	var j int = 0
+
+	sb := readFileSB(f, err, start)
+
+	bitMapDD := getSBBitMap(f, err, sb.SbDetailDirectoryCount, sb.SbApBitmapDetailDirectory)
+	report += "----------------------------REPORTE BITMAP DETALLE DE DIRECTORIO-------------------------\n"
+	report += "╔══════════════════════════════════════════════════════════╗\n"
+
+	for i <= 20 && j < len(bitMapDD) {
+		if i < 20 {
+			report += "║" + string(bitMapDD[j]) + "║"
+		} else if (i) == 20 {
+			i = -1
+			report += "\n"
+			j = j - 1
+		}
+		i++
+		j++
+	}
+
+	report += "\n╚══════════════════════════════════════════════════════════╝"
+
+	GenerateText(path, report)
+}
+
+func ReportBmInode(path string, diskPath string, start int64, name string) {
+	var report string = ""
+
+	f, err := os.OpenFile(diskPath, os.O_RDWR, 0777)
+	if err != nil {
+		panic(err)
+	}
+	defer f.Close()
+	var i int64 = 0
+	var j int = 0
+
+	sb := readFileSB(f, err, start)
+
+	bitMapInode := getSBBitMap(f, err, sb.SbInodosCount, sb.SbApBitmapTableInodo)
+	report += "----------------------------REPORTE BITMAP TABLA DE INODOS-------------------------\n"
+	report += "╔══════════════════════════════════════════════════════════╗\n"
+
+	for i <= 20 && j < len(bitMapInode) {
+		if i < 20 {
+			report += "║" + string(bitMapInode[j]) + "║"
+		} else if (i) == 20 {
+			i = -1
+			report += "\n"
+			j = j - 1
+		}
+		i++
+		j++
+	}
+
+	report += "\n╚══════════════════════════════════════════════════════════╝"
+
+	GenerateText(path, report)
+}
+
+func ReportBmBlock(path string, diskPath string, start int64, name string) {
+	var report string = ""
+
+	f, err := os.OpenFile(diskPath, os.O_RDWR, 0777)
+	if err != nil {
+		panic(err)
+	}
+	defer f.Close()
+	var i int64 = 0
+	var j int = 0
+
+	sb := readFileSB(f, err, start)
+
+	bitMapBlock := getSBBitMap(f, err, sb.SbBlocksCount, sb.SbApBitmapBlocks)
+	report += "----------------------------REPORTE BITMAP BLOQUES-------------------------\n"
+	report += "╔══════════════════════════════════════════════════════════╗\n"
+	for i <= 20 && j < len(bitMapBlock) {
+		if i < 20 {
+			report += "║" + string(bitMapBlock[j]) + "║"
+		} else if (i) == 20 {
+			i = -1
+			report += "\n"
+			j = j - 1
+		}
+		i++
+		j++
+	}
+
+	report += "\n╚══════════════════════════════════════════════════════════╝"
+
+	GenerateText(path, report)
+}
+
 func checkNextSpace(start int64, size int64, nextStart int64, index int, tot float64) string {
 	var report string = ""
 	var m structs_lwh.MBR
@@ -344,7 +606,7 @@ func checkNextSpace(start int64, size int64, nextStart int64, index int, tot flo
 func writeFileReport(path string, content string) {
 	// open file using READ & WRITE permission
 	createFile(path)
-	var file, err = os.OpenFile(path, os.O_RDWR, 0777)
+	var file, err = os.OpenFile(path, os.O_RDWR|os.O_TRUNC, 0777)
 	checkError(err)
 	defer file.Close()
 	// write some text to file
@@ -366,6 +628,27 @@ func createFile(path string) {
 		checkError(err)
 		defer file.Close()
 	}
+}
+
+func GenerateText(path string, content string) {
+	directory := GetNameReport(path)
+
+	makeDirectory(directory)
+	aux, _ := SetDirectory(path)
+
+	writeFileReport(aux, content)
+
+	archive, _ := SetDirectory(path)
+
+	openMyReport := GetOpenFile(path)
+
+	x, _ := SetDirectory(openMyReport)
+
+	openMyReport = x
+
+	fmt.Println("-----------REPORTE GENERADO CON EXITO!--------------")
+
+	ViewReport(openMyReport, archive)
 }
 
 func GenerateDot(path string, nameReport string, content string) {
@@ -480,6 +763,30 @@ func ViewReport(tipo string, outputFile string) int {
 				return -int(ws.Signal())
 			}
 		}
+	} else if tipo == ".txt" {
+		app := "gedit"
+		arg0 := outputFile
+
+		cmd := exec.Command(app, arg0)
+		cmd.Stdin = os.Stdin
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		err := cmd.Run()
+
+		if err == nil {
+			return 0
+		}
+
+		// Figure out the exit code
+		if ws, ok := cmd.ProcessState.Sys().(syscall.WaitStatus); ok {
+			if ws.Exited() {
+				return ws.ExitStatus()
+			}
+
+			if ws.Signaled() {
+				return -int(ws.Signal())
+			}
+		}
 	}
 	return -1
 }
@@ -490,6 +797,8 @@ func GetTypeFile(path string) string {
 	index := strings.LastIndex(path, ".")
 	if index > -1 {
 		path = path[index:]
+		x, _ := SetDirectory(path)
+		path = x
 		if path == ".pdf" {
 			return "-Tpdf"
 		} else if path == ".png" {

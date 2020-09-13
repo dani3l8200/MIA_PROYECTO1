@@ -714,7 +714,7 @@ func GenerateContForEmpty(size int64) string {
 				name += string(mybyte)
 				mybyte++
 			}
-		} else if j == 25 {
+		} else if i == 25 {
 			mybyte = 97
 			i = -1
 		}

@@ -388,7 +388,9 @@ func deleteEmpty(s []string) []string {
 func converByteLToString(name [20]byte) string {
 	var auxName string
 	for _, j := range name {
-		auxName += string(j)
+		if j != 0 {
+			auxName += string(j)
+		}
 	}
 	return auxName
 }
