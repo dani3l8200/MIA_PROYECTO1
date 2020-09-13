@@ -37,10 +37,12 @@ var Root lwh.Node
 %token MKFILE PCONT CONT 
 //TOKENS FOR LOIN
 %token LOGIN USER PWD 
-
+//Tokens FOR LOGOUT
 %token LOGOUT
-
+//TOKENS FOR MKDIR 
 %token MKDIR
+
+%token REP RUTA 
 
 //TOKEN PARA SEGUIR EN OTRA LINEA 
 %type <token>  PAUSE 
@@ -66,6 +68,8 @@ var Root lwh.Node
 %type <token> LOGOUT
 //TOKENS FOR MKDIR
 %type <token> MKDIR
+//TOKENS FOR REPORTS 
+%type <token> REP RUTA 
 
 //NO TERMINALES 
 //OTHERS NO TERMINALS
@@ -90,7 +94,8 @@ var Root lwh.Node
 %type <node> Login LoginParams
 //NO TERMINALS FOR MKDIR
 %type <node> Mkdir MkdirParams
-
+//NO TERMINALS FOR REPORTS 
+%type <node> Rep RepParams
 %start Input
 
 %%
@@ -113,6 +118,7 @@ Command: EXEC Exec {$$ = lwh.NodeF("EXEC",$1).Append($2)}
        | LOGOUT {$$ = lwh.NodeF("LOGOUT",$1)}
        | MKFILE Mkfile {$$ = lwh.NodeF("MKFILE",$1).Append($2)}
        | MKDIR Mkdir {$$ = lwh.NodeF("MKDIR",$1).Append($2)}
+       | REP Rep {$$ = lwh.NodeF("REP",$1).Append($2)}
        ;
 Exec: Exec Paparams {$$ = $1.Append($2)}
     | Paparams {$$.Append($1)}
@@ -144,6 +150,8 @@ Mkfile: Mkfile MkfileParams {$$ = $1.Append($2)}
 Mkdir: Mkdir MkdirParams {$$ = $1.Append($2)}
      | MkdirParams {$$.Append($1)}
      ;
+Rep: Rep RepParams {$$ = $1.Append($2)}
+    | RepParams {$$.Append($1)}
 FdiskParams: Paparams {$$ = $1}
            | TYPE_NAMES {$$ = $1}
            | UNIT ARROW B {$$ = lwh.NodeF("UNIT",$3)}
@@ -187,6 +195,11 @@ MkdirParams: Paparams {$$ = $1}
            | IDN ARROW ID {$$ = lwh.NodeF("ID",$3)}
            | PCONT {$$ = lwh.NodeF("P",$1)}
            ;
+RepParams: Paparams {$$ = $1}
+         | IDN ARROW ID {$$ = lwh.NodeF("ID",$3)}
+         | RUTA ARROW ROUTE {$$ = lwh.NodeF("RUTA",$3)}
+         | RUTA ARROW STRTYPE {$$ = lwh.NodeF("RUTA",$3)}
+         | NAME ARROW ID {$$ = lwh.NodeF("NAME",$3)}
 
 ParamsMount: Paparams {$$ = $1}
            | TYPE_NAMES {$$ = $1}

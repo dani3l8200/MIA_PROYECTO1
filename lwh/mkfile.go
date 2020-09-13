@@ -664,6 +664,16 @@ func convertBByteToString(name [25]byte) string {
 	return DbData
 }
 
+func convertPartitionNameToString(name [16]byte) string {
+	var DbData string = ""
+	for _, name := range name {
+		if name != 0 {
+			DbData += string(name)
+		}
+	}
+	return DbData
+}
+
 func getSBBitMap(f *os.File, err error, sizeBitmap int64, x int64) []byte {
 	var i int64 = 0
 

@@ -1,5 +1,6 @@
 package structs_lwh
 
+// SB ...
 type SB struct {
 	SbNameHd                      [20]byte
 	SbTreeVirtualCount            int64
@@ -34,6 +35,7 @@ type SB struct {
 	SbSize                        int64
 }
 
+//Pointer ...
 type Pointer struct {
 	Name     [20]byte
 	PPointer int64

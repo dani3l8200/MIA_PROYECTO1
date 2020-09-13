@@ -15,6 +15,7 @@ state 0
 	LOGIN  shift 13
 	LOGOUT  shift 14
 	MKDIR  shift 16
+	REP  shift 17
 	.  error
 
 	Input  goto 1
@@ -45,1056 +46,1170 @@ state 2
 	LOGIN  shift 13
 	LOGOUT  shift 14
 	MKDIR  shift 16
-	.  reduce 1 (src line 98)
+	REP  shift 17
+	.  reduce 1 (src line 103)
 
-	Command  goto 17
+	Command  goto 18
 
 state 3
 	ListCommands:  Command.    (3)
 
-	.  reduce 3 (src line 101)
+	.  reduce 3 (src line 106)
 
 
 state 4
 	Command:  EXEC.Exec 
 
-	PATH  shift 20
+	PATH  shift 21
 	.  error
 
-	Exec  goto 18
-	Paparams  goto 19
+	Exec  goto 19
+	Paparams  goto 20
 
 state 5
 	Command:  MKDISK.Mkdisk 
 
-	PATH  shift 20
-	SIZE  shift 24
-	UNIT  shift 25
-	NAME  shift 26
+	PATH  shift 21
+	SIZE  shift 25
+	UNIT  shift 26
+	NAME  shift 27
 	.  error
 
-	Paparams  goto 23
-	Mkdisk  goto 21
-	Mkparams  goto 22
+	Paparams  goto 24
+	Mkdisk  goto 22
+	Mkparams  goto 23
 
 state 6
 	Command:  RMDISK.Rmdisk 
 
-	PATH  shift 20
+	PATH  shift 21
 	.  error
 
-	Paparams  goto 28
-	Rmdisk  goto 27
+	Paparams  goto 29
+	Rmdisk  goto 28
 
 state 7
 	Command:  FDISK.Fdisk 
 
-	PATH  shift 20
-	SIZE  shift 38
-	UNIT  shift 33
-	NAME  shift 39
-	ADD  shift 37
-	DELETE  shift 36
-	FIT  shift 35
-	TYPE  shift 34
+	PATH  shift 21
+	SIZE  shift 39
+	UNIT  shift 34
+	NAME  shift 40
+	ADD  shift 38
+	DELETE  shift 37
+	FIT  shift 36
+	TYPE  shift 35
 	.  error
 
-	TYPE_NAMES  goto 32
-	Paparams  goto 31
-	Fdisk  goto 29
-	FdiskParams  goto 30
+	TYPE_NAMES  goto 33
+	Paparams  goto 32
+	Fdisk  goto 30
+	FdiskParams  goto 31
 
 state 8
 	Command:  PAUSE.    (8)
 
-	.  reduce 8 (src line 107)
+	.  reduce 8 (src line 112)
 
 
 state 9
 	Command:  UNMOUNT.Unmount 
 
-	IDM  shift 42
+	IDM  shift 43
 	.  error
 
-	Unmount  goto 40
-	ListUnmount  goto 41
+	Unmount  goto 41
+	ListUnmount  goto 42
 
 state 10
 	Command:  MOUNT.Mount 
 
-	PATH  shift 20
-	NAME  shift 39
+	PATH  shift 21
+	NAME  shift 40
 	.  error
 
-	TYPE_NAMES  goto 46
-	Paparams  goto 45
-	Mount  goto 43
-	ParamsMount  goto 44
+	TYPE_NAMES  goto 47
+	Paparams  goto 46
+	Mount  goto 44
+	ParamsMount  goto 45
 
 state 11
 	Command:  COMMENT.    (11)
 
-	.  reduce 11 (src line 110)
+	.  reduce 11 (src line 115)
 
 
 state 12
 	Command:  MKFS.Mkfs 
 
-	UNIT  shift 52
-	ADD  shift 51
-	TYPE  shift 50
-	IDN  shift 49
+	UNIT  shift 53
+	ADD  shift 52
+	TYPE  shift 51
+	IDN  shift 50
 	.  error
 
-	Mkfs  goto 47
-	MkfsParams  goto 48
+	Mkfs  goto 48
+	MkfsParams  goto 49
 
 state 13
 	Command:  LOGIN.Login 
 
-	IDN  shift 57
-	USER  shift 55
-	PWD  shift 56
+	IDN  shift 58
+	USER  shift 56
+	PWD  shift 57
 	.  error
 
-	Login  goto 53
-	LoginParams  goto 54
+	Login  goto 54
+	LoginParams  goto 55
 
 state 14
 	Command:  LOGOUT.    (14)
 
-	.  reduce 14 (src line 113)
+	.  reduce 14 (src line 118)
 
 
 state 15
 	Command:  MKFILE.Mkfile 
 
-	PATH  shift 20
-	SIZE  shift 63
-	IDN  shift 61
-	PCONT  shift 62
-	CONT  shift 64
+	PATH  shift 21
+	SIZE  shift 64
+	IDN  shift 62
+	PCONT  shift 63
+	CONT  shift 65
 	.  error
 
-	Paparams  goto 60
-	Mkfile  goto 58
-	MkfileParams  goto 59
+	Paparams  goto 61
+	Mkfile  goto 59
+	MkfileParams  goto 60
 
 state 16
 	Command:  MKDIR.Mkdir 
 
-	PATH  shift 20
-	IDN  shift 68
-	PCONT  shift 69
+	PATH  shift 21
+	IDN  shift 69
+	PCONT  shift 70
 	.  error
 
-	Paparams  goto 67
-	Mkdir  goto 65
-	MkdirParams  goto 66
+	Paparams  goto 68
+	Mkdir  goto 66
+	MkdirParams  goto 67
 
 state 17
-	ListCommands:  ListCommands Command.    (2)
+	Command:  REP.Rep 
 
-	.  reduce 2 (src line 100)
+	PATH  shift 21
+	NAME  shift 76
+	IDN  shift 74
+	RUTA  shift 75
+	.  error
 
+	Paparams  goto 73
+	Rep  goto 71
+	RepParams  goto 72
 
 state 18
+	ListCommands:  ListCommands Command.    (2)
+
+	.  reduce 2 (src line 105)
+
+
+state 19
 	Command:  EXEC Exec.    (4)
 	Exec:  Exec.Paparams 
 
-	PATH  shift 20
-	.  reduce 4 (src line 103)
+	PATH  shift 21
+	.  reduce 4 (src line 108)
 
-	Paparams  goto 70
-
-state 19
-	Exec:  Paparams.    (18)
-
-	.  reduce 18 (src line 118)
-
+	Paparams  goto 77
 
 state 20
-	Paparams:  PATH.ARROW ROUTE 
-	Paparams:  PATH.ARROW STRTYPE 
+	Exec:  Paparams.    (19)
 
-	ARROW  shift 71
-	.  error
+	.  reduce 19 (src line 124)
 
 
 state 21
-	Command:  MKDISK Mkdisk.    (5)
-	Mkdisk:  Mkdisk.Mkparams 
-
-	PATH  shift 20
-	SIZE  shift 24
-	UNIT  shift 25
-	NAME  shift 26
-	.  reduce 5 (src line 104)
-
-	Paparams  goto 23
-	Mkparams  goto 72
-
-state 22
-	Mkdisk:  Mkparams.    (20)
-
-	.  reduce 20 (src line 121)
-
-
-state 23
-	Mkparams:  Paparams.    (75)
-
-	.  reduce 75 (src line 196)
-
-
-state 24
-	Mkparams:  SIZE.ARROW NUMBERN 
-
-	ARROW  shift 73
-	.  error
-
-
-state 25
-	Mkparams:  UNIT.ARROW K 
-	Mkparams:  UNIT.ARROW M 
-
-	ARROW  shift 74
-	.  error
-
-
-state 26
-	Mkparams:  NAME.ARROW ID 
-
-	ARROW  shift 75
-	.  error
-
-
-state 27
-	Command:  RMDISK Rmdisk.    (6)
-	Rmdisk:  Rmdisk.Paparams 
-
-	PATH  shift 20
-	.  reduce 6 (src line 105)
-
-	Paparams  goto 76
-
-state 28
-	Rmdisk:  Paparams.    (22)
-
-	.  reduce 22 (src line 124)
-
-
-state 29
-	Command:  FDISK Fdisk.    (7)
-	Fdisk:  Fdisk.FdiskParams 
-
-	PATH  shift 20
-	SIZE  shift 38
-	UNIT  shift 33
-	NAME  shift 39
-	ADD  shift 37
-	DELETE  shift 36
-	FIT  shift 35
-	TYPE  shift 34
-	.  reduce 7 (src line 106)
-
-	TYPE_NAMES  goto 32
-	Paparams  goto 31
-	FdiskParams  goto 77
-
-state 30
-	Fdisk:  FdiskParams.    (24)
-
-	.  reduce 24 (src line 127)
-
-
-state 31
-	FdiskParams:  Paparams.    (37)
-
-	.  reduce 37 (src line 147)
-
-
-state 32
-	FdiskParams:  TYPE_NAMES.    (38)
-
-	.  reduce 38 (src line 148)
-
-
-state 33
-	FdiskParams:  UNIT.ARROW B 
-	FdiskParams:  UNIT.ARROW K 
-	FdiskParams:  UNIT.ARROW M 
+	Paparams:  PATH.ARROW ROUTE 
+	Paparams:  PATH.ARROW STRTYPE 
 
 	ARROW  shift 78
 	.  error
 
 
-state 34
-	FdiskParams:  TYPE.ARROW P 
-	FdiskParams:  TYPE.ARROW E 
-	FdiskParams:  TYPE.ARROW L 
+state 22
+	Command:  MKDISK Mkdisk.    (5)
+	Mkdisk:  Mkdisk.Mkparams 
 
-	ARROW  shift 79
-	.  error
+	PATH  shift 21
+	SIZE  shift 25
+	UNIT  shift 26
+	NAME  shift 27
+	.  reduce 5 (src line 109)
+
+	Paparams  goto 24
+	Mkparams  goto 79
+
+state 23
+	Mkdisk:  Mkparams.    (21)
+
+	.  reduce 21 (src line 127)
 
 
-state 35
-	FdiskParams:  FIT.ARROW BF 
-	FdiskParams:  FIT.ARROW FF 
-	FdiskParams:  FIT.ARROW WF 
+state 24
+	Mkparams:  Paparams.    (83)
+
+	.  reduce 83 (src line 209)
+
+
+state 25
+	Mkparams:  SIZE.ARROW NUMBERN 
 
 	ARROW  shift 80
 	.  error
 
 
-state 36
-	FdiskParams:  DELETE.ARROW FAST 
-	FdiskParams:  DELETE.ARROW FULL 
+state 26
+	Mkparams:  UNIT.ARROW K 
+	Mkparams:  UNIT.ARROW M 
 
 	ARROW  shift 81
 	.  error
 
 
-state 37
-	FdiskParams:  ADD.ARROW NUMBERN 
+state 27
+	Mkparams:  NAME.ARROW ID 
 
 	ARROW  shift 82
 	.  error
 
 
-state 38
-	FdiskParams:  SIZE.ARROW NUMBERN 
+state 28
+	Command:  RMDISK Rmdisk.    (6)
+	Rmdisk:  Rmdisk.Paparams 
 
-	ARROW  shift 83
+	PATH  shift 21
+	.  reduce 6 (src line 110)
+
+	Paparams  goto 83
+
+state 29
+	Rmdisk:  Paparams.    (23)
+
+	.  reduce 23 (src line 130)
+
+
+state 30
+	Command:  FDISK Fdisk.    (7)
+	Fdisk:  Fdisk.FdiskParams 
+
+	PATH  shift 21
+	SIZE  shift 39
+	UNIT  shift 34
+	NAME  shift 40
+	ADD  shift 38
+	DELETE  shift 37
+	FIT  shift 36
+	TYPE  shift 35
+	.  reduce 7 (src line 111)
+
+	TYPE_NAMES  goto 33
+	Paparams  goto 32
+	FdiskParams  goto 84
+
+state 31
+	Fdisk:  FdiskParams.    (25)
+
+	.  reduce 25 (src line 133)
+
+
+state 32
+	FdiskParams:  Paparams.    (40)
+
+	.  reduce 40 (src line 155)
+
+
+state 33
+	FdiskParams:  TYPE_NAMES.    (41)
+
+	.  reduce 41 (src line 156)
+
+
+state 34
+	FdiskParams:  UNIT.ARROW B 
+	FdiskParams:  UNIT.ARROW K 
+	FdiskParams:  UNIT.ARROW M 
+
+	ARROW  shift 85
 	.  error
 
 
-state 39
-	TYPE_NAMES:  NAME.ARROW ID 
-	TYPE_NAMES:  NAME.ARROW STRTYPE 
-
-	ARROW  shift 84
-	.  error
-
-
-state 40
-	Command:  UNMOUNT Unmount.    (9)
-	Unmount:  Unmount.ListUnmount 
-
-	IDM  shift 42
-	.  reduce 9 (src line 108)
-
-	ListUnmount  goto 85
-
-state 41
-	Unmount:  ListUnmount.    (28)
-
-	.  reduce 28 (src line 133)
-
-
-state 42
-	ListUnmount:  IDM.ARROW ID 
+state 35
+	FdiskParams:  TYPE.ARROW P 
+	FdiskParams:  TYPE.ARROW E 
+	FdiskParams:  TYPE.ARROW L 
 
 	ARROW  shift 86
 	.  error
 
 
-state 43
-	Command:  MOUNT Mount.    (10)
-	Mount:  Mount.ParamsMount 
+state 36
+	FdiskParams:  FIT.ARROW BF 
+	FdiskParams:  FIT.ARROW FF 
+	FdiskParams:  FIT.ARROW WF 
 
-	PATH  shift 20
-	NAME  shift 39
-	.  reduce 10 (src line 109)
-
-	TYPE_NAMES  goto 46
-	Paparams  goto 45
-	ParamsMount  goto 87
-
-state 44
-	Mount:  ParamsMount.    (26)
-
-	.  reduce 26 (src line 130)
+	ARROW  shift 87
+	.  error
 
 
-state 45
-	ParamsMount:  Paparams.    (72)
+state 37
+	FdiskParams:  DELETE.ARROW FAST 
+	FdiskParams:  DELETE.ARROW FULL 
 
-	.  reduce 72 (src line 191)
-
-
-state 46
-	ParamsMount:  TYPE_NAMES.    (73)
-
-	.  reduce 73 (src line 192)
+	ARROW  shift 88
+	.  error
 
 
-state 47
-	Command:  MKFS Mkfs.    (12)
-	Mkfs:  Mkfs.MkfsParams 
-
-	UNIT  shift 52
-	ADD  shift 51
-	TYPE  shift 50
-	IDN  shift 49
-	.  reduce 12 (src line 111)
-
-	MkfsParams  goto 88
-
-state 48
-	Mkfs:  MkfsParams.    (30)
-
-	.  reduce 30 (src line 136)
-
-
-state 49
-	MkfsParams:  IDN.ARROW ID 
+state 38
+	FdiskParams:  ADD.ARROW NUMBERN 
 
 	ARROW  shift 89
 	.  error
 
 
-state 50
-	MkfsParams:  TYPE.ARROW FAST 
-	MkfsParams:  TYPE.ARROW FULL 
+state 39
+	FdiskParams:  SIZE.ARROW NUMBERN 
 
 	ARROW  shift 90
 	.  error
 
 
-state 51
-	MkfsParams:  ADD.ARROW NUMBERN 
+state 40
+	TYPE_NAMES:  NAME.ARROW ID 
+	TYPE_NAMES:  NAME.ARROW STRTYPE 
 
 	ARROW  shift 91
 	.  error
 
 
-state 52
-	MkfsParams:  UNIT.ARROW K 
-	MkfsParams:  UNIT.ARROW M 
-	MkfsParams:  UNIT.ARROW B 
+state 41
+	Command:  UNMOUNT Unmount.    (9)
+	Unmount:  Unmount.ListUnmount 
 
-	ARROW  shift 92
+	IDM  shift 43
+	.  reduce 9 (src line 113)
+
+	ListUnmount  goto 92
+
+state 42
+	Unmount:  ListUnmount.    (29)
+
+	.  reduce 29 (src line 139)
+
+
+state 43
+	ListUnmount:  IDM.ARROW ID 
+
+	ARROW  shift 93
 	.  error
 
 
-state 53
-	Command:  LOGIN Login.    (13)
-	Login:  Login.LoginParams 
+state 44
+	Command:  MOUNT Mount.    (10)
+	Mount:  Mount.ParamsMount 
 
-	IDN  shift 57
-	USER  shift 55
-	PWD  shift 56
-	.  reduce 13 (src line 112)
+	PATH  shift 21
+	NAME  shift 40
+	.  reduce 10 (src line 114)
 
-	LoginParams  goto 93
+	TYPE_NAMES  goto 47
+	Paparams  goto 46
+	ParamsMount  goto 94
 
-state 54
-	Login:  LoginParams.    (32)
+state 45
+	Mount:  ParamsMount.    (27)
 
-	.  reduce 32 (src line 139)
-
-
-state 55
-	LoginParams:  USER.ARROW ID 
-
-	ARROW  shift 94
-	.  error
+	.  reduce 27 (src line 136)
 
 
-state 56
-	LoginParams:  PWD.ARROW ID 
-	LoginParams:  PWD.ARROW NUMBERN 
+state 46
+	ParamsMount:  Paparams.    (80)
 
-	ARROW  shift 95
-	.  error
+	.  reduce 80 (src line 204)
 
 
-state 57
-	LoginParams:  IDN.ARROW ID 
+state 47
+	ParamsMount:  TYPE_NAMES.    (81)
+
+	.  reduce 81 (src line 205)
+
+
+state 48
+	Command:  MKFS Mkfs.    (12)
+	Mkfs:  Mkfs.MkfsParams 
+
+	UNIT  shift 53
+	ADD  shift 52
+	TYPE  shift 51
+	IDN  shift 50
+	.  reduce 12 (src line 116)
+
+	MkfsParams  goto 95
+
+state 49
+	Mkfs:  MkfsParams.    (31)
+
+	.  reduce 31 (src line 142)
+
+
+state 50
+	MkfsParams:  IDN.ARROW ID 
 
 	ARROW  shift 96
 	.  error
 
 
-state 58
-	Command:  MKFILE Mkfile.    (15)
-	Mkfile:  Mkfile.MkfileParams 
+state 51
+	MkfsParams:  TYPE.ARROW FAST 
+	MkfsParams:  TYPE.ARROW FULL 
 
-	PATH  shift 20
-	SIZE  shift 63
-	IDN  shift 61
-	PCONT  shift 62
-	CONT  shift 64
-	.  reduce 15 (src line 114)
-
-	Paparams  goto 60
-	MkfileParams  goto 97
-
-state 59
-	Mkfile:  MkfileParams.    (34)
-
-	.  reduce 34 (src line 142)
+	ARROW  shift 97
+	.  error
 
 
-state 60
-	MkfileParams:  Paparams.    (63)
-
-	.  reduce 63 (src line 178)
-
-
-state 61
-	MkfileParams:  IDN.ARROW ID 
+state 52
+	MkfsParams:  ADD.ARROW NUMBERN 
 
 	ARROW  shift 98
 	.  error
 
 
-state 62
-	MkfileParams:  PCONT.    (65)
-
-	.  reduce 65 (src line 180)
-
-
-state 63
-	MkfileParams:  SIZE.ARROW NUMBERN 
+state 53
+	MkfsParams:  UNIT.ARROW K 
+	MkfsParams:  UNIT.ARROW M 
+	MkfsParams:  UNIT.ARROW B 
 
 	ARROW  shift 99
 	.  error
 
 
-state 64
-	MkfileParams:  CONT.ARROW ROUTE 
-	MkfileParams:  CONT.ARROW STRTYPE 
+state 54
+	Command:  LOGIN Login.    (13)
+	Login:  Login.LoginParams 
 
-	ARROW  shift 100
+	IDN  shift 58
+	USER  shift 56
+	PWD  shift 57
+	.  reduce 13 (src line 117)
+
+	LoginParams  goto 100
+
+state 55
+	Login:  LoginParams.    (33)
+
+	.  reduce 33 (src line 145)
+
+
+state 56
+	LoginParams:  USER.ARROW ID 
+
+	ARROW  shift 101
 	.  error
 
 
-state 65
-	Command:  MKDIR Mkdir.    (16)
-	Mkdir:  Mkdir.MkdirParams 
-
-	PATH  shift 20
-	IDN  shift 68
-	PCONT  shift 69
-	.  reduce 16 (src line 115)
-
-	Paparams  goto 67
-	MkdirParams  goto 101
-
-state 66
-	Mkdir:  MkdirParams.    (36)
-
-	.  reduce 36 (src line 145)
-
-
-state 67
-	MkdirParams:  Paparams.    (69)
-
-	.  reduce 69 (src line 186)
-
-
-state 68
-	MkdirParams:  IDN.ARROW ID 
+state 57
+	LoginParams:  PWD.ARROW ID 
+	LoginParams:  PWD.ARROW NUMBERN 
 
 	ARROW  shift 102
 	.  error
 
 
-state 69
-	MkdirParams:  PCONT.    (71)
+state 58
+	LoginParams:  IDN.ARROW ID 
 
-	.  reduce 71 (src line 188)
+	ARROW  shift 103
+	.  error
+
+
+state 59
+	Command:  MKFILE Mkfile.    (15)
+	Mkfile:  Mkfile.MkfileParams 
+
+	PATH  shift 21
+	SIZE  shift 64
+	IDN  shift 62
+	PCONT  shift 63
+	CONT  shift 65
+	.  reduce 15 (src line 119)
+
+	Paparams  goto 61
+	MkfileParams  goto 104
+
+state 60
+	Mkfile:  MkfileParams.    (35)
+
+	.  reduce 35 (src line 148)
+
+
+state 61
+	MkfileParams:  Paparams.    (66)
+
+	.  reduce 66 (src line 186)
+
+
+state 62
+	MkfileParams:  IDN.ARROW ID 
+
+	ARROW  shift 105
+	.  error
+
+
+state 63
+	MkfileParams:  PCONT.    (68)
+
+	.  reduce 68 (src line 188)
+
+
+state 64
+	MkfileParams:  SIZE.ARROW NUMBERN 
+
+	ARROW  shift 106
+	.  error
+
+
+state 65
+	MkfileParams:  CONT.ARROW ROUTE 
+	MkfileParams:  CONT.ARROW STRTYPE 
+
+	ARROW  shift 107
+	.  error
+
+
+state 66
+	Command:  MKDIR Mkdir.    (16)
+	Mkdir:  Mkdir.MkdirParams 
+
+	PATH  shift 21
+	IDN  shift 69
+	PCONT  shift 70
+	.  reduce 16 (src line 120)
+
+	Paparams  goto 68
+	MkdirParams  goto 108
+
+state 67
+	Mkdir:  MkdirParams.    (37)
+
+	.  reduce 37 (src line 151)
+
+
+state 68
+	MkdirParams:  Paparams.    (72)
+
+	.  reduce 72 (src line 194)
+
+
+state 69
+	MkdirParams:  IDN.ARROW ID 
+
+	ARROW  shift 109
+	.  error
 
 
 state 70
-	Exec:  Exec Paparams.    (17)
+	MkdirParams:  PCONT.    (74)
 
-	.  reduce 17 (src line 117)
+	.  reduce 74 (src line 196)
 
 
 state 71
-	Paparams:  PATH ARROW.ROUTE 
-	Paparams:  PATH ARROW.STRTYPE 
+	Command:  REP Rep.    (17)
+	Rep:  Rep.RepParams 
 
-	ROUTE  shift 103
-	STRTYPE  shift 104
-	.  error
+	PATH  shift 21
+	NAME  shift 76
+	IDN  shift 74
+	RUTA  shift 75
+	.  reduce 17 (src line 121)
 
+	Paparams  goto 73
+	RepParams  goto 110
 
 state 72
-	Mkdisk:  Mkdisk Mkparams.    (19)
+	Rep:  RepParams.    (39)
 
-	.  reduce 19 (src line 120)
+	.  reduce 39 (src line 154)
 
 
 state 73
-	Mkparams:  SIZE ARROW.NUMBERN 
+	RepParams:  Paparams.    (75)
 
-	NUMBERN  shift 105
-	.  error
+	.  reduce 75 (src line 198)
 
 
 state 74
-	Mkparams:  UNIT ARROW.K 
-	Mkparams:  UNIT ARROW.M 
+	RepParams:  IDN.ARROW ID 
 
-	K  shift 106
-	M  shift 107
+	ARROW  shift 111
 	.  error
 
 
 state 75
-	Mkparams:  NAME ARROW.ID 
+	RepParams:  RUTA.ARROW ROUTE 
+	RepParams:  RUTA.ARROW STRTYPE 
 
-	ID  shift 108
+	ARROW  shift 112
 	.  error
 
 
 state 76
-	Rmdisk:  Rmdisk Paparams.    (21)
+	RepParams:  NAME.ARROW ID 
 
-	.  reduce 21 (src line 123)
+	ARROW  shift 113
+	.  error
 
 
 state 77
-	Fdisk:  Fdisk FdiskParams.    (23)
+	Exec:  Exec Paparams.    (18)
 
-	.  reduce 23 (src line 126)
+	.  reduce 18 (src line 123)
 
 
 state 78
-	FdiskParams:  UNIT ARROW.B 
-	FdiskParams:  UNIT ARROW.K 
-	FdiskParams:  UNIT ARROW.M 
+	Paparams:  PATH ARROW.ROUTE 
+	Paparams:  PATH ARROW.STRTYPE 
 
-	K  shift 110
-	M  shift 111
-	B  shift 109
+	ROUTE  shift 114
+	STRTYPE  shift 115
 	.  error
 
 
 state 79
-	FdiskParams:  TYPE ARROW.P 
-	FdiskParams:  TYPE ARROW.E 
-	FdiskParams:  TYPE ARROW.L 
+	Mkdisk:  Mkdisk Mkparams.    (20)
 
-	P  shift 112
-	E  shift 113
-	L  shift 114
-	.  error
+	.  reduce 20 (src line 126)
 
 
 state 80
-	FdiskParams:  FIT ARROW.BF 
-	FdiskParams:  FIT ARROW.FF 
-	FdiskParams:  FIT ARROW.WF 
+	Mkparams:  SIZE ARROW.NUMBERN 
 
-	BF  shift 115
-	FF  shift 116
-	WF  shift 117
+	NUMBERN  shift 116
 	.  error
 
 
 state 81
-	FdiskParams:  DELETE ARROW.FAST 
-	FdiskParams:  DELETE ARROW.FULL 
+	Mkparams:  UNIT ARROW.K 
+	Mkparams:  UNIT ARROW.M 
 
-	FAST  shift 118
-	FULL  shift 119
+	K  shift 117
+	M  shift 118
 	.  error
 
 
 state 82
-	FdiskParams:  ADD ARROW.NUMBERN 
+	Mkparams:  NAME ARROW.ID 
 
-	NUMBERN  shift 120
+	ID  shift 119
 	.  error
 
 
 state 83
-	FdiskParams:  SIZE ARROW.NUMBERN 
+	Rmdisk:  Rmdisk Paparams.    (22)
 
-	NUMBERN  shift 121
-	.  error
+	.  reduce 22 (src line 129)
 
 
 state 84
-	TYPE_NAMES:  NAME ARROW.ID 
-	TYPE_NAMES:  NAME ARROW.STRTYPE 
+	Fdisk:  Fdisk FdiskParams.    (24)
 
-	ID  shift 122
-	STRTYPE  shift 123
-	.  error
+	.  reduce 24 (src line 132)
 
 
 state 85
-	Unmount:  Unmount ListUnmount.    (27)
+	FdiskParams:  UNIT ARROW.B 
+	FdiskParams:  UNIT ARROW.K 
+	FdiskParams:  UNIT ARROW.M 
 
-	.  reduce 27 (src line 132)
+	K  shift 121
+	M  shift 122
+	B  shift 120
+	.  error
 
 
 state 86
-	ListUnmount:  IDM ARROW.ID 
+	FdiskParams:  TYPE ARROW.P 
+	FdiskParams:  TYPE ARROW.E 
+	FdiskParams:  TYPE ARROW.L 
 
-	ID  shift 124
+	P  shift 123
+	E  shift 124
+	L  shift 125
 	.  error
 
 
 state 87
-	Mount:  Mount ParamsMount.    (25)
+	FdiskParams:  FIT ARROW.BF 
+	FdiskParams:  FIT ARROW.FF 
+	FdiskParams:  FIT ARROW.WF 
 
-	.  reduce 25 (src line 129)
+	BF  shift 126
+	FF  shift 127
+	WF  shift 128
+	.  error
 
 
 state 88
-	Mkfs:  Mkfs MkfsParams.    (29)
+	FdiskParams:  DELETE ARROW.FAST 
+	FdiskParams:  DELETE ARROW.FULL 
 
-	.  reduce 29 (src line 135)
+	FAST  shift 129
+	FULL  shift 130
+	.  error
 
 
 state 89
-	MkfsParams:  IDN ARROW.ID 
+	FdiskParams:  ADD ARROW.NUMBERN 
 
-	ID  shift 125
+	NUMBERN  shift 131
 	.  error
 
 
 state 90
-	MkfsParams:  TYPE ARROW.FAST 
-	MkfsParams:  TYPE ARROW.FULL 
+	FdiskParams:  SIZE ARROW.NUMBERN 
 
-	FAST  shift 126
-	FULL  shift 127
+	NUMBERN  shift 132
 	.  error
 
 
 state 91
-	MkfsParams:  ADD ARROW.NUMBERN 
+	TYPE_NAMES:  NAME ARROW.ID 
+	TYPE_NAMES:  NAME ARROW.STRTYPE 
 
-	NUMBERN  shift 128
+	ID  shift 133
+	STRTYPE  shift 134
 	.  error
 
 
 state 92
-	MkfsParams:  UNIT ARROW.K 
-	MkfsParams:  UNIT ARROW.M 
-	MkfsParams:  UNIT ARROW.B 
+	Unmount:  Unmount ListUnmount.    (28)
 
-	K  shift 129
-	M  shift 130
-	B  shift 131
-	.  error
+	.  reduce 28 (src line 138)
 
 
 state 93
-	Login:  Login LoginParams.    (31)
-
-	.  reduce 31 (src line 138)
-
-
-state 94
-	LoginParams:  USER ARROW.ID 
-
-	ID  shift 132
-	.  error
-
-
-state 95
-	LoginParams:  PWD ARROW.ID 
-	LoginParams:  PWD ARROW.NUMBERN 
-
-	NUMBERN  shift 134
-	ID  shift 133
-	.  error
-
-
-state 96
-	LoginParams:  IDN ARROW.ID 
+	ListUnmount:  IDM ARROW.ID 
 
 	ID  shift 135
 	.  error
 
 
-state 97
-	Mkfile:  Mkfile MkfileParams.    (33)
+state 94
+	Mount:  Mount ParamsMount.    (26)
 
-	.  reduce 33 (src line 141)
+	.  reduce 26 (src line 135)
 
 
-state 98
-	MkfileParams:  IDN ARROW.ID 
+state 95
+	Mkfs:  Mkfs MkfsParams.    (30)
+
+	.  reduce 30 (src line 141)
+
+
+state 96
+	MkfsParams:  IDN ARROW.ID 
 
 	ID  shift 136
 	.  error
 
 
-state 99
-	MkfileParams:  SIZE ARROW.NUMBERN 
+state 97
+	MkfsParams:  TYPE ARROW.FAST 
+	MkfsParams:  TYPE ARROW.FULL 
 
-	NUMBERN  shift 137
+	FAST  shift 137
+	FULL  shift 138
+	.  error
+
+
+state 98
+	MkfsParams:  ADD ARROW.NUMBERN 
+
+	NUMBERN  shift 139
+	.  error
+
+
+state 99
+	MkfsParams:  UNIT ARROW.K 
+	MkfsParams:  UNIT ARROW.M 
+	MkfsParams:  UNIT ARROW.B 
+
+	K  shift 140
+	M  shift 141
+	B  shift 142
 	.  error
 
 
 state 100
-	MkfileParams:  CONT ARROW.ROUTE 
-	MkfileParams:  CONT ARROW.STRTYPE 
+	Login:  Login LoginParams.    (32)
 
-	ROUTE  shift 138
-	STRTYPE  shift 139
-	.  error
+	.  reduce 32 (src line 144)
 
 
 state 101
-	Mkdir:  Mkdir MkdirParams.    (35)
+	LoginParams:  USER ARROW.ID 
 
-	.  reduce 35 (src line 144)
+	ID  shift 143
+	.  error
 
 
 state 102
-	MkdirParams:  IDN ARROW.ID 
+	LoginParams:  PWD ARROW.ID 
+	LoginParams:  PWD ARROW.NUMBERN 
 
-	ID  shift 140
+	NUMBERN  shift 145
+	ID  shift 144
 	.  error
 
 
 state 103
-	Paparams:  PATH ARROW ROUTE.    (80)
+	LoginParams:  IDN ARROW.ID 
 
-	.  reduce 80 (src line 202)
+	ID  shift 146
+	.  error
 
 
 state 104
-	Paparams:  PATH ARROW STRTYPE.    (81)
+	Mkfile:  Mkfile MkfileParams.    (34)
 
-	.  reduce 81 (src line 203)
+	.  reduce 34 (src line 147)
 
 
 state 105
-	Mkparams:  SIZE ARROW NUMBERN.    (76)
+	MkfileParams:  IDN ARROW.ID 
 
-	.  reduce 76 (src line 197)
+	ID  shift 147
+	.  error
 
 
 state 106
-	Mkparams:  UNIT ARROW K.    (77)
+	MkfileParams:  SIZE ARROW.NUMBERN 
 
-	.  reduce 77 (src line 198)
+	NUMBERN  shift 148
+	.  error
 
 
 state 107
-	Mkparams:  UNIT ARROW M.    (78)
+	MkfileParams:  CONT ARROW.ROUTE 
+	MkfileParams:  CONT ARROW.STRTYPE 
 
-	.  reduce 78 (src line 199)
+	ROUTE  shift 149
+	STRTYPE  shift 150
+	.  error
 
 
 state 108
-	Mkparams:  NAME ARROW ID.    (79)
+	Mkdir:  Mkdir MkdirParams.    (36)
 
-	.  reduce 79 (src line 200)
+	.  reduce 36 (src line 150)
 
 
 state 109
-	FdiskParams:  UNIT ARROW B.    (39)
+	MkdirParams:  IDN ARROW.ID 
 
-	.  reduce 39 (src line 149)
+	ID  shift 151
+	.  error
 
 
 state 110
-	FdiskParams:  UNIT ARROW K.    (50)
+	Rep:  Rep RepParams.    (38)
 
-	.  reduce 50 (src line 160)
+	.  reduce 38 (src line 153)
 
 
 state 111
-	FdiskParams:  UNIT ARROW M.    (51)
+	RepParams:  IDN ARROW.ID 
 
-	.  reduce 51 (src line 161)
+	ID  shift 152
+	.  error
 
 
 state 112
-	FdiskParams:  TYPE ARROW P.    (40)
+	RepParams:  RUTA ARROW.ROUTE 
+	RepParams:  RUTA ARROW.STRTYPE 
 
-	.  reduce 40 (src line 150)
+	ROUTE  shift 153
+	STRTYPE  shift 154
+	.  error
 
 
 state 113
-	FdiskParams:  TYPE ARROW E.    (41)
+	RepParams:  NAME ARROW.ID 
 
-	.  reduce 41 (src line 151)
+	ID  shift 155
+	.  error
 
 
 state 114
-	FdiskParams:  TYPE ARROW L.    (42)
+	Paparams:  PATH ARROW ROUTE.    (88)
 
-	.  reduce 42 (src line 152)
+	.  reduce 88 (src line 215)
 
 
 state 115
-	FdiskParams:  FIT ARROW BF.    (43)
+	Paparams:  PATH ARROW STRTYPE.    (89)
 
-	.  reduce 43 (src line 153)
+	.  reduce 89 (src line 216)
 
 
 state 116
-	FdiskParams:  FIT ARROW FF.    (44)
+	Mkparams:  SIZE ARROW NUMBERN.    (84)
 
-	.  reduce 44 (src line 154)
+	.  reduce 84 (src line 210)
 
 
 state 117
-	FdiskParams:  FIT ARROW WF.    (45)
+	Mkparams:  UNIT ARROW K.    (85)
 
-	.  reduce 45 (src line 155)
+	.  reduce 85 (src line 211)
 
 
 state 118
-	FdiskParams:  DELETE ARROW FAST.    (46)
+	Mkparams:  UNIT ARROW M.    (86)
 
-	.  reduce 46 (src line 156)
+	.  reduce 86 (src line 212)
 
 
 state 119
-	FdiskParams:  DELETE ARROW FULL.    (47)
+	Mkparams:  NAME ARROW ID.    (87)
 
-	.  reduce 47 (src line 157)
+	.  reduce 87 (src line 213)
 
 
 state 120
-	FdiskParams:  ADD ARROW NUMBERN.    (48)
+	FdiskParams:  UNIT ARROW B.    (42)
 
-	.  reduce 48 (src line 158)
+	.  reduce 42 (src line 157)
 
 
 state 121
-	FdiskParams:  SIZE ARROW NUMBERN.    (49)
+	FdiskParams:  UNIT ARROW K.    (53)
 
-	.  reduce 49 (src line 159)
+	.  reduce 53 (src line 168)
 
 
 state 122
-	TYPE_NAMES:  NAME ARROW ID.    (82)
+	FdiskParams:  UNIT ARROW M.    (54)
 
-	.  reduce 82 (src line 205)
+	.  reduce 54 (src line 169)
 
 
 state 123
-	TYPE_NAMES:  NAME ARROW STRTYPE.    (83)
+	FdiskParams:  TYPE ARROW P.    (43)
 
-	.  reduce 83 (src line 206)
+	.  reduce 43 (src line 158)
 
 
 state 124
-	ListUnmount:  IDM ARROW ID.    (74)
+	FdiskParams:  TYPE ARROW E.    (44)
 
-	.  reduce 74 (src line 194)
+	.  reduce 44 (src line 159)
 
 
 state 125
-	MkfsParams:  IDN ARROW ID.    (52)
+	FdiskParams:  TYPE ARROW L.    (45)
 
-	.  reduce 52 (src line 164)
+	.  reduce 45 (src line 160)
 
 
 state 126
-	MkfsParams:  TYPE ARROW FAST.    (53)
+	FdiskParams:  FIT ARROW BF.    (46)
 
-	.  reduce 53 (src line 165)
+	.  reduce 46 (src line 161)
 
 
 state 127
-	MkfsParams:  TYPE ARROW FULL.    (54)
+	FdiskParams:  FIT ARROW FF.    (47)
 
-	.  reduce 54 (src line 166)
+	.  reduce 47 (src line 162)
 
 
 state 128
-	MkfsParams:  ADD ARROW NUMBERN.    (55)
+	FdiskParams:  FIT ARROW WF.    (48)
 
-	.  reduce 55 (src line 167)
+	.  reduce 48 (src line 163)
 
 
 state 129
-	MkfsParams:  UNIT ARROW K.    (56)
+	FdiskParams:  DELETE ARROW FAST.    (49)
 
-	.  reduce 56 (src line 168)
+	.  reduce 49 (src line 164)
 
 
 state 130
-	MkfsParams:  UNIT ARROW M.    (57)
+	FdiskParams:  DELETE ARROW FULL.    (50)
 
-	.  reduce 57 (src line 169)
+	.  reduce 50 (src line 165)
 
 
 state 131
-	MkfsParams:  UNIT ARROW B.    (58)
+	FdiskParams:  ADD ARROW NUMBERN.    (51)
 
-	.  reduce 58 (src line 170)
+	.  reduce 51 (src line 166)
 
 
 state 132
-	LoginParams:  USER ARROW ID.    (59)
+	FdiskParams:  SIZE ARROW NUMBERN.    (52)
 
-	.  reduce 59 (src line 173)
+	.  reduce 52 (src line 167)
 
 
 state 133
-	LoginParams:  PWD ARROW ID.    (60)
+	TYPE_NAMES:  NAME ARROW ID.    (90)
 
-	.  reduce 60 (src line 174)
+	.  reduce 90 (src line 218)
 
 
 state 134
-	LoginParams:  PWD ARROW NUMBERN.    (61)
+	TYPE_NAMES:  NAME ARROW STRTYPE.    (91)
 
-	.  reduce 61 (src line 175)
+	.  reduce 91 (src line 219)
 
 
 state 135
-	LoginParams:  IDN ARROW ID.    (62)
+	ListUnmount:  IDM ARROW ID.    (82)
 
-	.  reduce 62 (src line 176)
+	.  reduce 82 (src line 207)
 
 
 state 136
-	MkfileParams:  IDN ARROW ID.    (64)
+	MkfsParams:  IDN ARROW ID.    (55)
 
-	.  reduce 64 (src line 179)
+	.  reduce 55 (src line 172)
 
 
 state 137
-	MkfileParams:  SIZE ARROW NUMBERN.    (66)
+	MkfsParams:  TYPE ARROW FAST.    (56)
 
-	.  reduce 66 (src line 181)
+	.  reduce 56 (src line 173)
 
 
 state 138
-	MkfileParams:  CONT ARROW ROUTE.    (67)
+	MkfsParams:  TYPE ARROW FULL.    (57)
 
-	.  reduce 67 (src line 182)
+	.  reduce 57 (src line 174)
 
 
 state 139
-	MkfileParams:  CONT ARROW STRTYPE.    (68)
+	MkfsParams:  ADD ARROW NUMBERN.    (58)
 
-	.  reduce 68 (src line 183)
+	.  reduce 58 (src line 175)
 
 
 state 140
-	MkdirParams:  IDN ARROW ID.    (70)
+	MkfsParams:  UNIT ARROW K.    (59)
 
-	.  reduce 70 (src line 187)
+	.  reduce 59 (src line 176)
 
 
-48 terminals, 24 nonterminals
-84 grammar rules, 141/8000 states
+state 141
+	MkfsParams:  UNIT ARROW M.    (60)
+
+	.  reduce 60 (src line 177)
+
+
+state 142
+	MkfsParams:  UNIT ARROW B.    (61)
+
+	.  reduce 61 (src line 178)
+
+
+state 143
+	LoginParams:  USER ARROW ID.    (62)
+
+	.  reduce 62 (src line 181)
+
+
+state 144
+	LoginParams:  PWD ARROW ID.    (63)
+
+	.  reduce 63 (src line 182)
+
+
+state 145
+	LoginParams:  PWD ARROW NUMBERN.    (64)
+
+	.  reduce 64 (src line 183)
+
+
+state 146
+	LoginParams:  IDN ARROW ID.    (65)
+
+	.  reduce 65 (src line 184)
+
+
+state 147
+	MkfileParams:  IDN ARROW ID.    (67)
+
+	.  reduce 67 (src line 187)
+
+
+state 148
+	MkfileParams:  SIZE ARROW NUMBERN.    (69)
+
+	.  reduce 69 (src line 189)
+
+
+state 149
+	MkfileParams:  CONT ARROW ROUTE.    (70)
+
+	.  reduce 70 (src line 190)
+
+
+state 150
+	MkfileParams:  CONT ARROW STRTYPE.    (71)
+
+	.  reduce 71 (src line 191)
+
+
+state 151
+	MkdirParams:  IDN ARROW ID.    (73)
+
+	.  reduce 73 (src line 195)
+
+
+state 152
+	RepParams:  IDN ARROW ID.    (76)
+
+	.  reduce 76 (src line 199)
+
+
+state 153
+	RepParams:  RUTA ARROW ROUTE.    (77)
+
+	.  reduce 77 (src line 200)
+
+
+state 154
+	RepParams:  RUTA ARROW STRTYPE.    (78)
+
+	.  reduce 78 (src line 201)
+
+
+state 155
+	RepParams:  NAME ARROW ID.    (79)
+
+	.  reduce 79 (src line 202)
+
+
+50 terminals, 26 nonterminals
+92 grammar rules, 156/8000 states
 0 shift/reduce, 0 reduce/reduce conflicts reported
-73 working sets used
-memory: parser 61/120000
+75 working sets used
+memory: parser 67/120000
 0 extra closures
-151 shift entries, 1 exceptions
-46 goto entries
+168 shift entries, 1 exceptions
+51 goto entries
 2 entries saved by goto default
-Optimizer space used: output 151/120000
-151 table entries, 0 zero
-maximum spread: 48, maximum offset: 65
+Optimizer space used: output 168/120000
+168 table entries, 0 zero
+maximum spread: 50, maximum offset: 71

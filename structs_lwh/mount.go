@@ -8,9 +8,10 @@ type MountDisk struct {
 }
 
 type GetMounDisk struct {
-	GetSize  int64
-	GetStart int64
-	GetName  string
+	GetSize          int64
+	GetStart         int64
+	GetName          string
+	GetNamePartition string
 }
 
 //FMountDisk Inicializa la structura mount

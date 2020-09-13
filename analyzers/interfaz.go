@@ -27,28 +27,28 @@ func Execute() {
 
 	//eqn := "mkfs -id->vdb1 -type->fast"
 
-	/*fmt.Println("************************************************************************************************")
-	fmt.Println("                                       SISTEMA DE ARCHIVOS LWH                                 ")
-	fmt.Println("************************************************************************************************")
+	/*	fmt.Println("************************************************************************************************")
+		fmt.Println("                                       SISTEMA DE ARCHIVOS LWH                                 ")
+		fmt.Println("************************************************************************************************")
 
-	var flag = false
-	for !flag {
-		fmt.Printf("~$: ")
-		str := readLine()
-		if strings.EqualFold(str, "exit") {
-			flag = true
-		} else {
-			for strings.Contains(str, "\\*") {
-				str = strings.ReplaceAll(str, "\\*", "")
-				scanner := bufio.NewScanner(os.Stdin)
-				fmt.Printf("> ")
-				scanner.Scan()
-				str += scanner.Text()
+		var flag = false
+		for !flag {
+			fmt.Printf("~$: ")
+			str := readLine()
+			if strings.EqualFold(str, "exit") {
+				flag = true
+			} else {
+				for strings.Contains(str, "\\*") {
+					str = strings.ReplaceAll(str, "\\*", "")
+					scanner := bufio.NewScanner(os.Stdin)
+					fmt.Printf("> ")
+					scanner.Scan()
+					str += scanner.Text()
+				}
+				ExecuteComands(str)
 			}
-			ExecuteComands(str)
-		}
 
-	}*/
+		}*/
 	ExecuteComands(eqn)
 
 }
@@ -98,9 +98,11 @@ func SelectCommands(command lwh.Node) {
 	} else if command.TypeToken == "LOGOUT" {
 		lwh.MakeLogout(command)
 	} else if command.TypeToken == "MKFILE" {
-
+		lwh.MakeFile(command)
 	} else if command.TypeToken == "MKDIR" {
-
+		lwh.MakeMkdir(command)
+	} else if command.TypeToken == "REP" {
+		lwh.MakeReports(command)
 	}
 	for _, i := range command.Children {
 		if i.TypeToken == "PAUSE" {
@@ -136,9 +138,11 @@ func SelectCommands(command lwh.Node) {
 		} else if i.TypeToken == "LOGOUT" {
 			lwh.MakeLogout(i)
 		} else if i.TypeToken == "MKFILE" {
-
+			lwh.MakeFile(i)
 		} else if i.TypeToken == "MKDIR" {
-
+			lwh.MakeMkdir(i)
+		} else if i.TypeToken == "REP" {
+			lwh.MakeReports(i)
 		}
 	}
 }

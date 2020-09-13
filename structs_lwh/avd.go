@@ -1,5 +1,6 @@
 package structs_lwh
 
+//AVD ...
 type AVD struct {
 	AvdDateCreation           [25]byte
 	AvdNameDirectory          [20]byte

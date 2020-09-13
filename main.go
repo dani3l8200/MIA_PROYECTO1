@@ -3,6 +3,7 @@ package main
 import "MIA-PROYECTO1/analyzers"
 
 func main() {
+
 	analyzers.Execute()
 
 	/*	if _, err := os.Stat("/home/Juan Daniel/"); os.IsNotExist(err) {

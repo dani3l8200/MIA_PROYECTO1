@@ -1,5 +1,6 @@
 package structs_lwh
 
+//DDArrayFile ...
 type DDArrayFile struct {
 	DdFileName             [25]byte
 	DdFileApInodo          int64
@@ -7,6 +8,7 @@ type DDArrayFile struct {
 	DdFileDateModification [25]byte
 }
 
+//DDirectory ..
 type DDirectory struct {
 	DDArrayBlock        [5]DDArrayFile
 	DdApDetailDirectory int64

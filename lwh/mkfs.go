@@ -44,6 +44,7 @@ func GetDiskMount(path string, name string, part bool) structs_lwh.GetMounDisk {
 			Data.GetName = aux
 			Data.GetSize = i.PartSize
 			Data.GetStart = i.PartStart
+			Data.GetNamePartition = convertPartitionNameToString(i.PartName)
 			if part {
 				pathDisk = path
 				startDisk = i.PartStart

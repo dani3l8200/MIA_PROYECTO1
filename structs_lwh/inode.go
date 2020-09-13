@@ -1,5 +1,6 @@
 package structs_lwh
 
+//INodo ...
 type INodo struct {
 	ICountInodo         int64
 	ISizeArchive        int64
@@ -11,6 +12,7 @@ type INodo struct {
 	IPerm               int64
 }
 
+// Block ...
 type Block struct {
 	DbData [25]byte
 }

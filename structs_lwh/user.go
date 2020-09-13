@@ -10,16 +10,20 @@ type User struct {
 	ID  [20]byte
 }
 
+//Group ...
 type Group struct {
 	Gid int64
 	Grp [20]byte
 }
+
+//CheckPermiso ...
 type CheckPermiso struct {
 	Read  bool
 	Write bool
 	Exec  bool
 }
 
+//Permisos ...
 type Permisos struct {
 	Permiso [3]CheckPermiso
 }
