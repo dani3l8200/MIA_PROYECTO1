@@ -73,8 +73,6 @@ func MakeMK(root Node) {
 // CreateDisk Funcion para crear el disco y tambien inicializar el mbr
 func CreateDisk(path string, size int64, diskSignature int64, name string, unit byte) {
 	auxSize := verifySize(unit, size)
-
-	var directory string = ""
 	var auxName string = ""
 	times := time.Now()
 	fixFormat := times.Format("01-02-2006 15:04:00")
