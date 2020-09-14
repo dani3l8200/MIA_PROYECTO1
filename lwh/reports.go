@@ -54,7 +54,7 @@ func MakeReports(Root Node) {
 		ReportDisk(path, id)
 		return
 	} else if strings.EqualFold(name, "sb") {
-		disk, err := lista.GetMountedPart(id)
+		disk, err := Lista.GetMountedPart(id)
 		if err == true {
 			getData := GetDiskMount(disk.GetPath(), disk.GetName(), false)
 
@@ -68,7 +68,7 @@ func MakeReports(Root Node) {
 			return
 		}
 	} else if strings.EqualFold(name, "bm_arbdir") {
-		disk, err := lista.GetMountedPart(id)
+		disk, err := Lista.GetMountedPart(id)
 		if err == true {
 			getData := GetDiskMount(disk.GetPath(), disk.GetName(), false)
 
@@ -82,7 +82,7 @@ func MakeReports(Root Node) {
 			return
 		}
 	} else if strings.EqualFold(name, "bm_detdir") {
-		disk, err := lista.GetMountedPart(id)
+		disk, err := Lista.GetMountedPart(id)
 		if err == true {
 			getData := GetDiskMount(disk.GetPath(), disk.GetName(), false)
 
@@ -96,7 +96,7 @@ func MakeReports(Root Node) {
 			return
 		}
 	} else if strings.EqualFold(name, "bm_inode") {
-		disk, err := lista.GetMountedPart(id)
+		disk, err := Lista.GetMountedPart(id)
 		if err == true {
 			getData := GetDiskMount(disk.GetPath(), disk.GetName(), false)
 
@@ -110,7 +110,7 @@ func MakeReports(Root Node) {
 			return
 		}
 	} else if strings.EqualFold(name, "bm_block") {
-		disk, err := lista.GetMountedPart(id)
+		disk, err := Lista.GetMountedPart(id)
 		if err == true {
 			getData := GetDiskMount(disk.GetPath(), disk.GetName(), false)
 
@@ -124,7 +124,7 @@ func MakeReports(Root Node) {
 			return
 		}
 	} else if strings.EqualFold(name, "directorio") {
-		disk, err := lista.GetMountedPart(id)
+		disk, err := Lista.GetMountedPart(id)
 		if err == true {
 			getData := GetDiskMount(disk.GetPath(), disk.GetName(), false)
 
@@ -138,7 +138,7 @@ func MakeReports(Root Node) {
 			return
 		}
 	} else if strings.EqualFold(name, "tree_complete") {
-		disk, err := lista.GetMountedPart(id)
+		disk, err := Lista.GetMountedPart(id)
 		if err == true {
 			getData := GetDiskMount(disk.GetPath(), disk.GetName(), false)
 
@@ -152,7 +152,7 @@ func MakeReports(Root Node) {
 			return
 		}
 	} else if strings.EqualFold(name, "tree_file") {
-		disk, err := lista.GetMountedPart(id)
+		disk, err := Lista.GetMountedPart(id)
 		if err == true {
 			getData := GetDiskMount(disk.GetPath(), disk.GetName(), false)
 
@@ -166,7 +166,7 @@ func MakeReports(Root Node) {
 			return
 		}
 	} else if strings.EqualFold(name, "tree_directorio") {
-		disk, err := lista.GetMountedPart(id)
+		disk, err := Lista.GetMountedPart(id)
 		if err == true {
 			getData := GetDiskMount(disk.GetPath(), disk.GetName(), false)
 
@@ -188,7 +188,7 @@ func ReportMBR(path string, id string) {
 	var report string = ""
 	var namePartition string = ""
 
-	disk, check := lista.GetMountedPart(id)
+	disk, check := Lista.GetMountedPart(id)
 
 	if !check {
 		fmt.Println("LA PARTICION CON ESTE ID NO ESTA MONTADA, F")
@@ -307,7 +307,7 @@ func ReportDisk(path string, id string) {
 	var report string = ""
 	//var namePartition string = ""
 
-	disk, check := lista.GetMountedPart(id)
+	disk, check := Lista.GetMountedPart(id)
 
 	if !check {
 		fmt.Println("LA PARTICION CON ESTE ID NO ESTA MONTADA, F")

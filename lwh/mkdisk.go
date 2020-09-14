@@ -6,7 +6,6 @@ import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
-	"log"
 	"math/rand"
 	"os"
 	"strconv"
@@ -76,6 +75,7 @@ func CreateDisk(path string, size int64, diskSignature int64, name string, unit 
 	auxSize := verifySize(unit, size)
 
 	var directory string = ""
+	var auxName string = ""
 	times := time.Now()
 	fixFormat := times.Format("01-02-2006 15:04:00")
 
@@ -92,8 +92,21 @@ func CreateDisk(path string, size int64, diskSignature int64, name string, unit 
 	if strings.Contains(path, "\"") {
 		directory, _ = SetDirectory(path)
 	}
+
 	if directory != "" {
 		path = directory
+	}
+
+	if strings.Contains(name, "\"") {
+		auxName, _ = SetDirectory(name)
+	}
+
+	if auxName != "" {
+		name = auxName
+	}
+
+	if strings.Contains(path, ".d") {
+		path = RemakeDirectory(directory) + "/"
 	}
 
 	nameDisk += name
@@ -110,42 +123,16 @@ func CreateDisk(path string, size int64, diskSignature int64, name string, unit 
 	//	read(path)
 	/*f1, err := os.OpenFile(path, os.O_RDWR, 0777)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 	defer f1.Close()*/
 
 }
 
-/*func read(path string) {
-	f, err := os.OpenFile(path, os.O_RDWR, 0666)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer f.Close()
-	var m structs_lwh.MBR
-	var size int = int(unsafe.Sizeof(m))
-	size2 := binary.Size(mbr)
-
-	fmt.Println(size)
-	fmt.Println(size2)
-
-	data := readNextBytes(f, size)
-
-	buffer := bytes.NewBuffer(data)
-
-	fmt.Println("AQUI ESTA", data)
-	err = binary.Read(buffer, binary.BigEndian, &m)
-	if err != nil {
-		log.Fatal("binary.Read failled", err)
-	}
-	fmt.Printf("size: %d\nDiskSignature: %d\nTime: %+v\nCaracter:%+v\n ", m.MbrSize, m.MbrDiskSignature, m.MbrTime, m.Partition)
-
-}*/
-
 func writeFile(path string, m structs_lwh.MBR) {
 	f, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0777)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 	defer f.Close()
 	var pos [2]byte
@@ -178,7 +165,7 @@ func readNextBytes(file *os.File, number int) []byte {
 	bytes := make([]byte, number)
 	_, err := file.Read(bytes)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 
 	return bytes
@@ -188,7 +175,7 @@ func writeNextBytes(file *os.File, bytes []byte) {
 	_, err := file.Write(bytes)
 
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 }
 
@@ -221,7 +208,19 @@ func verifySize(unit byte, size int64) int64 {
 	return size
 }
 
+//Pause ...
 func Pause() {
 	fmt.Print("Press 'Enter' to continue...")
 	bufio.NewReader(os.Stdin).ReadBytes('\n')
+}
+
+//RemakeDirectory ...
+func RemakeDirectory(path string) string {
+	index := strings.LastIndex(path, "/")
+	if strings.Contains(path, ".d") {
+		if index > -1 {
+			path = path[:index]
+		}
+	}
+	return path
 }

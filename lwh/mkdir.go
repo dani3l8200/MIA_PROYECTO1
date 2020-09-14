@@ -2,11 +2,11 @@ package lwh
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"strings"
 )
 
+//MakeMkdir ...
 func MakeMkdir(Root Node) {
 	var id string = ""
 	var path string = ""
@@ -32,7 +32,7 @@ func MakeMkdir(Root Node) {
 		}
 	}
 
-	disk, err := lista.GetMountedPart(id)
+	disk, err := Lista.GetMountedPart(id)
 	if err {
 		getData := GetDiskMount(disk.GetPath(), disk.GetName(), false)
 
@@ -44,7 +44,7 @@ func MakeMkdir(Root Node) {
 				MakeDirectorys(disk.GetPath(), getData.GetStart, path, p)
 
 			} else if errorPath == false {
-				log.Fatal("ERROR CON EL PATH")
+				fmt.Println("ERROR CON EL PATH")
 			}
 
 		}
@@ -54,11 +54,12 @@ func MakeMkdir(Root Node) {
 	}
 }
 
+//MakeDirectorys ...
 func MakeDirectorys(diskPath string, start int64, path string, p bool) {
 
 	f, err := os.OpenFile(diskPath, os.O_RDWR, 0666)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
 	}
 	defer f.Close()
 
@@ -114,7 +115,7 @@ func MakeDirectorys(diskPath string, start int64, path string, p bool) {
 
 			if pos < len(auxPath)-1 {
 				if !(existDirectoryAVD(f, err, sb.SbApTreeDirectory, avd, auxPath[pos]) != -1) {
-					log.Fatalln("NO EXISTE LA CARPETA USE EL COMANDO P")
+					fmt.Println("NO EXISTE LA CARPETA USE EL COMANDO P")
 					return
 				}
 
@@ -125,7 +126,7 @@ func MakeDirectorys(diskPath string, start int64, path string, p bool) {
 					avd = GetFilesAVD(f, err, sb.SbApTreeDirectory, avd, auxPath[pos], myusers.UID, myusers.Gid)
 
 				} else {
-					log.Fatalln("NO TIENE PERMISOS DE LECTURA")
+					fmt.Println("NO TIENE PERMISOS DE LECTURA")
 					return
 				}
 

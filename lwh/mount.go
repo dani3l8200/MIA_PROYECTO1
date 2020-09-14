@@ -9,7 +9,8 @@ import (
 	"strconv"
 )
 
-var lista datastructure.LinkedList
+//Lista ...
+var Lista datastructure.LinkedList
 
 //MountPartitions ...
 func MountPartitions(root Node) {
@@ -30,8 +31,10 @@ func MountPartitions(root Node) {
 			}
 		}
 	}
-	if name != "" && path != "" {
 
+	if name != "" && path != "" {
+		name, _ = SetDirectory(name)
+		path, _ = SetDirectory(path)
 		if _, err := os.Stat(path); err == nil {
 			auxName := converNameToByte(name)
 			f, err := os.OpenFile(path, os.O_RDWR, 0666)
@@ -78,9 +81,9 @@ func MountPartitions(root Node) {
 				}
 			}
 			if index != -1 {
-				if !lista.MountedPart(path, name) {
-					letter := lista.SetLetter(path)
-					number := lista.SetNumber(path)
+				if !Lista.MountedPart(path, name) {
+					letter := Lista.SetLetter(path)
+					number := Lista.SetNumber(path)
 					var mount structs_lwh.MountDisk
 					var id string = ""
 
@@ -93,8 +96,8 @@ func MountPartitions(root Node) {
 						}
 					}
 					id += strconv.Itoa(number)
-					lista.Insert(mount.FMountDisk(id, path, name))
-					lista.Print()
+					Lista.Insert(mount.FMountDisk(id, path, name))
+					Lista.Print()
 					Pause()
 				} else {
 					fmt.Println("La particion con el nombre", name, "ya ha sido montara anteriormente")
@@ -110,7 +113,7 @@ func MountPartitions(root Node) {
 			Pause()
 		}
 	} else {
-		lista.Print()
+		Lista.Print()
 	}
 }
 
@@ -118,10 +121,10 @@ func MountPartitions(root Node) {
 func UnmountPartitions(root Node) {
 	for _, i := range root.Children {
 		if i.TypeToken == "ID" {
-			lista.DeleteMount(i.Value)
+			Lista.DeleteMount(i.Value)
 		}
 		for _, j := range i.Children {
-			lista.DeleteMount(j.Value)
+			Lista.DeleteMount(j.Value)
 		}
 	}
 }

@@ -38,10 +38,11 @@ func MakeLogin(Root Node) {
 		}
 	}
 
-	disk, err := lista.GetMountedPart(id)
+	disk, err := Lista.GetMountedPart(id)
 	if err {
 		getData := GetDiskMount(disk.GetPath(), disk.GetName(), false)
-
+		usr, _ = SetDirectory(usr)
+		pwd, _ = SetDirectory(pwd)
 		if getData.GetSize != 0 && getData.GetStart != 0 {
 			Login(disk.GetPath(), usr, pwd, id, getData.GetStart)
 		}
@@ -55,7 +56,7 @@ func MakeLogin(Root Node) {
 func Login(path string, usr string, pwd string, id string, start int64) bool {
 	f, err := os.OpenFile(path, os.O_RDWR, 0777)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
 	}
 	defer f.Close()
 	sb := readFileSB(f, err, start)

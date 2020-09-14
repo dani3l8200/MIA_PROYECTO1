@@ -21,46 +21,52 @@ func Execute() {
 	//eqn := "Fdisk -sizE->45 -path->/home/dani3l8200/Escritorio/MisDiscos/Disco5.dsk -name->Particion7 -type->L"
 	//eqn := "mount -path->/home/dani3l8200/Escritorio/MisDiscos/Disco5.dsk -name->Particion1"
 
-	eqn := "exec -path->/home/dani3l8200/Escritorio/MisDiscos/ht1.txt"
+	//eqn := "Mkdisk -Size->4000 -unit->K -path->\"/home/disco Espacio/Disco44.dsk\" -name->Disco44.dsk"
 	//eqn := "login -usr->root -pwd->201020576 -id->vda1"
 	//eqn := "fdisk -add->2 -unit->k -path->/home/dani3l8200/Escritorio/MisDiscos/Disco5.dsk -name->Particion2"
 
 	//eqn := "mkfs -id->vdb1 -type->fast"
 
-	/*	fmt.Println("************************************************************************************************")
-		fmt.Println("                                       SISTEMA DE ARCHIVOS LWH                                 ")
-		fmt.Println("************************************************************************************************")
+	fmt.Println("************************************************************************************************")
+	fmt.Println("                                       SISTEMA DE ARCHIVOS LWH                                 ")
+	fmt.Println("************************************************************************************************")
 
-		var flag = false
-		for !flag {
-			fmt.Printf("~$: ")
-			str := readLine()
-			if strings.EqualFold(str, "exit") {
-				flag = true
-			} else {
-				for strings.Contains(str, "\\*") {
-					str = strings.ReplaceAll(str, "\\*", "")
-					scanner := bufio.NewScanner(os.Stdin)
-					fmt.Printf("> ")
-					scanner.Scan()
-					str += scanner.Text()
-				}
-				ExecuteComands(str)
+	var flag = false
+	for !flag {
+		fmt.Printf("~$: ")
+		str := readLine()
+		if strings.EqualFold(str, "exit") {
+			flag = true
+		} else {
+			for strings.Contains(str, "\\*") {
+				str = strings.ReplaceAll(str, "\\*", "")
+				scanner := bufio.NewScanner(os.Stdin)
+				fmt.Printf("> ")
+				scanner.Scan()
+				str += scanner.Text()
 			}
+			ExecuteComands(str)
+		}
 
-		}*/
-	ExecuteComands(eqn)
+	}
+	//ExecuteComands(eqn)
 
 }
 
 // ExecuteComands ejecuta todos los comandos definidos en el enunciado
 func ExecuteComands(entra string) {
-	l := newLexer(bytes.NewBufferString(entra), os.Stdout, "file.name")
-	if yyParse(l) == 0 {
-		SelectCommands(Root)
+	if entra == "mount" {
+		lwh.Lista.Print()
+		Pause()
+	} else if entra != "mount" {
+		l := newLexer(bytes.NewBufferString(entra), os.Stdout, "file.name")
+		if yyParse(l) == 0 {
+			SelectCommands(Root)
+		}
+		yyDebug = 0
+		yyErrorVerbose = true
 	}
-	yyDebug = 0
-	yyErrorVerbose = true
+
 }
 
 // SelectCommands utilizaro para ver de que comando se trata

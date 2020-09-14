@@ -128,7 +128,20 @@ func MakeFdisk(root Node) {
 			}
 		}
 	}
-
+	var directory string = ""
+	if strings.Contains(path, "\"") {
+		directory, _ = SetDirectory(path)
+	}
+	if directory != "" {
+		path = directory
+	}
+	var auxName string = ""
+	if strings.Contains(name, "\"") {
+		auxName, _ = SetDirectory(name)
+	}
+	if auxName != "" {
+		name = auxName
+	}
 	if _, err := os.Stat(path); err == nil {
 		if size != 0 {
 			if tipo == 'P' {
@@ -259,7 +272,7 @@ func AddSize(path string, name string, unit byte, size int64) {
 
 }
 
-//DeletePartition
+//DeletePartition ...
 func DeletePartition(path string, name string, del int64) {
 	f, err := os.OpenFile(path, os.O_RDWR, 0666)
 	if err != nil {
@@ -280,7 +293,7 @@ func DeletePartition(path string, name string, del int64) {
 		}
 	}
 
-	if !lista.MountedPart(path, name) {
+	if !Lista.MountedPart(path, name) {
 		f.Seek(0, io.SeekStart)
 		auxName := converNameToByte(name)
 		m := readFileDisk(f, err)
@@ -328,18 +341,19 @@ func DeletePartition(path string, name string, del int64) {
 				} else if !checkName {
 					fmt.Println("NO SE ECONTRO LA PARTICION")
 					Pause()
+					break
 				}
 			} else if del == 1 {
 				if checkName {
 					if m.Partition[indexP].PartType == 'P' {
 						make0 := make([]byte, m.Partition[indexP].PartSize)
-
+						f.Seek(m.Partition[indexP].PartStart, io.SeekStart)
 						var binario0 bytes.Buffer
 
 						binary.Write(&binario0, binary.BigEndian, &make0)
 
 						writeNextBytes(f, binario0.Bytes())
-
+						f.Seek(0, io.SeekStart)
 						m.Partition[indexP].PartFit = 'F'
 						for i := 0; i < 16; i++ {
 							m.Partition[indexP].PartName[i] = '0'
@@ -359,6 +373,7 @@ func DeletePartition(path string, name string, del int64) {
 						Pause()
 					} else if m.Partition[indexP].PartType == 'E' {
 						make0 := make([]byte, m.Partition[indexP].PartSize)
+						f.Seek(m.Partition[indexP].PartStart, io.SeekStart)
 
 						var binario0 bytes.Buffer
 
@@ -374,7 +389,7 @@ func DeletePartition(path string, name string, del int64) {
 						m.Partition[indexP].PartStart = -1
 						m.Partition[indexP].PartStatus = '1'
 						m.Partition[indexP].PartType = 'P'
-
+						f.Seek(0, io.SeekStart)
 						var binario bytes.Buffer
 
 						binary.Write(&binario, binary.BigEndian, &m)
@@ -387,6 +402,7 @@ func DeletePartition(path string, name string, del int64) {
 				} else if !checkName {
 					fmt.Println("PARTICION NO Encontrada")
 					Pause()
+					break
 				}
 			}
 		}

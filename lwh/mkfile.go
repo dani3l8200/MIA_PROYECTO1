@@ -55,7 +55,7 @@ func MakeFile(Root Node) {
 		}
 	}
 
-	disk, err := lista.GetMountedPart(id)
+	disk, err := Lista.GetMountedPart(id)
 	if err {
 		getData := GetDiskMount(disk.GetPath(), disk.GetName(), false)
 
@@ -80,7 +80,7 @@ func MakeFile(Root Node) {
 func RecorrerAVD(pathDisk string, start int64, size int64, path string, cont string, p bool) {
 	f, err := os.OpenFile(pathDisk, os.O_RDWR, 0666)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
 	}
 	defer f.Close()
 
@@ -569,7 +569,7 @@ func createPointer(name string, ppointer int64) structs_lwh.Pointer {
 	return pointer
 }
 
-//CreateListPointer obtiene las carpetas del avd
+//CreateListPointerAvd obtiene las carpetas del avd
 func CreateListPointerAvd(f *os.File, err error, SbApTreeDirectory int64, avd structs_lwh.AVD) datastructure.LinkedListP {
 
 	var listaP datastructure.LinkedListP
@@ -603,6 +603,7 @@ func CreateListPointerAvd(f *os.File, err error, SbApTreeDirectory int64, avd st
 	return listaP
 }
 
+//CreateListPointerDd ...
 func CreateListPointerDd(f *os.File, err error, SbApDetailDirectory int64, dd structs_lwh.DDirectory) datastructure.LinkedListP {
 	var listaP datastructure.LinkedListP
 	listaP.Delete()

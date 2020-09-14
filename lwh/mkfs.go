@@ -6,7 +6,6 @@ import (
 	"encoding/binary"
 	"fmt"
 	"io"
-	"log"
 	"os"
 	"strings"
 	"time"
@@ -27,19 +26,18 @@ func GetDiskMount(path string, name string, part bool) structs_lwh.GetMounDisk {
 	Data.GetStart = 0
 	f, err := os.OpenFile(path, os.O_RDWR, 0666)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
 	}
 	defer f.Close()
 	f.Seek(0, 0)
 	m = readFileDisk(f, err)
-	fmt.Println(m)
 	var posExt int = 0
 
 	for pos, i := range m.Partition {
 		if i.PartName == auxName {
 			aux, flag := GetNameDisk(path)
 			if !flag {
-				log.Fatal("OCURRIO UN ERROR AL OBTENER EL NOMBRE DEL DISCO")
+				fmt.Println("OCURRIO UN ERROR AL OBTENER EL NOMBRE DEL DISCO")
 			}
 			Data.GetName = aux
 			Data.GetSize = i.PartSize
@@ -64,7 +62,7 @@ func GetDiskMount(path string, name string, part bool) structs_lwh.GetMounDisk {
 			if e.PartNameE == auxName {
 				aux, flag := GetNameDisk(path)
 				if !flag {
-					log.Fatal("OCURRIO UN ERROR AL OBTENER EL NOMBRE DEL DISCO")
+					fmt.Println("OCURRIO UN ERROR AL OBTENER EL NOMBRE DEL DISCO")
 				}
 				Data.GetName = aux
 				Data.GetSize = e.PartSizeE
@@ -137,7 +135,7 @@ func MakeFileSystem(root Node) {
 		}
 	}
 
-	disk, err := lista.GetMountedPart(id)
+	disk, err := Lista.GetMountedPart(id)
 	if err == true {
 		getData := GetDiskMount(disk.GetPath(), disk.GetName(), false)
 
@@ -158,7 +156,7 @@ func MakeFormatFast(start int64, sizePartition int64, path string, name string) 
 
 	f, err := os.OpenFile(path, os.O_RDWR, 0777)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
 	}
 	defer f.Close()
 
@@ -360,7 +358,7 @@ func readFileSB(f *os.File, err error, start int64) structs_lwh.SB {
 	err = binary.Read(buffer, binary.BigEndian, &sb)
 
 	if err != nil {
-		log.Fatal("binary.Read failled", err)
+		fmt.Println("binary.Read failled", err)
 	}
 
 	return sb
@@ -574,7 +572,7 @@ func ReadAVD(i int64, f *os.File, err error, SbApTreeDirectory int64) structs_lw
 	err = binary.Read(buffer, binary.BigEndian, &avd)
 
 	if err != nil {
-		log.Fatal("binary.Read failed", err)
+		fmt.Println("binary.Read failed", err)
 	}
 
 	return avd
@@ -632,7 +630,7 @@ func ReadDD(i int64, f *os.File, err error, SbApDetailDirectory int64) structs_l
 	err = binary.Read(buffer, binary.BigEndian, &dd)
 
 	if err != nil {
-		log.Fatal("binary.Read failed", err)
+		fmt.Println("binary.Read failed", err)
 	}
 
 	return dd
@@ -689,7 +687,7 @@ func ReadTInodo(i int64, f *os.File, err error, SbApTableInodo int64) structs_lw
 	err = binary.Read(buffer, binary.BigEndian, &inodo)
 
 	if err != nil {
-		log.Fatal("binary.Read failed", err)
+		fmt.Println("binary.Read failed", err)
 	}
 
 	return inodo
@@ -729,7 +727,7 @@ func ReadBlock(i int64, f *os.File, err error, SbApBlocks int64) structs_lwh.Blo
 	err = binary.Read(buffer, binary.BigEndian, &block)
 
 	if err != nil {
-		log.Fatal("binary.Read failed", err)
+		fmt.Println("binary.Read failed", err)
 	}
 
 	return block
