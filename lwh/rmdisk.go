@@ -18,7 +18,6 @@ func DeleteDisk(path string) {
 	}
 	reader := bufio.NewReader(os.Stdin)
 	if _, err := os.Stat(path); err == nil {
-		fmt.Println(path)
 		for {
 			fmt.Println("SEGURO QUE DESEA ELIMINAR EL DISCO ", path, "? (y/n)")
 			text, _ := reader.ReadString('\n')
@@ -30,7 +29,7 @@ func DeleteDisk(path string) {
 				Pause()
 				break
 			} else if strings.Compare("N", text) == 0 || strings.Compare("n", text) == 0 {
-				break
+				return
 			}
 
 		}

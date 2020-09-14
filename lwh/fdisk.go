@@ -2,6 +2,7 @@ package lwh
 
 import (
 	"MIA-PROYECTO1/structs_lwh"
+	"bufio"
 	"bytes"
 	"encoding/binary"
 	"fmt"
@@ -141,7 +142,7 @@ func MakeFdisk(root Node) {
 				printMBR(path)
 			}
 		} else if del != -1 {
-
+			DeletePartition(path, name, del)
 		} else {
 			AddSize(path, name, unit, add)
 		}
@@ -256,6 +257,158 @@ func AddSize(path string, name string, unit byte, size int64) {
 		Pause()
 	}
 
+}
+
+//DeletePartition
+func DeletePartition(path string, name string, del int64) {
+	f, err := os.OpenFile(path, os.O_RDWR, 0666)
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer f.Close()
+	reader := bufio.NewReader(os.Stdin)
+
+	for {
+		fmt.Println("SEGURO QUE DESEA LA PARTICION ", name, "? (y/n)")
+		text, _ := reader.ReadString('\n')
+		text = strings.Replace(text, "\n", "", -1)
+
+		if strings.Compare("Y", text) == 0 || strings.Compare("y", text) == 0 {
+			break
+		} else if strings.Compare("N", text) == 0 || strings.Compare("n", text) == 0 {
+			return
+		}
+	}
+
+	if !lista.MountedPart(path, name) {
+		f.Seek(0, io.SeekStart)
+		auxName := converNameToByte(name)
+		m := readFileDisk(f, err)
+
+		var checkName bool = false
+
+		var indexP = -1
+
+		for i := 0; i < 4; i++ {
+			if auxName == m.Partition[i].PartName {
+				checkName = true
+				indexP = i
+				break
+			}
+		}
+
+		var flag bool = true
+
+		for flag != false {
+			if del == 0 {
+				if checkName {
+					if m.Partition[indexP].PartType == 'P' {
+						m.Partition[indexP].PartStatus = '1'
+						f.Seek(0, io.SeekStart)
+						var binario bytes.Buffer
+
+						binary.Write(&binario, binary.BigEndian, &m)
+
+						writeNextBytes(f, binario.Bytes())
+						flag = false
+						fmt.Println("Se borro la particion")
+						Pause()
+					} else if m.Partition[indexP].PartType == 'E' {
+						m.Partition[indexP].PartStatus = '1'
+						f.Seek(0, io.SeekStart)
+						var binario bytes.Buffer
+
+						binary.Write(&binario, binary.BigEndian, &m)
+
+						writeNextBytes(f, binario.Bytes())
+						flag = false
+						fmt.Println("Se borro la particion")
+						Pause()
+					}
+				} else if !checkName {
+					fmt.Println("NO SE ECONTRO LA PARTICION")
+					Pause()
+				}
+			} else if del == 1 {
+				if checkName {
+					if m.Partition[indexP].PartType == 'P' {
+						make0 := make([]byte, m.Partition[indexP].PartSize)
+
+						var binario0 bytes.Buffer
+
+						binary.Write(&binario0, binary.BigEndian, &make0)
+
+						writeNextBytes(f, binario0.Bytes())
+
+						m.Partition[indexP].PartFit = 'F'
+						for i := 0; i < 16; i++ {
+							m.Partition[indexP].PartName[i] = '0'
+						}
+						m.Partition[indexP].PartSize = 0
+						m.Partition[indexP].PartStart = -1
+						m.Partition[indexP].PartStatus = '1'
+						m.Partition[indexP].PartType = 'P'
+
+						var binario bytes.Buffer
+
+						binary.Write(&binario, binary.BigEndian, &m)
+
+						writeNextBytes(f, binario.Bytes())
+						flag = false
+						fmt.Println("PARTICION ELIMINADA")
+						Pause()
+					} else if m.Partition[indexP].PartType == 'E' {
+						make0 := make([]byte, m.Partition[indexP].PartSize)
+
+						var binario0 bytes.Buffer
+
+						binary.Write(&binario0, binary.BigEndian, &make0)
+
+						writeNextBytes(f, binario0.Bytes())
+
+						m.Partition[indexP].PartFit = 'F'
+						for i := 0; i < 16; i++ {
+							m.Partition[indexP].PartName[i] = '0'
+						}
+						m.Partition[indexP].PartSize = 0
+						m.Partition[indexP].PartStart = -1
+						m.Partition[indexP].PartStatus = '1'
+						m.Partition[indexP].PartType = 'P'
+
+						var binario bytes.Buffer
+
+						binary.Write(&binario, binary.BigEndian, &m)
+
+						writeNextBytes(f, binario.Bytes())
+						flag = false
+						fmt.Println("PARTICION ELIMINADA")
+						Pause()
+					}
+				} else if !checkName {
+					fmt.Println("PARTICION NO Encontrada")
+					Pause()
+				}
+			}
+		}
+
+		/*if indexE == -1 && indexP == -1 {
+			f.Seek(int64(m.Partition[indexE].PartStart), 0)
+			ebr := readFileEBR(f, err)
+			pos, _ := f.Seek(0, os.SEEK_CUR)
+			eSize := binary.Size(ebr)
+			for eSize != 0 && pos < int64(m.Partition[indexE].PartSize)+int64(m.Partition[indexE].PartStart) {
+				if ebr.PartNameE == auxName {
+					checkPartition = true
+				}
+				if ebr.PartNextE == -1 {
+					break
+				} else {
+					f.Seek(ebr.PartNextE, 0)
+					ebr = readFileEBR(f, err)
+				}
+			}
+		}*/
+	}
 }
 
 // ParticionPrimaria este metodo es usado para crear la particion primaria en el disco
@@ -554,9 +707,7 @@ func ParticionLogica(path string, name string, tipo byte, fit byte, unit byte, s
 			f.Seek(int64(m.Partition[i].PartStart), 0)
 			ebr = readFileEBR(f, err)
 			pos, _ := f.Seek(0, os.SEEK_CUR)
-			fmt.Println(pos)
 			eSize := binary.Size(ebr)
-			fmt.Println(eSize)
 			for eSize != 0 && pos < int64(m.Partition[i].PartSize)+int64(m.Partition[i].PartStart) {
 				if ebr.PartNameE == auxName {
 					checkPartition = true

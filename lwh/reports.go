@@ -1196,6 +1196,7 @@ func ReportTreeFile(path string, diskPath string, start int64, name string, ruta
 	}
 }
 
+//ReportDirectoryFile ...
 func ReportDirectoryFile(path string, diskPath string, start int64, name string, ruta string) {
 	var report string = ""
 
@@ -1392,6 +1393,8 @@ func GenerateText(path string, content string) {
 	fmt.Println("-----------REPORTE GENERADO CON EXITO!--------------")
 
 	ViewReport(openMyReport, archive)
+
+	Pause()
 }
 
 //GenerateDot ...
@@ -1419,6 +1422,8 @@ func GenerateDot(path string, nameReport string, content string) {
 	fmt.Println("-----------REPORTE GENERADO CON EXITO!--------------")
 
 	ViewReport(openMyReport, archive)
+
+	Pause()
 
 }
 
