@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
+	"io"
 	"log"
 	"math"
 	"os"
@@ -26,7 +27,8 @@ func MakeFdisk(root Node) {
 		if i.TypeToken == "SIZE" {
 			k, err := strconv.ParseInt(i.Value, 10, 64)
 			if err != nil {
-				log.Fatal(err)
+				fmt.Println(err)
+				Pause()
 			}
 			size = k
 		} else if i.TypeToken == "UNIT" {
@@ -66,16 +68,17 @@ func MakeFdisk(root Node) {
 		} else if i.TypeToken == "ADD" {
 			k, err := strconv.ParseInt(i.Value, 10, 64)
 			if err != nil {
-				log.Fatal(err)
+				fmt.Println(err)
+				Pause()
 			}
 			add = k
-			fmt.Println(add)
 		}
 		for _, j := range i.Children {
 			if j.TypeToken == "SIZE" {
 				k, err := strconv.ParseInt(j.Value, 10, 64)
 				if err != nil {
-					log.Fatal(err)
+					fmt.Println(err)
+					Pause()
 				}
 				size = k
 			} else if j.TypeToken == "UNIT" {
@@ -117,10 +120,10 @@ func MakeFdisk(root Node) {
 			} else if j.TypeToken == "ADD" {
 				k, err := strconv.ParseInt(j.Value, 10, 64)
 				if err != nil {
-					log.Fatal(err)
+					fmt.Println(err)
+					Pause()
 				}
 				add = k
-				fmt.Println(add)
 			}
 		}
 	}
@@ -143,7 +146,8 @@ func MakeFdisk(root Node) {
 			AddSize(path, name, unit, add)
 		}
 	} else if os.IsNotExist(err) {
-		panic(err)
+		fmt.Println(err)
+		Pause()
 	}
 
 }
@@ -152,7 +156,7 @@ func MakeFdisk(root Node) {
 func AddSize(path string, name string, unit byte, size int64) {
 	f, err := os.OpenFile(path, os.O_RDWR, 0666)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 	defer f.Close()
 	auxSize := verifySize(unit, size)
@@ -186,6 +190,10 @@ func AddSize(path string, name string, unit byte, size int64) {
 				binary.Write(&binario, binary.BigEndian, &m)
 
 				writeNextBytes(f, binario.Bytes())
+
+				fmt.Println("SE QUITO EL ESPACIO AL DISCO")
+
+				Pause()
 			}
 		} else {
 			if index == 3 {
@@ -199,8 +207,13 @@ func AddSize(path string, name string, unit byte, size int64) {
 					binary.Write(&binario, binary.BigEndian, &m)
 
 					writeNextBytes(f, binario.Bytes())
+
+					fmt.Println("SE ANADIO ESPACIO")
+
+					Pause()
 				} else {
 					fmt.Println("EL ESPACION ANADIR ES MAYOR AL QUE TIENE LA PARTICION")
+					Pause()
 				}
 			} else {
 				var nextPartition structs_lwh.Partitions
@@ -228,11 +241,19 @@ func AddSize(path string, name string, unit byte, size int64) {
 					binary.Write(&binario, binary.BigEndian, &m)
 
 					writeNextBytes(f, binario.Bytes())
+
+					fmt.Println("SE ANADIO ESPACIO")
+
+					Pause()
 				} else {
 					fmt.Println("EL ESPACIO A AGREGAR ES MAYOR A LO DISPONIBLE PARA LA SIGUIENTE PARTICION")
+					Pause()
 				}
 			}
 		}
+	} else {
+		fmt.Println("LA PARTICION NO EXISTE EN ESTE DISCO")
+		Pause()
 	}
 
 }
@@ -241,7 +262,8 @@ func AddSize(path string, name string, unit byte, size int64) {
 func ParticionPrimaria(path string, name string, tipo byte, fit byte, unit byte, size int64) {
 	f, err := os.OpenFile(path, os.O_RDWR, 0666)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
+		Pause()
 	}
 	defer f.Close()
 	auxSize := verifySize(unit, size)
@@ -287,7 +309,6 @@ func ParticionPrimaria(path string, name string, tipo byte, fit byte, unit byte,
 			var index int = 0
 			if fit == 'B' {
 				index = BestFit(m, auxSize)
-				fmt.Println(index)
 			} else if fit == 'F' {
 				index = FirstFit(m, auxSize)
 			} else if fit == 'W' {
@@ -317,15 +338,20 @@ func ParticionPrimaria(path string, name string, tipo byte, fit byte, unit byte,
 
 				fmt.Println("SE CREO LA PARTICION PRIMARIA :D")
 
+				Pause()
+
 			} else {
 				fmt.Println("YA SE HA CREADO 4 PARTICIONES YA NO SE PUEDEN CREAR MAS :(")
+				Pause()
 			}
 		} else {
 			fmt.Println("LA PARTICION YA HA SIDO CREADA CON ESTE NOMBRE ", name)
+			Pause()
 		}
 
 	} else {
-		fmt.Println("YA NO CUENTA CON ESPACIO EN EL DISCO, EL DISTO TIENE UN ESPACIO DE: ", string(m.MbrSize), " Y ESTA TRATANDO DE HACER UNA PARTICION DE ", string(size))
+		fmt.Println("YA NO CUENTA CON ESPACIO EN EL DISCO, EL DISTO TIENE UN ESPACIO DE: ", strconv.Itoa(int(m.MbrSize)), " Y ESTA TRATANDO DE HACER UNA PARTICION DE ", strconv.Itoa(int(size)))
+		Pause()
 	}
 }
 
@@ -333,7 +359,8 @@ func ParticionPrimaria(path string, name string, tipo byte, fit byte, unit byte,
 func ParticionExtendida(path string, name string, tipo byte, fit byte, unit byte, size int64) {
 	f, err := os.OpenFile(path, os.O_RDWR, 0777)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
+		Pause()
 	}
 	defer f.Close()
 	auxSize := verifySize(unit, size)
@@ -345,6 +372,7 @@ func ParticionExtendida(path string, name string, tipo byte, fit byte, unit byte
 	for i := 0; i < 4; i++ {
 		if m.Partition[i].PartType == 'E' {
 			fmt.Println("SOLO UNA PARTICION EXTENDIDA ES PERMITIDA")
+			Pause()
 			return
 		}
 	}
@@ -363,15 +391,18 @@ func ParticionExtendida(path string, name string, tipo byte, fit byte, unit byte
 				break
 			} else if m.Partition[i].PartType == 'E' {
 				pos, _ := f.Seek(0, os.SEEK_CUR)
+				f.Seek(m.Partition[i].PartStart, 0)
 				e := readFileEBR(f, err)
 				eSize := binary.Size(e)
-				fmt.Println(pos)
 				for eSize != 0 && pos < int64(m.Partition[i].PartSize)+int64(m.Partition[i].PartStart) {
 					if e.PartNameE == auxName {
 						checkPartition = true
 					}
 					if e.PartNextE == -1 {
 						break
+					} else {
+						f.Seek(e.PartNextE, io.SeekStart)
+						e = readFileEBR(f, err)
 					}
 				}
 			}
@@ -407,14 +438,18 @@ func ParticionExtendida(path string, name string, tipo byte, fit byte, unit byte
 				ebr.PartStartE = m.Partition[index].PartStart
 				writeInExtenderPartition(path, m, ebr, index)
 				fmt.Println("SE CREO LA PARTICION EXTENDIDA, SI SALE AUN ARCHIVOS :D")
+				Pause()
 			} else {
 				fmt.Println("YA SE HA CREADO 4 PARTICIONES YA NO SE PUEDEN CREAR MAS :(")
+				Pause()
 			}
 		} else {
 			fmt.Println("LA PARTICION YA HA SIDO CREADA CON ESTE NOMBRE ", name)
+			Pause()
 		}
 	} else {
 		fmt.Println("YA NO CUENTA CON ESPACIO EN EL DISCO, EL DISTO TIENE UN ESPACIO DE: ", string(m.MbrSize), " Y ESTA TRATANDO DE HACER UNA PARTICION DE ", string(size))
+		Pause()
 	}
 
 }
@@ -506,7 +541,6 @@ func ParticionLogica(path string, name string, tipo byte, fit byte, unit byte, s
 	defer f.Close()
 	auxSize := verifySize(unit, size)
 	auxName := converNameToByte(name)
-	fmt.Printf("%+v\n", auxSize)
 	f.Seek(0, 0)
 	m := readFileDisk(f, err)
 	var ebr structs_lwh.EBR
@@ -547,12 +581,14 @@ func ParticionLogica(path string, name string, tipo byte, fit byte, unit byte, s
 		}
 		if index == -1 {
 			fmt.Println("EL ENUNCIADO INDICA QUE PARA LOGICA SE NECESITA UNA EXTENDIDA :)")
+			Pause()
 		}
 		f.Seek(m.Partition[index].PartStart, 0)
 		ebr = readFileEBR(f, err)
 		if ebr.PartSizeE == 0 {
 			if m.Partition[index].PartSize < auxSize {
 				fmt.Println("El size de la particion logica debe ser menor a la extendida ya creada :p")
+				Pause()
 			} else {
 				sizeM := binary.Size(ebr)
 				pos, _ := f.Seek(0, os.SEEK_CUR)
@@ -564,10 +600,8 @@ func ParticionLogica(path string, name string, tipo byte, fit byte, unit byte, s
 				ebr.PartNextE = -1
 				copy(ebr.PartNameE[:], name)
 				writeInLogicalPartition(path, m, ebr, index)
-				f.Seek(m.Partition[index].PartStart, 0)
-				auxMI := readFileEBR(f, err)
-				fmt.Println(auxMI)
 				fmt.Println("SE CREO LA PARTICION LOGICA")
+				Pause()
 			}
 		} else {
 			pos, _ := f.Seek(0, os.SEEK_CUR)
@@ -607,13 +641,16 @@ func ParticionLogica(path string, name string, tipo byte, fit byte, unit byte, s
 				writeNextBytes(f, binario2.Bytes())
 
 				fmt.Println("SE CREO LA PARTICION LOGICA")
+				Pause()
 			} else {
 				fmt.Println("LA PARTICION LOGICA SOBREPASA EL PESO DE LA EXTENDIDA")
+				Pause()
 			}
 		}
 
 	} else {
 		fmt.Println("LA PARTICION LOGICA CON ESTE NOMBRE YA HA SIDO CREADA", name)
+		Pause()
 	}
 }
 
@@ -673,7 +710,6 @@ func WorstFit(m structs_lwh.MBR, size int64) int {
 func readFileDisk(f *os.File, err error) structs_lwh.MBR {
 	var m structs_lwh.MBR
 	sizeRead := binary.Size(m)
-	fmt.Printf("%+v\n", sizeRead)
 	data := readNextBytes(f, sizeRead)
 	buffer := bytes.NewBuffer(data)
 	err = binary.Read(buffer, binary.BigEndian, &m)
@@ -686,12 +722,11 @@ func readFileDisk(f *os.File, err error) structs_lwh.MBR {
 func readFileEBR(f *os.File, err error) structs_lwh.EBR {
 	var e structs_lwh.EBR
 	sizeRead := binary.Size(e)
-	fmt.Printf("%+v\n", sizeRead)
 	data := readNextBytes(f, sizeRead)
 	buffer := bytes.NewBuffer(data)
 	err = binary.Read(buffer, binary.BigEndian, &e)
 	if err != nil {
-		log.Fatal("binary.Read failled", err)
+		fmt.Println(err)
 	}
 	return e
 }
@@ -707,7 +742,7 @@ func converNameToByte(name string) [16]byte {
 func writeInLogicalPartition(path string, m structs_lwh.MBR, e structs_lwh.EBR, index int) {
 	f, err := os.OpenFile(path, os.O_RDWR, 0777)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
 	}
 	defer f.Close()
 
@@ -735,17 +770,11 @@ func writeInExtenderPartition(path string, m structs_lwh.MBR, e structs_lwh.EBR,
 
 	f.Seek(m.Partition[index].PartStart, 0)
 
-	fmt.Println(strconv.Itoa(int(m.Partition[index].PartStart)))
-
 	var binario2 bytes.Buffer
 
 	binary.Write(&binario2, binary.BigEndian, &e)
 
 	writeNextBytes(f, binario2.Bytes())
-}
-
-func writeInExtenderPartitionIfExist(path string, m structs_lwh.MBR, e structs_lwh.EBR, index int, fit byte, auxSize int32) {
-
 }
 
 //CheckNumbers revisa si el valor para el comando add es positivio o negativo

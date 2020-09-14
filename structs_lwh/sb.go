@@ -37,6 +37,6 @@ type SB struct {
 
 //Pointer ...
 type Pointer struct {
-	Name     [20]byte
+	Name     [25]byte
 	PPointer int64
 }

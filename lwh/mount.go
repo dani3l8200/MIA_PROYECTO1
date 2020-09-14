@@ -19,10 +19,8 @@ func MountPartitions(root Node) {
 	for _, i := range root.Children {
 		if i.TypeToken == "PATH" {
 			path = i.Value
-			fmt.Println(path)
 		} else if i.TypeToken == "NAME" {
 			name = i.Value
-			fmt.Println(name)
 		}
 		for _, j := range i.Children {
 			if j.TypeToken == "PATH" {
@@ -38,7 +36,8 @@ func MountPartitions(root Node) {
 			auxName := converNameToByte(name)
 			f, err := os.OpenFile(path, os.O_RDWR, 0666)
 			if err != nil {
-				panic(err)
+				fmt.Println(err)
+				Pause()
 			}
 			defer f.Close()
 			f.Seek(0, 0)
@@ -96,15 +95,19 @@ func MountPartitions(root Node) {
 					id += strconv.Itoa(number)
 					lista.Insert(mount.FMountDisk(id, path, name))
 					lista.Print()
+					Pause()
 				} else {
-					fmt.Println("La particion con l nombre", name, "ya ha sido montara anteriormente")
+					fmt.Println("La particion con el nombre", name, "ya ha sido montara anteriormente")
+					Pause()
 				}
 			} else {
 				fmt.Println("LA PARTICION NO HA SIDO ENONTRADO EN EL DISCO")
+				Pause()
 			}
 
 		} else if os.IsNotExist(err) {
-			panic(err)
+			fmt.Println(err)
+			Pause()
 		}
 	} else {
 		lista.Print()

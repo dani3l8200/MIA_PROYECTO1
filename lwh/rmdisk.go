@@ -9,6 +9,13 @@ import (
 
 // DeleteDisk Funcion para eliminar el disco binario creado con rmdisk
 func DeleteDisk(path string) {
+	var directory string = ""
+	if strings.Contains(path, "\"") {
+		directory, _ = SetDirectory(path)
+	}
+	if directory != "" {
+		path = directory
+	}
 	reader := bufio.NewReader(os.Stdin)
 	if _, err := os.Stat(path); err == nil {
 		fmt.Println(path)
@@ -19,6 +26,8 @@ func DeleteDisk(path string) {
 
 			if strings.Compare("Y", text) == 0 || strings.Compare("y", text) == 0 {
 				deleteFile(path)
+				fmt.Println("SE ELIMINO EL DISCO CORRECTAMENTE")
+				Pause()
 				break
 			} else if strings.Compare("N", text) == 0 || strings.Compare("n", text) == 0 {
 				break
@@ -26,7 +35,8 @@ func DeleteDisk(path string) {
 
 		}
 	} else if os.IsNotExist(err) {
-		panic(err)
+		Pause()
+		fmt.Println(err)
 	}
 
 }

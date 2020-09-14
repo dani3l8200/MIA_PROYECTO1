@@ -195,7 +195,6 @@ func ChekcFDisk(aux Node) bool {
 					fmt.Println("COMANDO NAME REPETIDO :(")
 					return false
 				}
-				fmt.Println(j.Value)
 				nameCheck = true
 			} else if j.TypeToken == "ADD" {
 				if addCheck {
@@ -236,8 +235,6 @@ func ChekcFDisk(aux Node) bool {
 		fmt.Println("ERROR EN FDISK NO TIENE SENTIDO SIZE Y DELETE :)")
 		generalFlag = false
 	}
-
-	fmt.Println(sizeCheck, unitCheck, pathCheck, typeCheck, fitCheck, deleteCheck, nameCheck, addCheck)
 	return generalFlag
 }
 

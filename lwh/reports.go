@@ -1,7 +1,9 @@
 package lwh
 
 import (
+	"MIA-PROYECTO1/datastructure"
 	"MIA-PROYECTO1/structs_lwh"
+	"bufio"
 	"encoding/binary"
 	"fmt"
 	"io"
@@ -12,6 +14,7 @@ import (
 	"syscall"
 )
 
+//MakeReports ...
 func MakeReports(Root Node) {
 	var path string = ""
 	var id string = ""
@@ -148,6 +151,34 @@ func MakeReports(Root Node) {
 			fmt.Println("ERROR NO SE ENCONTRO LA PARTICION")
 			return
 		}
+	} else if strings.EqualFold(name, "tree_file") {
+		disk, err := lista.GetMountedPart(id)
+		if err == true {
+			getData := GetDiskMount(disk.GetPath(), disk.GetName(), false)
+
+			if getData.GetSize != 0 && getData.GetStart != 0 {
+				ReportTreeFile(path, disk.GetPath(), getData.GetStart, getData.GetName, ruta)
+				return
+			}
+
+		} else if err == false {
+			fmt.Println("ERROR NO SE ENCONTRO LA PARTICION")
+			return
+		}
+	} else if strings.EqualFold(name, "tree_directorio") {
+		disk, err := lista.GetMountedPart(id)
+		if err == true {
+			getData := GetDiskMount(disk.GetPath(), disk.GetName(), false)
+
+			if getData.GetSize != 0 && getData.GetStart != 0 {
+				ReportDirectoryFile(path, disk.GetPath(), getData.GetStart, getData.GetName, ruta)
+				return
+			}
+
+		} else if err == false {
+			fmt.Println("ERROR NO SE ENCONTRO LA PARTICION")
+			return
+		}
 	}
 }
 
@@ -168,7 +199,7 @@ func ReportMBR(path string, id string) {
 
 	f, err := os.OpenFile(pathDirectory, os.O_RDWR, 0777)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
 	}
 	defer f.Close()
 
@@ -271,6 +302,7 @@ func ReportMBR(path string, id string) {
 	GenerateDot(path, "mbrReport.dot", report)
 }
 
+//ReportDisk ...
 func ReportDisk(path string, id string) {
 	var report string = ""
 	//var namePartition string = ""
@@ -286,7 +318,7 @@ func ReportDisk(path string, id string) {
 
 	f, err := os.OpenFile(pathDirectory, os.O_RDWR, 0777)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
 	}
 	defer f.Close()
 
@@ -396,13 +428,14 @@ func ReportDisk(path string, id string) {
 	GenerateDot(path, "ResportMount.dot", report)
 }
 
+//ReportSB ...
 func ReportSB(path string, diskPath string, start int64, name string) {
 
 	var report string = ""
 
 	f, err := os.OpenFile(diskPath, os.O_RDWR, 0777)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
 	}
 	defer f.Close()
 
@@ -451,13 +484,14 @@ func ReportSB(path string, diskPath string, start int64, name string) {
 	GenerateDot(path, "Report3.dot", report)
 }
 
+//ReportBmArbdir ...
 func ReportBmArbdir(path string, diskPath string, start int64, name string) {
 
 	var report string = ""
 
 	f, err := os.OpenFile(diskPath, os.O_RDWR, 0777)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
 	}
 	defer f.Close()
 	var i int64 = 0
@@ -487,12 +521,13 @@ func ReportBmArbdir(path string, diskPath string, start int64, name string) {
 
 }
 
+//ReportBmDetdir ...
 func ReportBmDetdir(path string, diskPath string, start int64, name string) {
 	var report string = ""
 
 	f, err := os.OpenFile(diskPath, os.O_RDWR, 0777)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
 	}
 	defer f.Close()
 	var i int64 = 0
@@ -521,12 +556,13 @@ func ReportBmDetdir(path string, diskPath string, start int64, name string) {
 	GenerateText(path, report)
 }
 
+//ReportBmInode ...
 func ReportBmInode(path string, diskPath string, start int64, name string) {
 	var report string = ""
 
 	f, err := os.OpenFile(diskPath, os.O_RDWR, 0777)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
 	}
 	defer f.Close()
 	var i int64 = 0
@@ -555,12 +591,13 @@ func ReportBmInode(path string, diskPath string, start int64, name string) {
 	GenerateText(path, report)
 }
 
+//ReportBmBlock ...
 func ReportBmBlock(path string, diskPath string, start int64, name string) {
 	var report string = ""
 
 	f, err := os.OpenFile(diskPath, os.O_RDWR, 0777)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
 	}
 	defer f.Close()
 	var i int64 = 0
@@ -588,12 +625,13 @@ func ReportBmBlock(path string, diskPath string, start int64, name string) {
 	GenerateText(path, report)
 }
 
+//ReportDirectory ...
 func ReportDirectory(path string, diskPath string, start int64, name string) {
 	var report string = ""
 
 	f, err := os.OpenFile(diskPath, os.O_RDWR, 0777)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
 	}
 
 	defer f.Close()
@@ -611,6 +649,7 @@ func ReportDirectory(path string, diskPath string, start int64, name string) {
 	GenerateDot(path, "reporDirectory.dot", report)
 }
 
+//GenerateDotAVD ...
 func GenerateDotAVD(f *os.File, err error, avd structs_lwh.AVD, startAvd int64, pos int64, graphColor string) string {
 	var report string = ""
 
@@ -695,12 +734,13 @@ func GenerateDotAVD(f *os.File, err error, avd structs_lwh.AVD, startAvd int64, 
 	return report
 }
 
+//ReportTreeComplete ...
 func ReportTreeComplete(path string, diskPath string, start int64, name string) {
 	var report string = ""
 
 	f, err := os.OpenFile(diskPath, os.O_RDWR, 0777)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
 	}
 
 	defer f.Close()
@@ -722,6 +762,7 @@ func ReportTreeComplete(path string, diskPath string, start int64, name string) 
 	GenerateDot(path, "reportTreeComplete.dot", report)
 }
 
+//GenerateDotFullTree ...
 func GenerateDotFullTree(f *os.File, err error, avd structs_lwh.AVD, startAvd int64, pos int64, graphColor string, starDD int64, startInodo int64, startBlock int64) string {
 	var report string = ""
 
@@ -812,6 +853,7 @@ func GenerateDotFullTree(f *os.File, err error, avd structs_lwh.AVD, startAvd in
 	return report
 }
 
+//GenerateDotDD ...
 func GenerateDotDD(f *os.File, err error, dd structs_lwh.DDirectory, startDd int64, pos int64, startInode int64, startBlock int64) string {
 	var report string = ""
 	var graphColor string = ""
@@ -869,6 +911,7 @@ func GenerateDotDD(f *os.File, err error, dd structs_lwh.DDirectory, startDd int
 	return report
 }
 
+//GenerateDotInode ...
 func GenerateDotInode(f *os.File, err error, inodo structs_lwh.INodo, startInodo int64, pos int64, startBlock int64) string {
 	var report string = ""
 
@@ -923,6 +966,339 @@ func GenerateDotInode(f *os.File, err error, inodo structs_lwh.INodo, startInodo
 	}
 
 	return report
+}
+
+//GenerateDotTreeDd ...
+func GenerateDotTreeDd(f *os.File, err error, dd structs_lwh.DDirectory, pos int64, startDd int64) string {
+	var graphColor string = ""
+
+	var report string = ""
+
+	report += "\tDD" + strconv.Itoa(int(pos)) + " [\n"
+	report += "\t\tshape = none;\n"
+	report += "\t\tlabel = <\n"
+	report += "\t\t\t<table border=\"0\" cellborder=\"2\" cellspacing=\"2\" color=\"cyan4\">\n"
+	report += "\t\t\t\t<tr><td colspan=\"2\" bgcolor=\"dodgerblue\" >Detalle " + strconv.Itoa(int(pos)) + "</td></tr>\n"
+
+	for i := 0; i < 5; i++ {
+		if (i % 2) == 1 {
+			graphColor = "deepskyblue"
+		} else if (i % 2) == 0 {
+			graphColor = "lightskyblue1"
+		}
+
+		if dd.DDArrayBlock[i].DdFileApInodo != -1 {
+			report += "\t\t\t\t\t<tr>\n"
+			report += "\t\t\t\t\t\t<td bgcolor=\"" + graphColor + "\">" + convertBByteToString(dd.DDArrayBlock[i].DdFileName) + "</td>\n"
+			report += "\t\t\t\t\t\t<td bgcolor=\"" + graphColor + "\">" + strconv.Itoa(int(dd.DDArrayBlock[i].DdFileApInodo)) + "</td>\n"
+			report += "\t\t\t\t\t</tr>\n"
+		} else if dd.DDArrayBlock[i].DdFileApInodo == -1 {
+			report += "<tr><td bgcolor=\"" + graphColor + "\"> </td><td bgcolor=\"" + graphColor + "\"> </td></tr>\n"
+		}
+	}
+
+	if dd.DdApDetailDirectory != -1 {
+		report += "\t\t\t\t\t<tr>\n"
+		report += "\t\t\t\t\t\t<td colspan=\"2\" bgcolor=\"greenyellow\">" + strconv.Itoa(int(dd.DdApDetailDirectory)) + "</td>\n"
+		report += "\t\t\t\t\t</tr>\n"
+	} else if dd.DdApDetailDirectory == -1 {
+		report += "<tr><td colspan=\"2\" bgcolor=\"greenyellow\"> </td></tr>\n"
+	}
+
+	report += "\t\t\t\t</table>\n"
+	report += "\t\t\t>\n"
+	report += "\t\t];\n\n"
+
+	if dd.DdApDetailDirectory != -1 {
+		report += "DD" + strconv.Itoa(int(pos)) + "->DD" + strconv.Itoa(int(dd.DdApDetailDirectory)) + ";\n"
+		report += GenerateDotTreeDd(f, err, ReadDD(dd.DdApDetailDirectory, f, err, startDd), dd.DdApDetailDirectory, startDd)
+	}
+
+	return report
+}
+
+//ReportTreeFile ...
+func ReportTreeFile(path string, diskPath string, start int64, name string, ruta string) {
+	var report string = ""
+
+	f, err := os.OpenFile(diskPath, os.O_RDWR, 0777)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	defer f.Close()
+
+	sb := readFileSB(f, err, start)
+
+	k, _ := SetDirectory(ruta)
+
+	ruta = k
+
+	auxPath := strings.Split(ruta, "/")
+
+	auxPath = deleteEmpty(auxPath)
+
+	var pos int = 0
+
+	var apavd int64 = 0
+
+	avd := ReadAVD(apavd, f, err, sb.SbApTreeDirectory)
+
+	if ruta == "/" {
+		archivos := CreateListPointerDd(f, err, sb.SbApDetailDirectory, ReadDD(avd.AvdApDetailDirectory, f, err, sb.SbApDetailDirectory))
+
+		if archivos.Head != nil {
+			i := 0
+			for node := archivos.Head; node != nil; node = node.Next() {
+
+				fmt.Println(strconv.Itoa(i+1), convertBByteToString(node.Value().Name))
+				i++
+			}
+		}
+
+		reader := bufio.NewReader(os.Stdin)
+
+		for {
+			fmt.Println("INGRESE UNA OPCION")
+
+			text, _ := reader.ReadString('\n')
+
+			text = strings.Replace(text, "\n", "", -1)
+
+			newRuta, _ := strconv.Atoi(text)
+
+			if newRuta < archivos.Length()+1 {
+
+				report += "digraph structs {\n"
+
+				report += "splines = ortho\n"
+
+				inodo := ReadTInodo(archivos.Get(newRuta-1), f, err, sb.SbApTableInodo)
+
+				report += GenerateDotInode(f, err, inodo, sb.SbApTableInodo, archivos.Get(newRuta-1), sb.SbApBlocks)
+
+				report += "}\n"
+
+				GenerateDot(path, "ReporFile.dot", report)
+
+				return
+			}
+			break
+		}
+
+	} else if ruta != "/" {
+		for pos < len(auxPath) {
+			if pos < len(auxPath)-1 {
+				if !(existDirectoryAVD(f, err, sb.SbApTreeDirectory, avd, auxPath[pos]) != -1) {
+					fmt.Println("LA CARPETA NO EXISTE")
+					Pause()
+				}
+				apavd = existDirectoryAVD(f, err, sb.SbApTreeDirectory, avd, auxPath[pos])
+
+				if len(GetFilesAVD(f, err, sb.SbApTreeDirectory, avd, auxPath[pos], myusers.UID, myusers.Gid).AvdNameDirectory) != 0 {
+					avd = GetFilesAVD(f, err, sb.SbApTreeDirectory, avd, auxPath[pos], myusers.UID, myusers.Gid)
+				} else if len(GetFilesAVD(f, err, sb.SbApTreeDirectory, avd, auxPath[pos], myusers.UID, myusers.Gid).AvdNameDirectory) == 0 {
+					fmt.Println("SIN PERMISOS DE LECTURA")
+					Pause()
+				}
+				pos++
+			} else if pos == len(auxPath)-1 {
+				if existDirectoryAVD(f, err, sb.SbApTreeDirectory, avd, auxPath[pos]) != -1 {
+					apavd = existDirectoryAVD(f, err, sb.SbApTreeDirectory, avd, auxPath[pos])
+
+					avd = GetFilesAVD(f, err, sb.SbApTreeDirectory, avd, auxPath[pos], myusers.UID, myusers.Gid)
+
+					archivos := CreateListPointerDd(f, err, sb.SbApDetailDirectory, ReadDD(avd.AvdApDetailDirectory, f, err, sb.SbApDetailDirectory))
+
+					if archivos.Head != nil {
+						i := 0
+						for node := archivos.Head; node != nil; node = node.Next() {
+
+							fmt.Println(strconv.Itoa(i+1), convertBByteToString(node.Value().Name))
+							i++
+						}
+					}
+
+					reader := bufio.NewReader(os.Stdin)
+
+					for {
+						fmt.Println("INGRESE UNA OPCION")
+
+						text, _ := reader.ReadString('\n')
+
+						text = strings.Replace(text, "\n", "", -1)
+
+						newRuta, _ := strconv.Atoi(text)
+
+						if newRuta < archivos.Length()+1 {
+
+							report += "digraph structs {\n"
+
+							report += "splines = ortho\n"
+
+							inodo := ReadTInodo(archivos.Get(newRuta-1), f, err, sb.SbApTableInodo)
+
+							report += GenerateDotInode(f, err, inodo, sb.SbApTableInodo, archivos.Get(newRuta-1), sb.SbApBlocks)
+
+							report += "}\n"
+
+							GenerateDot(path, "ReporFile.dot", report)
+
+							return
+						}
+						break
+					}
+				} else if existDetailDirectory(f, err, sb.SbApDetailDirectory, ReadDD(avd.AvdApDetailDirectory, f, err, sb.SbApDetailDirectory), auxPath[pos]) {
+					archivos := CreateListPointerDd(f, err, sb.SbApDetailDirectory, ReadDD(avd.AvdApDetailDirectory, f, err, sb.SbApDetailDirectory))
+
+					if archivos.Head != nil {
+						i := 0
+						for node := archivos.Head; node != nil; node = node.Next() {
+
+							fmt.Println(strconv.Itoa(i+1), convertBByteToString(node.Value().Name))
+							i++
+						}
+					}
+
+					reader := bufio.NewReader(os.Stdin)
+
+					for {
+						fmt.Println("INGRESE UNA OPCION")
+
+						text, _ := reader.ReadString('\n')
+
+						text = strings.Replace(text, "\n", "", -1)
+
+						newRuta, _ := strconv.Atoi(text)
+
+						if newRuta < archivos.Length()+1 {
+
+							report += "digraph structs {\n"
+
+							report += "splines = ortho\n"
+
+							inodo := ReadTInodo(archivos.Get(newRuta-1), f, err, sb.SbApTableInodo)
+
+							report += GenerateDotInode(f, err, inodo, sb.SbApTableInodo, archivos.Get(newRuta-1), sb.SbApBlocks)
+
+							report += "}\n"
+
+							GenerateDot(path, "ReporFile.dot", report)
+
+							return
+						}
+						break
+					}
+				}
+				pos++
+			}
+		}
+	}
+}
+
+func ReportDirectoryFile(path string, diskPath string, start int64, name string, ruta string) {
+	var report string = ""
+
+	f, err := os.OpenFile(diskPath, os.O_RDWR, 0777)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	defer f.Close()
+
+	sb := readFileSB(f, err, start)
+
+	k, _ := SetDirectory(ruta)
+
+	ruta = k
+
+	auxPath := strings.Split(ruta, "/")
+
+	auxPath = deleteEmpty(auxPath)
+
+	avd := ReadAVD(0, f, err, sb.SbApTreeDirectory)
+
+	var directorio datastructure.LinkedListP
+
+	directorio.Insert(createPointer("\"/\"", 0))
+
+	var exit bool = true
+
+	for exit != false {
+		if directorio.Length() > 0 {
+			if directorio.Head != nil {
+				i := 0
+				for node := directorio.Head; node != nil; node = node.Next() {
+
+					fmt.Println(strconv.Itoa(i+1), convertBByteToString(node.Value().Name))
+					i++
+				}
+			}
+			fmt.Println("INGRESE UNA OPCION")
+			reader := bufio.NewReader(os.Stdin)
+
+			text, _ := reader.ReadString('\n')
+
+			text = strings.Replace(text, "\n", "", -1)
+
+			newRuta, _ := strconv.Atoi(text)
+
+			if newRuta < directorio.Length()+1 {
+				fmt.Println("a. Buscar Siguiente Carpeta")
+				fmt.Println("b. Generar Reporte")
+
+				text, _ := reader.ReadString('\n')
+
+				text = strings.Replace(text, "\n", "", -1)
+
+				if strings.EqualFold(text, "a") {
+					avd = ReadAVD(directorio.Get(newRuta-1), f, err, sb.SbApTreeDirectory)
+					directorio = CreateListPointerAvd(f, err, sb.SbApTreeDirectory, avd)
+				} else if strings.EqualFold(text, "b") {
+					avd = ReadAVD(directorio.Get(newRuta-1), f, err, sb.SbApTreeDirectory)
+
+					report += "digraph structs {\n"
+					report += "splines = ortho\n"
+
+					report += "\tAVD" + strconv.Itoa(int(directorio.Get(newRuta-1))) + " [\n"
+					report += "\t\tshape = none;\n"
+					report += "\t\tlabel = <\n"
+					report += "\t\t\t<table border=\"0\" cellborder=\"2\" cellspacing=\"2\" color=\"cyan4\">\n"
+					report += "\t\t\t\t<tr><td colspan=\"8\" bgcolor=\"white\" >" + converByteLToString(avd.AvdNameDirectory) + "</td></tr>\n"
+					report += "\t\t\t\t<tr>\n"
+					report += "\t\t\t\t\t<td bgcolor = \"lightcyan\"> &nbsp; </td>\n"
+					report += "\t\t\t\t\t<td bgcolor = \"lightcyan\"> &nbsp; </td>\n"
+					report += "\t\t\t\t\t<td bgcolor = \"lightcyan\"> &nbsp; </td>\n"
+					report += "\t\t\t\t\t<td bgcolor = \"lightcyan\"> &nbsp; </td>\n"
+					report += "\t\t\t\t\t<td bgcolor = \"lightcyan\"> &nbsp; </td>\n"
+					report += "\t\t\t\t\t<td bgcolor = \"lightcyan\"> &nbsp; </td>\n"
+					report += "\t\t\t\t\t<td bgcolor = \"cyan3\"> &nbsp; </td>\n"
+
+					if avd.AvdApDetailDirectory != -1 {
+						report += "\t\t\t\t\t<td bgcolor = \"greenyellow\">" + strconv.Itoa(int(avd.AvdApDetailDirectory)) + "</td>\n"
+					} else if avd.AvdApDetailDirectory == -1 {
+						report += "\t\t\t\t\t<td bgcolor = \"greenyellow\"> &nbsp; </td>\n"
+					}
+
+					report += "\t\t\t\t</tr>\n"
+					report += "\t\t\t</table>\n"
+					report += "\t\t>\n"
+					report += "\t];\n\n"
+
+					report += "AVD" + strconv.Itoa(int(directorio.Get(newRuta-1))) + "->DD" + strconv.Itoa(int(avd.AvdApDetailDirectory))
+
+					report += GenerateDotTreeDd(f, err, ReadDD(avd.AvdApDetailDirectory, f, err, sb.SbApDetailDirectory), avd.AvdApDetailDirectory, sb.SbApDetailDirectory)
+
+					report += "}\n"
+
+					GenerateDot(path, "TreeDirectorio.dot", report)
+
+					exit = false
+				}
+			}
+		}
+	}
+
 }
 
 func checkNextSpace(start int64, size int64, nextStart int64, index int, tot float64) string {
@@ -996,6 +1372,7 @@ func createFile(path string) {
 	}
 }
 
+//GenerateText ...
 func GenerateText(path string, content string) {
 	directory := GetNameReport(path)
 
@@ -1017,6 +1394,7 @@ func GenerateText(path string, content string) {
 	ViewReport(openMyReport, archive)
 }
 
+//GenerateDot ...
 func GenerateDot(path string, nameReport string, content string) {
 
 	directory := GetNameReport(path)
@@ -1044,9 +1422,10 @@ func GenerateDot(path string, nameReport string, content string) {
 
 }
 
-func FloatToString(input_num float64) string {
+//FloatToString ...
+func FloatToString(inputNum float64) string {
 	// to convert a float number to a string
-	return strconv.FormatFloat(input_num, 'f', 6, 64)
+	return strconv.FormatFloat(inputNum, 'f', 6, 64)
 }
 
 func execProcess(tipo string, inputFile string, outputFile string) int {
@@ -1080,6 +1459,7 @@ func execProcess(tipo string, inputFile string, outputFile string) int {
 	return -1
 }
 
+//ViewReport ...
 func ViewReport(tipo string, outputFile string) int {
 	if tipo == ".jpg" || tipo == ".png" {
 		app := "eog"
@@ -1176,6 +1556,7 @@ func GetTypeFile(path string) string {
 	return "-Tpng"
 }
 
+//GetOpenFile ...
 func GetOpenFile(path string) string {
 	index := strings.LastIndex(path, ".")
 	if index > -1 {
@@ -1185,6 +1566,7 @@ func GetOpenFile(path string) string {
 	return "-Tpng"
 }
 
+//GetNameReport ...
 func GetNameReport(path string) string {
 	if strings.Contains(path, "\"") {
 		path = strings.ReplaceAll(path, "\"", "")

@@ -350,7 +350,7 @@ func WriteFilesDD(start int64, f *os.File, err error, sb structs_lwh.SB, dd stru
 
 //WriteFilesInodos ...
 func WriteFilesInodos(f *os.File, err error, sb structs_lwh.SB, inodo structs_lwh.INodo, aptInodo int64, cont string, start int64) bool {
-	if sb.SbInodosFree != 0 && sb.SbBlocksFree != 0 {
+	if sb.SbInodosFree != 0 {
 
 		inodoBitmap := getSBBitMap(f, err, sb.SbInodosCount, sb.SbApBitmapTableInodo)
 
@@ -557,27 +557,28 @@ func SetDirectory(path string) (string, bool) {
 			return path, true
 		}*/
 	}
-	return "", false
+	return path, true
 }
 
-func createPointer(name [20]byte, ppointer int64) structs_lwh.Pointer {
+func createPointer(name string, ppointer int64) structs_lwh.Pointer {
 	var pointer structs_lwh.Pointer
 
-	pointer.Name = name
+	pointer.Name = converNameDDToByte(name)
 	pointer.PPointer = ppointer
 
 	return pointer
 }
 
-func createListPointer(f *os.File, err error, SbApTreeDirectory int64, avd structs_lwh.AVD) datastructure.LinkedListP {
+//CreateListPointer obtiene las carpetas del avd
+func CreateListPointerAvd(f *os.File, err error, SbApTreeDirectory int64, avd structs_lwh.AVD) datastructure.LinkedListP {
 
 	var listaP datastructure.LinkedListP
-
+	listaP.Delete()
 	for i := 0; i < 6; i++ {
 		if avd.AvdApArraySubdirectories[i] != -1 {
 			aux := ReadAVD(avd.AvdApArraySubdirectories[i], f, err, SbApTreeDirectory)
 
-			listaP.Insert(createPointer(aux.AvdNameDirectory, avd.AvdApArraySubdirectories[i]))
+			listaP.Insert(createPointer(converByteLToString(aux.AvdNameDirectory), avd.AvdApArraySubdirectories[i]))
 		}
 
 	}
@@ -586,7 +587,7 @@ func createListPointer(f *os.File, err error, SbApTreeDirectory int64, avd struc
 
 		aux := ReadAVD(avd.AvdApTreeVirtualDirectory, f, err, SbApTreeDirectory)
 
-		auxList := createListPointer(f, err, SbApTreeDirectory, aux)
+		auxList := CreateListPointerAvd(f, err, SbApTreeDirectory, aux)
 
 		if auxList.Head != nil {
 			for node := auxList.Head; node != nil; node = node.Next() {
@@ -599,6 +600,32 @@ func createListPointer(f *os.File, err error, SbApTreeDirectory int64, avd struc
 
 	}
 
+	return listaP
+}
+
+func CreateListPointerDd(f *os.File, err error, SbApDetailDirectory int64, dd structs_lwh.DDirectory) datastructure.LinkedListP {
+	var listaP datastructure.LinkedListP
+	listaP.Delete()
+
+	for i := 0; i < 5; i++ {
+		if dd.DDArrayBlock[i].DdFileApInodo != -1 {
+			listaP.Insert(createPointer(convertBByteToString(dd.DDArrayBlock[i].DdFileName), dd.DDArrayBlock[i].DdFileApInodo))
+		}
+	}
+
+	if dd.DdApDetailDirectory != -1 {
+		auxList := CreateListPointerDd(f, err, SbApDetailDirectory, ReadDD(dd.DdApDetailDirectory, f, err, SbApDetailDirectory))
+
+		if auxList.Head != nil {
+			for node := auxList.Head; node != nil; node = node.Next() {
+
+				point := node.Value()
+
+				listaP.Insert(point)
+			}
+		}
+
+	}
 	return listaP
 }
 

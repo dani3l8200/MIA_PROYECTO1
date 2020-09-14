@@ -2,6 +2,7 @@ package lwh
 
 import (
 	"MIA-PROYECTO1/structs_lwh"
+	"bufio"
 	"bytes"
 	"encoding/binary"
 	"fmt"
@@ -11,7 +12,6 @@ import (
 	"strconv"
 	"strings"
 	"time"
-	"unsafe"
 )
 
 var mbr structs_lwh.MBR
@@ -31,51 +31,36 @@ func MakeMK(root Node) {
 		if v.TypeToken == "SIZE" {
 			k, err := strconv.ParseInt(v.Value, 10, 64)
 			if err != nil {
-				log.Fatal(err)
+				fmt.Println(err)
 			}
 			size = k
-			fmt.Println(size)
-			fmt.Printf("%+v\n", unsafe.Sizeof(k))
-			fmt.Printf("%+v\n", unsafe.Sizeof(size))
 		} else if v.TypeToken == "PATH" {
 			path = v.Value
-			fmt.Printf("%+v\n", path)
 		} else if v.TypeToken == "NAME" {
 			name = v.Value
-			fmt.Printf("%+v\n", name)
 		} else if v.TypeToken == "UNIT" {
 			if strings.EqualFold(v.Value, "k") {
 				unit = 'k'
-				fmt.Printf("%+v\n", unit)
 			} else if strings.EqualFold(v.Value, "m") {
 				unit = 'm'
-				fmt.Printf("%+v\n", unit)
 			}
 		}
 		for _, j := range v.Children {
 			if j.TypeToken == "SIZE" {
 				k, err := strconv.ParseInt(v.Value, 10, 64)
 				if err != nil {
-					log.Fatal(err)
+					fmt.Println(err)
 				}
 				size = k
-				fmt.Println(j.Value)
-				fmt.Printf("%+v\n", unsafe.Sizeof(size))
 			} else if j.TypeToken == "PATH" {
 				path = j.Value
-				fmt.Printf("%+v\n", path)
 			} else if j.TypeToken == "NAME" {
 				name = j.Value
-				fmt.Printf("%+v\n", name)
 			} else if j.TypeToken == "UNIT" {
 				if strings.EqualFold(j.Value, "k") {
 					unit = 'K'
-					//size = size * 1024
-					fmt.Printf("%+v\n", size)
 				} else if strings.EqualFold(j.Value, "m") {
 					unit = 'M'
-					//size = size * 1024 * 1024
-					fmt.Printf("%+v\n", unit)
 				}
 			}
 		}
@@ -91,7 +76,6 @@ func CreateDisk(path string, size int64, diskSignature int64, name string, unit 
 	auxSize := verifySize(unit, size)
 
 	var directory string = ""
-	var newPath string = ""
 	times := time.Now()
 	fixFormat := times.Format("01-02-2006 15:04:00")
 
@@ -105,35 +89,24 @@ func CreateDisk(path string, size int64, diskSignature int64, name string, unit 
 		mbr.Partition[i].PartSize = 0
 		copy(mbr.Partition[i].PartName[:], "")
 	}
-
-	indexPath := strings.LastIndex(path, ".")
-	if indexPath > -1 {
-		aux1 := path[:indexPath]
-		aux1 += "_copy.dsk"
-		newPath += aux1
-		fmt.Println(newPath)
-	} else {
-		fmt.Println("Route not copy :(")
+	if strings.Contains(path, "\"") {
+		directory, _ = SetDirectory(path)
 	}
-	indexSlash := strings.LastIndex(path, "/")
-	if indexSlash > -1 {
-		aux2 := path[:indexSlash]
-		aux2 += "/"
-		directory += aux2
-		fmt.Println(directory)
-	} else {
-		fmt.Println("No se pudo obtener la ruta del directorio")
+	if directory != "" {
+		path = directory
 	}
 
-	pathDisk += directory
 	nameDisk += name
+	pathaux := path + name
 	// creando el directorio
-	makeDirectory(directory)
+	makeDirectory(path)
 	// Creando el archivo binario
-	pathaux := directory + name
+
 	writeFile(pathaux, mbr)
-	// Creando una copia del archivo binario
-	writeFile(newPath, mbr)
+
+	fmt.Println("SE CREO EL DISCO EXICTOSAMENTE :)")
+
+	Pause()
 	//	read(path)
 	/*f1, err := os.OpenFile(path, os.O_RDWR, 0777)
 	if err != nil {
@@ -246,4 +219,9 @@ func verifySize(unit byte, size int64) int64 {
 		size = size * 1
 	}
 	return size
+}
+
+func Pause() {
+	fmt.Print("Press 'Enter' to continue...")
+	bufio.NewReader(os.Stdin).ReadBytes('\n')
 }

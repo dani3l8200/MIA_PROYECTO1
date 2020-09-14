@@ -150,7 +150,6 @@ func (l *LinkedList) MountedPart(path string, name string) bool {
 	if l.head != nil {
 		for node := l.head; node != nil; node = node.Next() {
 			if path == node.Value().Path && name == node.Value().Name {
-				fmt.Println("SI ENTRO ACA xd")
 				return true
 			}
 		}

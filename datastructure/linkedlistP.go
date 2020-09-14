@@ -2,7 +2,6 @@ package datastructure
 
 import (
 	"MIA-PROYECTO1/structs_lwh"
-	"fmt"
 )
 
 type LinkedListP struct {
@@ -58,10 +57,9 @@ func (l *LinkedListP) InsertAt(pos int, val structs_lwh.Pointer) {
 }
 
 // Get value in the given position
-func (l *LinkedListP) Get(pos int) interface{} {
-	fmt.Println(l.length)
+func (l *LinkedListP) Get(pos int) int64 {
 	if pos > l.length {
-		return nil
+		return -1
 	}
 
 	node := l.Head
@@ -70,24 +68,12 @@ func (l *LinkedListP) Get(pos int) interface{} {
 		node = node.Next()
 	}
 
-	return node.Value()
+	return node.Value().PPointer
 }
 
 // Delete value at the given position
-func (l *LinkedListP) Delete(pos int) bool {
-	if pos > l.length {
-		return false
-	}
-
-	node := l.Head
-	if pos == 1 {
-		l.Head = node.Next()
-	} else {
-		for i := 1; i < pos-1; i++ {
-			node = node.Next()
-		}
-		node.SetNext(node.Next().Next())
-	}
-	l.length = l.length - 1
-	return true
+func (l *LinkedListP) Delete() {
+	l.Head = nil
+	l.Tail = nil
+	l.length = 0
 }
