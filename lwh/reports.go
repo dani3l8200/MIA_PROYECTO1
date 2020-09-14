@@ -1057,32 +1057,29 @@ func ReportTreeFile(path string, diskPath string, start int64, name string, ruta
 
 		reader := bufio.NewReader(os.Stdin)
 
-		for {
-			fmt.Println("INGRESE UNA OPCION")
+		fmt.Println("INGRESE UNA OPCION")
 
-			text, _ := reader.ReadString('\n')
+		text, _ := reader.ReadString('\n')
 
-			text = strings.Replace(text, "\n", "", -1)
+		text = strings.Replace(text, "\n", "", -1)
 
-			newRuta, _ := strconv.Atoi(text)
+		newRuta, _ := strconv.Atoi(text)
 
-			if newRuta < archivos.Length()+1 {
+		if newRuta < archivos.Length()+1 {
 
-				report += "digraph structs {\n"
+			report += "digraph structs {\n"
 
-				report += "splines = ortho\n"
+			report += "splines = ortho\n"
 
-				inodo := ReadTInodo(archivos.Get(newRuta-1), f, err, sb.SbApTableInodo)
+			inodo := ReadTInodo(archivos.Get(newRuta-1), f, err, sb.SbApTableInodo)
 
-				report += GenerateDotInode(f, err, inodo, sb.SbApTableInodo, archivos.Get(newRuta-1), sb.SbApBlocks)
+			report += GenerateDotInode(f, err, inodo, sb.SbApTableInodo, archivos.Get(newRuta-1), sb.SbApBlocks)
 
-				report += "}\n"
+			report += "}\n"
 
-				GenerateDot(path, "ReporFile.dot", report)
+			GenerateDot(path, "ReporFile.dot", report)
 
-				return
-			}
-			break
+			return
 		}
 
 	} else if ruta != "/" {
@@ -1120,33 +1117,32 @@ func ReportTreeFile(path string, diskPath string, start int64, name string, ruta
 
 					reader := bufio.NewReader(os.Stdin)
 
-					for {
-						fmt.Println("INGRESE UNA OPCION")
+					fmt.Println("INGRESE UNA OPCION")
 
-						text, _ := reader.ReadString('\n')
+					text, _ := reader.ReadString('\n')
 
-						text = strings.Replace(text, "\n", "", -1)
+					text = strings.Replace(text, "\n", "", -1)
 
-						newRuta, _ := strconv.Atoi(text)
+					newRuta, _ := strconv.Atoi(text)
 
-						if newRuta < archivos.Length()+1 {
+					if newRuta < archivos.Length()+1 {
 
-							report += "digraph structs {\n"
+						report += "digraph structs {\n"
 
-							report += "splines = ortho\n"
+						report += "splines = ortho\n"
 
-							inodo := ReadTInodo(archivos.Get(newRuta-1), f, err, sb.SbApTableInodo)
+						inodo := ReadTInodo(archivos.Get(newRuta-1), f, err, sb.SbApTableInodo)
 
-							report += GenerateDotInode(f, err, inodo, sb.SbApTableInodo, archivos.Get(newRuta-1), sb.SbApBlocks)
+						report += GenerateDotInode(f, err, inodo, sb.SbApTableInodo, archivos.Get(newRuta-1), sb.SbApBlocks)
 
-							report += "}\n"
+						report += "}\n"
 
-							GenerateDot(path, "ReporFile.dot", report)
+						GenerateDot(path, "ReporFile.dot", report)
 
-							return
-						}
-						break
+						return
 					}
+					break
+
 				} else if existDetailDirectory(f, err, sb.SbApDetailDirectory, ReadDD(avd.AvdApDetailDirectory, f, err, sb.SbApDetailDirectory), auxPath[pos]) {
 					archivos := CreateListPointerDd(f, err, sb.SbApDetailDirectory, ReadDD(avd.AvdApDetailDirectory, f, err, sb.SbApDetailDirectory))
 
