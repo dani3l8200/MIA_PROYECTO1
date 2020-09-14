@@ -11,7 +11,7 @@ import (
 
 // Execute realiza el iniciamiento del proyecto :D
 func Execute() {
-	//eqn := "mkdisk -size->10 -path->/home/dani3l8200/Escritorio/MisDiscos/DiscoFormateo.dsk -name->DiscoFormateo.dsk -unit->m"
+	eqn := "mkdisk -size->10 -path->/home/dani3l8200/Escritorio/MisDiscos/DiscoFormateo.dsk -name->DiscoFormateo.dsk -unit->m"
 	//eqn := "Fdisk -sizE->40 -path->/home/dani3l8200/Escritorio/MisDiscos/Disco5.dsk -name->Particion1 \n"
 	//eqn := "Fdisk -sizE->50 -path->/home/dani3l8200/Escritorio/MisDiscos/DiscoFormateo.dsk -name->Particion2 -fit->BF"
 	//eqn := "Fdisk -sizE->63 -path->/home/dani3l8200/Escritorio/MisDiscos/Disco5.dsk -name->Particion3  -fit->BF"
@@ -27,7 +27,7 @@ func Execute() {
 
 	//eqn := "mkfs -id->vdb1 -type->fast"
 
-	fmt.Println("************************************************************************************************")
+	/*fmt.Println("************************************************************************************************")
 	fmt.Println("                                       SISTEMA DE ARCHIVOS LWH                                 ")
 	fmt.Println("************************************************************************************************")
 
@@ -48,8 +48,8 @@ func Execute() {
 			ExecuteComands(str)
 		}
 
-	}
-	//ExecuteComands(eqn)
+	}*/
+	ExecuteComands(eqn)
 
 }
 

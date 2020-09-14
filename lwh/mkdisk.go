@@ -90,11 +90,7 @@ func CreateDisk(path string, size int64, diskSignature int64, name string, unit 
 		copy(mbr.Partition[i].PartName[:], "")
 	}
 	if strings.Contains(path, "\"") {
-		directory, _ = SetDirectory(path)
-	}
-
-	if directory != "" {
-		path = directory
+		path, _ = SetDirectory(path)
 	}
 
 	if strings.Contains(name, "\"") {
@@ -106,7 +102,7 @@ func CreateDisk(path string, size int64, diskSignature int64, name string, unit 
 	}
 
 	if strings.Contains(path, ".d") {
-		path = RemakeDirectory(directory) + "/"
+		path = RemakeDirectory(path) + "/"
 	}
 
 	nameDisk += name
