@@ -13,7 +13,7 @@ import (
 func Execute() {
 	//eqn := "mkdisk -size->10 -path->/home/dani3l8200/Escritorio/MisDiscos/DiscoFormateo.dsk -name->DiscoFormateo.dsk -unit->m"
 	//eqn := "Fdisk -sizE->40 -path->/home/dani3l8200/Escritorio/MisDiscos/Disco5.dsk -name->Particion1 \n"
-	//eqn := "Fdisk -sizE->50 -path->/home/dani3l8200/Escritorio/MisDiscos/DiscoFormateo.dsk -name->Particion2 -fit->BF"
+	//eqn := "Fdisk -sizE->50 -path->/home/dani3l8200/Escritorio/MisDiscos/DiscoFormateo.dsk -name->Particion1 -fit->BF"
 	//eqn := "Fdisk -sizE->63 -path->/home/dani3l8200/Escritorio/MisDiscos/Disco5.dsk -name->Particion3  -fit->BF"
 	//eqn := "Fdisk -sizE->883 -path->/home/dani3l8200/Escritorio/MisDiscos/DiscoFormateo.dsk -name->Particion4 -type->E"
 	//eqn := "Fdisk -sizE->12 -path->/home/dani3l8200/Escritorio/MisDiscos/Disco5.dsk -name->Particion5 -type->L"
@@ -25,7 +25,7 @@ func Execute() {
 	//eqn := "login -usr->root -pwd->201020576 -id->vda1"
 	//eqn := "fdisk -add->2 -unit->k -path->/home/dani3l8200/Escritorio/MisDiscos/Disco5.dsk -name->Particion2"
 
-	//eqn := "mkfs -id->vdb1 -type->fast"
+	//eqn := "mkfs -id->vda1 -type->fast"
 
 	fmt.Println("************************************************************************************************")
 	fmt.Println("                                       SISTEMA DE ARCHIVOS LWH                                 ")

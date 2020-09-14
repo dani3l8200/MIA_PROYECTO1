@@ -60,31 +60,36 @@ func Login(path string, usr string, pwd string, id string, start int64) bool {
 	}
 	defer f.Close()
 	sb := readFileSB(f, err, start)
-	inodo := ReadTInodo(0, f, err, sb.SbApTableInodo)
-	us := ReadUsers(f, err, sb, inodo)
+	if sb.SbMagicNum == 201801364 {
+		inodo := ReadTInodo(0, f, err, sb.SbApTableInodo)
+		us := ReadUsers(f, err, sb, inodo)
 
-	GetRecoveryUsers(us, id)
+		GetRecoveryUsers(us, id)
 
-	if listU.Head != nil {
+		if listU.Head != nil {
 
-		for node := listU.Head; node != nil; node = node.Next() {
-			xa := converNameSBToByte(usr)
-			xs := converNameSBToByte(pwd)
-			if node.Value().Usr == xa && node.Value().Pwd == xs {
+			for node := listU.Head; node != nil; node = node.Next() {
+				xa := converNameSBToByte(usr)
+				xs := converNameSBToByte(pwd)
+				if node.Value().Usr == xa && node.Value().Pwd == xs {
 
-				myusers = node.Value()
+					myusers = node.Value()
 
-				fmt.Println("BIENVENIDO AL SISTEMAS DE ARCHIVOS, User:", usr)
+					fmt.Println("BIENVENIDO AL SISTEMAS DE ARCHIVOS, User:", usr)
 
-				return true
+					return true
 
-			} else if node.Value().Usr != xa && node.Value().Pwd != xs {
-				fmt.Println("REVISE LOS DATOS INTRODUCIDOS")
-				return false
+				} else if node.Value().Usr != xa && node.Value().Pwd != xs {
+					fmt.Println("REVISE LOS DATOS INTRODUCIDOS")
+					return false
+				}
 			}
+		} else {
+			fmt.Println("NO HAY USUARIOS EN EL SISTEMA O INTRODUJO MAL LOS DATOS")
 		}
-	} else {
-		fmt.Println("NO HAY USUARIOS EN EL SISTEMA O INTRODUJO MAL LOS DATOS")
+	} else if sb.SbMagicNum == 0 {
+		fmt.Println("NO SE HA FORMATEADO EL DISCO")
+		return false
 	}
 
 	return false

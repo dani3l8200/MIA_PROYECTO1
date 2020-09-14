@@ -440,7 +440,6 @@ func ReportSB(path string, diskPath string, start int64, name string) {
 	defer f.Close()
 
 	sb := readFileSB(f, err, start)
-
 	report += "digraph D{\n"
 	report += "graph [pad=\"0.5\", nodesep=\"0.5\", ranksep=\"2\"];\n"
 	report += "node [shape=plain]\n"
@@ -884,7 +883,7 @@ func GenerateDotDD(f *os.File, err error, dd structs_lwh.DDirectory, startDd int
 	if dd.DdApDetailDirectory != -1 {
 		report += "\t\t\t\t<tr>\n"
 		report += "\t\t\t\t\t<td colspan=\"2\" bgcolor=\"greenyellow\">" + strconv.Itoa(int(dd.DdApDetailDirectory)) + "</td>\n"
-		report += "\t\t\t\t<tr>\n"
+		report += "\t\t\t\t</tr>\n"
 	} else if dd.DdApDetailDirectory == -1 {
 		report += "<tr><td colspan=\"2\" bgcolor=\"greenyellow\"> </td></tr>\n"
 	}

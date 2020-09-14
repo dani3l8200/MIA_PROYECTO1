@@ -280,10 +280,7 @@ func WriteFilesDD(start int64, f *os.File, err error, sb structs_lwh.SB, dd stru
 				inodoBitmap[inodoFree] = '1'
 
 				dd.DDArrayBlock[i] = createArrayFile(name, inodoFree)
-
 				sb.SbInodosFree--
-
-				sb.SbDetailDirectoryFree--
 
 				writeDD(aptDD, f, err, sb, dd)
 
@@ -440,8 +437,6 @@ func WriteFilesInodos(f *os.File, err error, sb structs_lwh.SB, inodo structs_lw
 					block = createBlock(cont)
 
 					sb.SbBlocksFree--
-
-					sb.SbInodosFree--
 
 					writeBlock(blockFree, f, err, sb, block)
 
